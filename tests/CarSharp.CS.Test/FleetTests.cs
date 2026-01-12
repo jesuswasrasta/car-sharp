@@ -26,8 +26,24 @@ public class FleetTests
             // Act
             fleet.Add(car);
     
-            // Assert
-            Assert.Equal(1, fleet.Count);
-        }
-    }
-    
+                    // Assert
+                    Assert.Equal(1, fleet.Count);
+                }
+            
+                [Fact]
+                public void Remove_ExistingCar_Should_DecrementCount()
+                {
+                    // Arrange
+                    var fleet = new Fleet();
+                    var car = new Car();
+                    fleet.Add(car);
+            
+                    // Act
+                    var result = fleet.Remove(car);
+            
+                    // Assert
+                    Assert.True(result);
+                    Assert.Equal(0, fleet.Count);
+                }
+            }
+            
