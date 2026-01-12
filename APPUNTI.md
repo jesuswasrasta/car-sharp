@@ -6,12 +6,17 @@ Il dominio viene introdotto **per passi**, partendo da un modello volutamente po
 
 ---
 
-## Fase 1 – Parco mezzi minimale **(✅ COMPLETATA)**
+## Fase 1 – Parco mezzi minimale **(🚧 IN CORSO)**
+
+- IMMUTABLE / PURE FUNCTIONAL VERSION
+- IN VERSIONE OOP, FAI CAR CON STATO; IN FP, FACCIAMO 2 RECORD DIVERSI: UNO PER LA MACCHINA DISPONIBILE, UNO PER LA MACCHINA NOLEGGIATA
+
 
 - Il sistema gestisce un parco mezzi.
-- In questa fase, un mezzo è indistinguibile dagli altri.
+- In questa fase, un mezzo è indistinguibile dagli altri. (da capire, magari un ID mettiamoglielo subito)
 - Il parco può essere inizialmente vuoto.
 - È possibile aggiungere un mezzo al parco.
+  >>> aggiungo il mezzo a un elenco: side-effect; Alberto cambia implementazione, fa lista immutabile, evita problemi di concorrenza
 - È possibile rimuovere un mezzo dal parco.
 - Il sistema può sempre fornire il numero totale di mezzi presenti.
 
@@ -19,7 +24,12 @@ Il dominio viene introdotto **per passi**, partendo da un modello volutamente po
 
 ## Fase 2 – Disponibilità
 
+IMMUTABLE / PURE FUNCTIONAL VERSION
+DESCRIZIONE DEL DOMINIO "FUNZIONALE"
+MONADI
+
 - Un mezzo può essere **disponibile** o **noleggiato**.
+  >>> versione OOP mutable, con proprietà stato "noleggiato (true/false); nel metodo "noleggia", cambi lo stato, e te lo ritorna. Nella versione FP ti passo una macchina available, e ti torno un oggetto "macchina noleggiata". Il  "ti passo un oggetto, me ne torni uno nuovo, dverso" è un pattern tipico delle monadi.
 - Noleggiare un mezzo disponibile lo rende non disponibile.
 - Non è possibile noleggiare un mezzo già noleggiato.
 - È possibile restituire un mezzo noleggiato.
@@ -28,6 +38,8 @@ Il dominio viene introdotto **per passi**, partendo da un modello volutamente po
 ---
 
 ## Fase 3 – Richieste e batch
+
+QUI MAGARI SWITCH A TEST PBT
 
 - Il sistema può ricevere un batch di richieste.
 - Un batch viene soddisfatto solo se **tutte** le richieste possono essere soddisfatte.
