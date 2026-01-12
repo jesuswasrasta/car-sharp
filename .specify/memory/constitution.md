@@ -1,27 +1,22 @@
 # CarSharp Constitution
 
 <!-- Sync Impact Report
-Version: 1.0.0 -> 2.0.0
+Version: 2.1.0
 Modified Principles:
-- "Functional Domain Modeling" -> "Comparative Implementation Strategy" (Major scope change)
-- "Railway Oriented Programming" -> "Architectural Contrast" (Broadened)
-- "Property-Based Testing" -> "Paradigm-Specific Testing" (Split strategies)
-- "Library-First Architecture" -> "Narrative Test-Driven Development" (Process focus)
-Added Sections: None.
-Templates:
-- .specify/templates/plan-template.md: ⚠ Pending update for multi-language structure
-- .specify/templates/tasks-template.md: ⚠ Pending update for dual-track tasks
-- .specify/templates/spec-template.md: ✅
-Follow-up: Update project structure to include C# project; Create slide/intro content folder.
+- "Comparative Implementation Strategy": Focused strictly on C# (OOP vs Functional).
+- "Paradigm-Specific Testing": Updated to contrast Example-Based vs Property-Based in C#.
+- "Architectural Contrast": Focused on C# implementation differences.
+Removed: All F# references.
 -->
 
 ## Core Principles
 
 ### I. Comparative Implementation Strategy
-The primary goal is creating educational material comparing paradigms. Every domain phase MUST be implemented twice:
-1.  **C# (OOP)**: Idiomatic Object-Oriented style (Classes, Encapsulation, Mutable State).
-2.  **F# (Functional)**: Idiomatic Functional style (Types, Immutability, Pure Functions).
-The C# implementation acts as the "control group" (familiar territory) to contrast against the F# approach.
+The primary goal is creating educational material comparing software paradigms within the same language. Every domain phase MUST be implemented twice:
+1.  **C# (OOP)**: Idiomatic Object-Oriented style (Classes, Encapsulation, Mutable State). This acts as the "control group" (familiar territory).
+2.  **C# (Functional)**: C# leveraging modern functional features (Records, Immutability, Pure Functions, LINQ).
+
+The objective is to demonstrate how the same language can be used to solve the same problem using radically different mental models.
 
 ### II. Narrative Test-Driven Development
 Code is documentation. Development MUST follow a strict, granular Red-Green-Refactor cycle intended for presentation.
@@ -31,16 +26,17 @@ Code is documentation. Development MUST follow a strict, granular Red-Green-Refa
 
 ### III. Paradigm-Specific Testing
 Testing strategies must reflect the strengths of each paradigm:
-*   **C#**: Use **Example-Based Testing** (xUnit `[Fact]`). Verify specific state transitions after method calls.
-*   **F#**: Use **Property-Based Testing** (FsCheck `[Property]`). Verify invariants that hold true for any random input.
+*   **C# (OOP)**: Use **Example-Based Testing**. Verify specific state transitions after method calls using xUnit `[Fact]`.
+*   **C# (Functional)**: Use **Property-Based Testing**. Verify invariants that hold true for any random input using xUnit with FsCheck (or similar C# property testing library like CsCheck/Hedgehog).
+*  Always use xUnit as the base test runner to maintain consistency.
 
 ### IV. Incremental Phased Delivery
-Development follows the strictly defined "Phases" (1-10). Both C# and F# implementations for Phase N must be complete and compared before moving to Phase N+1.
+Development follows the strictly defined "Phases" (1-10). Both OOP and Functional implementations for Phase N must be complete and compared before moving to Phase N+1.
 
 ### V. Architectural Contrast
 Implementations must highlight the differences in error handling and state management:
-*   **C#**: Use Exceptions or boolean returns for failure; `void` methods for state mutation.
-*   **F#**: Use Railway Oriented Programming (`Result<T,E>`) for failure; `State -> State` transformations for logic.
+*   **C# (OOP)**: Use Exceptions or boolean returns for failure; methods that mutate internal state.
+*   **C# (Functional)**: Use Result types for failure handling; pure functions that return new states.
 
 ## Governance
 
@@ -49,6 +45,5 @@ This constitution defines the rules for the CarSharp educational project.
 *   **Amendments**: Changes require a version bump.
 *   **Compliance**: Pull requests must demonstrate the dual implementation and narrative structure.
 *   **Versioning**: Semantic Versioning.
-    *   **MAJOR 2.0.0**: Shift from pure F# library to Comparative Educational Project.
 
-**Version**: 2.0.0 | **Ratified**: 2026-01-12 | **Last Amended**: 2026-01-12
+**Version**: 2.1.0 | **Ratified**: 2026-01-12 | **Last Amended**: 2026-01-12
