@@ -1,1 +1,10 @@
-.build
+.build/
+bin/
+obj/
+*.user
+*.suo
+packages/
+.idea/
+.vscode/
+*.swp
+.DS_Store

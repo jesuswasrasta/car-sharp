@@ -12,7 +12,7 @@ Il dominio viene introdotto **per passi**, partendo da un modello volutamente po
 - Il parco può essere inizialmente vuoto.
 - È possibile aggiungere un mezzo al parco.
 - È possibile rimuovere un mezzo dal parco.
-- Il sistema può sempre fornire il numero totale di mezzi presenti.
+- È possibile conoscere il numero totale di mezzi nel parco.
 
 ---
 
