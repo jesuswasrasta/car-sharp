@@ -10,14 +10,46 @@ public class Fleet
 
     
 
-        public void Add(Car car)
+            public void Add(Car car)
 
-        {
+    
 
-            _cars.Add(car);
+            {
+
+    
+
+                _cars.Add(car);
+
+    
+
+            }
+
+    
+
+        
+
+    
+
+            public bool Remove(Car car)
+
+    
+
+            {
+
+    
+
+                return _cars.Remove(car);
+
+    
+
+            }
+
+    
 
         }
 
-    }
+    
+
+        
 
     
