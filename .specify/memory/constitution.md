@@ -38,6 +38,11 @@ Implementations must highlight the differences in error handling and state manag
 *   **C# (OOP)**: Use Exceptions or boolean returns for failure; methods that mutate internal state.
 *   **C# (Functional)**: Use Result types for failure handling; pure functions that return new states.
 
+### VI. Learning Purpose
+The purpose of this project is educational. The focus is on clarity, contrast, and understanding over performance or production readiness.
+*   **Comments**: Every test and every implementation must include inline comments explaining the *why* for an audience.
+*   **Functional VS OOP**: Each functional implementation must include notes on how it contrasts with the OOP version.
+
 ## Governance
 
 This constitution defines the rules for the CarSharp educational project.
