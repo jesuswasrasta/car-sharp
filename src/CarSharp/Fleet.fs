@@ -5,4 +5,12 @@ type Fleet = Fleet of Car list
 
 let emptyFleet = Fleet []
 
-let count (Fleet cars) = 0
+
+
+let count (Fleet cars) = cars.Length
+
+
+
+let add (car: Car) (Fleet cars) =
+
+    Fleet (car :: cars)
