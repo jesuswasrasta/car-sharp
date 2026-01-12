@@ -6,7 +6,7 @@ Il dominio viene introdotto **per passi**, partendo da un modello volutamente po
 
 ---
 
-## Fase 1 – Parco mezzi minimale
+## Fase 1 – Parco mezzi minimale **(✅ COMPLETATA)**
 
 - Il sistema gestisce un parco mezzi.
 - In questa fase, un mezzo è indistinguibile dagli altri.
