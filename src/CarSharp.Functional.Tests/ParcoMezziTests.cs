@@ -13,12 +13,14 @@ public class ParcoMezziTests
     [Fact]
     public void ParcoMezziVuoto_DovrebbeAvereZeroAuto()
     {
+        // Perché: Il punto di partenza del dominio è un valore immutabile vuoto.
         Assert.Equal(0, ParcoMezzi.Vuoto.TotaleAuto);
     }
 
     [Property]
     public bool AggiuntaDiNAuto_DovrebbeRisultareInConteggioTotaleN(PositiveInt n)
     {
+        // Perché: Ogni operazione di aggiunta produce un nuovo valore del ParcoMezzi che riflette il cambiamento.
         var parco = ParcoMezzi.Vuoto;
         var conteggio = n.Get;
 
@@ -33,6 +35,8 @@ public class ParcoMezziTests
     [Fact]
     public void GrandeVolume_DovrebbeEssereIstantaneo()
     {
+        // Perché: L'uso di strutture dati persistenti (Immutable Collections) garantisce performance 
+        // comparabili alla mutazione tramite la condivisione strutturale (structural sharing).
         var parco = ParcoMezzi.Vuoto;
         var grandeConteggio = 10_000;
 
@@ -52,6 +56,7 @@ public class ParcoMezziTests
     [Property]
     public bool RimozioneAuto_DovrebbeDecrementareIlConteggio_QuandoLAutoEsiste(PositiveInt n)
     {
+        // Perché: La rimozione produce un nuovo stato senza alterare il valore originale.
         var parco = ParcoMezzi.Vuoto;
         var autoList = new List<IAuto>();
         for (int i = 0; i < n.Get; i++)
@@ -84,6 +89,8 @@ public class ParcoMezziTests
     [Fact]
     public void RimozioneDaParcoVuoto_DovrebbeRestituireUnFallimento()
     {
+        // Perché: Le operazioni fallibili devono essere modellate tramite tipi che forzano 
+        // la gestione esplicita dell'errore (Result), invece di lanciare eccezioni.
         var parco = ParcoMezzi.Vuoto;
         var auto = new AutoDisponibile(Guid.NewGuid(), "TEST1");
 

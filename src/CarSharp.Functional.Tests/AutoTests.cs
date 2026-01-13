@@ -23,6 +23,7 @@ public class AutoTests
     [Property]
     public bool AutoNoleggiata_DovrebbeAvereValueEquality(Guid id, string targa)
     {
+        // Perché: L'uguaglianza basata sul valore deve valere per tutti i tipi di record del dominio.
         var auto1 = new AutoNoleggiata(id, targa);
         var auto2 = new AutoNoleggiata(id, targa);
 
