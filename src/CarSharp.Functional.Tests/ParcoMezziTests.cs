@@ -21,20 +21,16 @@ public class ParcoMezziTests
     public bool AggiuntaDiNAuto_DovrebbeRisultareInConteggioTotaleN(PositiveInt n)
     {
         // Arrange
-        // Partiamo da un parco mezzi vuoto.
         var parco = ParcoMezzi.Vuoto;
         var conteggio = n.Get;
 
         // Act
-        // Eseguiamo un 'fold' dell'aggiunta sul parco mezzi 'n' volte.
-        // In FP, questa è una sequenza di trasformazioni, ognuna delle quali produce una nuova istanza di parco mezzi.
         for (int i = 0; i < conteggio; i++)
         {
-            parco = parco.AggiungiAuto(new Auto());
+            parco = parco.AggiungiAuto(new Auto()).Valore!;
         }
 
         // Assert
-        // L'istanza finale del parco mezzi dovrebbe riflettere il numero totale di aggiunte.
         return (parco.TotaleAuto == conteggio);
     }
 
@@ -48,17 +44,14 @@ public class ParcoMezziTests
         // Act
         for (int i = 0; i < grandeConteggio; i++)
         {
-            parco = parco.AggiungiAuto(new Auto());
+            parco = parco.AggiungiAuto(new Auto()).Valore!;
         }
 
-        // Misuriamo le prestazioni dell'accesso alla proprietà TotaleAuto.
         var watch = System.Diagnostics.Stopwatch.StartNew();
         var conteggio = parco.TotaleAuto;
         watch.Stop();
 
         // Assert
-        // In C# Funzionale, anche ImmutableList.Count è un'operazione O(1) 
-        // poiché la collezione mantiene internamente il proprio conteggio.
         Assert.Equal(grandeConteggio, conteggio);
         Assert.True(watch.ElapsedMilliseconds < 10, $"Il conteggio ha richiesto {watch.ElapsedMilliseconds}ms");
     }
@@ -73,31 +66,30 @@ public class ParcoMezziTests
         {
             var auto = new Auto();
             autoList.Add(auto);
-            parco = parco.AggiungiAuto(auto);
+            parco = parco.AggiungiAuto(auto).Valore!;
         }
 
-        // Scegliamo un'auto casuale dalla lista
         var bersaglio = autoList[new Random().Next(autoList.Count)];
 
         // Act
-        var parcoAggiornato = parco.RimuoviAuto(bersaglio);
+        var risultato = parco.RimuoviAuto(bersaglio);
 
         // Assert
-        return parcoAggiornato.TotaleAuto == parco.TotaleAuto - 1;
+        return risultato.IsSuccess && risultato.Valore!.TotaleAuto == parco.TotaleAuto - 1;
     }
 
     [Fact]
-    public void RimozioneDaParcoVuoto_DovrebbeRestituireLoStessoParco()
+    public void RimozioneDaParcoVuoto_DovrebbeRestituireUnFallimento()
     {
         // Arrange
         var parco = ParcoMezzi.Vuoto;
         var auto = new Auto();
 
         // Act
-        var parcoAggiornato = parco.RimuoviAuto(auto);
+        var risultato = parco.RimuoviAuto(auto);
 
         // Assert
-        Assert.Same(parco, parcoAggiornato);
-        Assert.Equal(0, parcoAggiornato.TotaleAuto);
+        Assert.False(risultato.IsSuccess);
+        Assert.Equal("Auto non trovata nel parco mezzi", risultato.Errore!.Messaggio);
     }
 }
