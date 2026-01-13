@@ -59,4 +59,57 @@ public static class ParcoMezziExtensions
             ? Result<ParcoMezzi>.Failure(new Error("Auto non trovata nel parco mezzi"))
             : Result<ParcoMezzi>.Success(parco with { auto = nuoveAuto });
     }
+
+    /// <summary>
+    /// Tenta di noleggiare un'auto specifica dal parco.
+    /// In Type-Driven Design, usiamo il pattern matching per agire solo se l'auto è nello stato corretto.
+    /// </summary>
+    public static Result<ParcoMezzi> NoleggiaAuto(this ParcoMezzi parco, Guid id)
+    {
+        var autoTrovata = parco.auto.FirstOrDefault(a => a.Id == id);
+        
+        if (autoTrovata == null)
+            return Result<ParcoMezzi>.Failure(new Error("Auto non trovata"));
+
+        return autoTrovata switch
+        {
+            AutoDisponibile disponibile => 
+                Result<ParcoMezzi>.Success(parco with { 
+                    auto = parco.auto.Replace(disponibile, disponibile.Noleggia()) 
+                }),
+            _ => Result<ParcoMezzi>.Failure(new Error("Auto già noleggiata o in stato non valido"))
+        };
+    }
+
+    /// <summary>
+    /// Noleggia un batch di auto atomicamente.
+    /// In FP, utilizziamo la composizione di funzioni (Bind) per garantire che
+    /// il risultato sia Success solo se tutte le operazioni intermedie hanno successo.
+    /// </summary>
+    /// <param name="parco">Il parco mezzi corrente.</param>
+    /// <param name="targhe">Elenco delle targhe da noleggiare.</param>
+    public static Result<ParcoMezzi> NoleggiaBatch(this ParcoMezzi parco, IEnumerable<Guid> targhe)
+    {
+        // APPLYING "PARSE, DON'T VALIDATE":
+        // Invece di controllare "if (duplicati) return error", proviamo a costruire
+        // una struttura dati che PER DEFINIZIONE non ha duplicati (un Set).
+        // Se la cardinalità cambia durante la trasformazione, significa che l'input 
+        // non era valido per il nostro dominio (che richiede unicità).
+        
+        var listaInput = targhe.ToImmutableList();
+        var setTarghe = listaInput.ToImmutableHashSet();
+
+        if (listaInput.Count != setTarghe.Count)
+        {
+            // Il parsing è fallito: l'input non è un "Batch valido di richieste uniche".
+            return Result<ParcoMezzi>.Failure(new Error("Il batch contiene duplicati"));
+        }
+
+        // Da qui in poi, lavoriamo con 'setTarghe', che è garantito essere unico.
+        // Non dobbiamo più preoccuparci dei duplicati.
+        return setTarghe.Aggregate(
+            Result<ParcoMezzi>.Success(parco),
+            (risultatoCorrente, id) => risultatoCorrente.Bind(p => p.NoleggiaAuto(id))
+        );
+    }
 }

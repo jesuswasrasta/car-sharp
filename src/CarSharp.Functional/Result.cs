@@ -26,4 +26,7 @@ public record Result<T>
 
     public Result<TResult> Map<TResult>(Func<T, TResult> mapper) =>
         IsSuccess ? Result<TResult>.Success(mapper(Value!)) : Result<TResult>.Failure(Error!);
+
+    public Result<TResult> Bind<TResult>(Func<T, Result<TResult>> binder) =>
+        IsSuccess ? binder(Value!) : Result<TResult>.Failure(Error!);
 }

@@ -82,4 +82,62 @@ public class ParcoMezziTests
 
         Assert.Equal(2, parco.TotaleDisponibili);
     }
+
+    [Fact]
+    public void NoleggiaBatch_ConAutoDisponibili_DovrebbeNoleggiarleTutte()
+    {
+        // Questo test verifica il caso d'uso principale del noleggio batch.
+        // In OOP, ci aspettiamo che il parco mezzi coordini la mutazione dello stato
+        // di più oggetti Auto contemporaneamente.
+        var parco = new ParcoMezzi();
+        var auto1 = new Auto(Guid.NewGuid(), "AA111AA", StatoAuto.Disponibile);
+        var auto2 = new Auto(Guid.NewGuid(), "BB222BB", StatoAuto.Disponibile);
+        
+        parco.AggiungiAuto(auto1);
+        parco.AggiungiAuto(auto2);
+
+        var batch = new List<Guid> { auto1.Id, auto2.Id };
+
+        parco.NoleggiaBatch(batch);
+
+        // Verifichiamo che la mutazione sia avvenuta correttamente su tutti gli oggetti coinvolti.
+        Assert.Equal(StatoAuto.Noleggiata, auto1.Stato);
+        Assert.Equal(StatoAuto.Noleggiata, auto2.Stato);
+        Assert.Equal(0, parco.TotaleDisponibili);
+    }
+
+    [Fact]
+    public void NoleggiaBatch_ConAutoNonDisponibile_DovrebbeLanciareEccezioneENonModificareStato()
+    {
+        // Questo test verifica l'atomicità in caso di errore.
+        // Se un'auto nel batch non è disponibile, nessuna deve essere noleggiata.
+        var parco = new ParcoMezzi();
+        var auto1 = new Auto(Guid.NewGuid(), "AA111AA", StatoAuto.Disponibile);
+        var auto2 = new Auto(Guid.NewGuid(), "BB222BB", StatoAuto.Noleggiata); // Già noleggiata
+        
+        parco.AggiungiAuto(auto1);
+        parco.AggiungiAuto(auto2);
+
+        var batch = new List<Guid> { auto1.Id, auto2.Id };
+
+        // Ci aspettiamo un'eccezione perché il batch non può essere soddisfatto interamente.
+        Assert.Throws<InvalidOperationException>(() => parco.NoleggiaBatch(batch));
+
+        // Fondamentale: l'auto1 deve essere rimasta DISPONIBILE (rollback in-memory).
+        Assert.Equal(StatoAuto.Disponibile, auto1.Stato);
+    }
+
+    [Fact]
+    public void NoleggiaBatch_ConDuplicati_DovrebbeLanciareEccezione()
+    {
+        // Un batch non deve contenere la stessa auto più volte. 
+        // In OOP, validiamo questo vincolo prima di procedere.
+        var parco = new ParcoMezzi();
+        var auto = new Auto(Guid.NewGuid(), "AA111AA", StatoAuto.Disponibile);
+        parco.AggiungiAuto(auto);
+
+        var batch = new List<Guid> { auto.Id, auto.Id };
+
+        Assert.Throws<ArgumentException>(() => parco.NoleggiaBatch(batch));
+    }
 }
