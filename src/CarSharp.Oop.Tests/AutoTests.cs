@@ -22,4 +22,25 @@ public class AutoTests
         Assert.Equal(targa, auto.Targa);
         Assert.Equal(statoIniziale, auto.Stato);
     }
+
+    [Fact]
+    public void Noleggia_DovrebbeCambiareLoStatoInNoleggiata_QuandoDisponibile()
+    {
+        // Perché: L'azione di noleggio deve mutare lo stato interno dell'oggetto per riflettere l'operazione avvenuta.
+        var auto = new Auto(Guid.NewGuid(), "AA123BB", StatoAuto.Disponibile);
+
+        auto.Noleggia();
+
+        Assert.Equal(StatoAuto.Noleggiata, auto.Stato);
+    }
+
+    [Fact]
+    public void Noleggia_DovrebbeLanciareInvalidOperationException_QuandoGiaNoleggiata()
+    {
+        // Perché: In OOP, le eccezioni sono il modo idiomatico per segnalare violazioni di regole di business o stati invalidi.
+        var auto = new Auto(Guid.NewGuid(), "AA123BB", StatoAuto.Noleggiata);
+
+        var ex = Assert.Throws<InvalidOperationException>(() => auto.Noleggia());
+        Assert.Equal("L'auto è già noleggiata.", ex.Message);
+    }
 }

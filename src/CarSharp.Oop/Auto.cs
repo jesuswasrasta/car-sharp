@@ -34,4 +34,20 @@ public class Auto
         Targa = targa;
         Stato = stato;
     }
+
+    /// <summary>
+    /// Registra il noleggio dell'auto.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Lanciata se l'auto è già noleggiata.</exception>
+    public void Noleggia()
+    {
+        // Perché: In OOP, l'oggetto è responsabile di proteggere i propri invarianti.
+        // Impedire un noleggio doppio è una regola di business critica.
+        if (Stato == StatoAuto.Noleggiata)
+        {
+            throw new InvalidOperationException("L'auto è già noleggiata.");
+        }
+
+        Stato = StatoAuto.Noleggiata;
+    }
 }
