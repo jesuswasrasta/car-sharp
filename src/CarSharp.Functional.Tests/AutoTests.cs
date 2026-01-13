@@ -28,4 +28,16 @@ public class AutoTests
 
         return auto1 == auto2 && !ReferenceEquals(auto1, auto2);
     }
+
+    [Property]
+    public bool Noleggia_DovrebbeTrasformareInAutoNoleggiata(Guid id, string targa)
+    {
+        // Perché: In FP, le operazioni di business sono trasformazioni di dati (Type-Driven Design).
+        // Il successo è garantito dalla firma: un'auto disponibile può sempre essere noleggiata.
+        var disponibile = new AutoDisponibile(id, targa);
+
+        AutoNoleggiata noleggiata = disponibile.Noleggia();
+
+        return noleggiata.Id == id && noleggiata.Targa == targa;
+    }
 }
