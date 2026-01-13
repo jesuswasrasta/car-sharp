@@ -1,22 +1,22 @@
-# Phase 1: Minimal Fleet Management
-## The Journey Begins
+# Fase 1: Gestione Parco Mezzi Minimale
+## Il Viaggio Inizia
 
-Welcome to the first phase of **CarSharp**. In this phase, we lay the foundation for our comparative study of programming paradigms.
+Benvenuti alla prima fase di **CarSharp**. In questa fase, gettiamo le basi per il nostro studio comparativo dei paradigmi di programmazione.
 
-### The Objective
-Implement a fleet management system that can:
-1.  Initialize an **empty fleet**.
-2.  **Add** a car to the fleet.
-3.  **Remove** a specific car from the fleet.
-4.  Track the **total count** of cars.
+### L'Obiettivo
+Implementare un sistema di gestione del parco mezzi che possa:
+1.  Inizializzare un **parco mezzi vuoto**.
+2.  **Aggiungere** un'auto al parco mezzi.
+3.  **Rimuovere** un'auto specifica dal parco mezzi.
+4.  Tracciare il **conteggio totale** delle auto.
 
-### The Paradigms
--   **OOP (Object-Oriented Programming)**: We'll focus on **encapsulation** and **mutable state**. The `Fleet` will hold a list that it manages internally.
--   **Functional Programming**: We'll focus on **immutability** and **pure functions**. Every operation on the `Fleet` will return a *new* fleet, leaving the original unchanged.
+### I Paradigmi
+-   **OOP (Programmazione Orientata agli Oggetti)**: Ci concentreremo sull'**incapsulamento** e sullo **stato mutabile**. Il `ParcoMezzi` conterrà una lista gestita internamente.
+-   **Programmazione Funzionale**: Ci concentreremo sull'**immutabilità** e sulle **funzioni pure**. Ogni operazione sul `ParcoMezzi` restituirà un *nuovo* parco mezzi, lasciando invariato l'originale.
 
-### Key Concept: Identity
-In this phase, cars have no properties (like Plate or Model).
--   In **OOP**, we distinguish cars by their **memory reference**.
--   In **Functional**, we treat them as **values**. (Though in this phase, they are empty records, we'll treat them as distinct value tokens).
+### Concetto Chiave: Identità
+In questa fase, le auto non hanno proprietà (come Targa o Modello).
+-   In **OOP**, distinguiamo le auto in base al loro **riferimento in memoria**.
+-   In **Funzionale**, le trattiamo come **valori**. (Sebbene in questa fase siano record vuoti, le tratteremo come token di valore distinti).
 
-Let's see how these two mental models diverge in code.
+Vediamo come questi due modelli mentali divergono nel codice.

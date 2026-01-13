@@ -87,3 +87,7 @@ CarSharp.sln
 │   ├── CarSharp.Functional/  (C# Functional Project)
 │   └── CarSharp.Tests/       (Shared or separate tests)
 ```
+
+
+# Italian Language Usage
+All comments, documentation, and domain concepts MUST be expressed in Italian to cater to the target audience of Italian programmers.

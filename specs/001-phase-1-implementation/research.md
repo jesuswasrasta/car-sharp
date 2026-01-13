@@ -1,17 +1,16 @@
-# Research: Phase 1 - Minimal Fleet Management
+# Ricerca Tecnica: Fase 1
 
-## Decision: Equality-based Identity
-- **Rationale**: In Phase 1, we avoid explicit identifiers (ID, Plate) to keep the domain minimal. Identity is handled via language-native equality: reference equality for OOP classes and value equality for Functional records. This highlights the fundamental difference in how objects vs. values are perceived in different paradigms.
-- **Alternatives considered**: 
-  - Adding a GUID: Rejected to avoid premature domain complexity.
-  - Position-based removal: Rejected as it doesn't represent "removing a specific car".
+## Decisioni sull'Uguaglianza
+Per la Fase 1, abbiamo deciso di utilizzare l'uguaglianza nativa del linguaggio per distinguere le auto.
 
-## Decision: FsCheck.Xunit for Functional Testing
-- **Rationale**: Property-based testing is a core pillar of the functional paradigm. FsCheck is the most mature .NET tool for this.
-- **Alternatives considered**: 
-  -CsCheck: A more C#-native alternative, but FsCheck has better integration with the project's educational goals and xUnit.
+### OOP: Uguaglianza per Riferimento
+In C#, le classi sono tipi di riferimento. Per impostazione predefinita, `Equals` e `==` confrontano gli indirizzi di memoria. Questo si adatta bene al concetto di "Entità" in cui un oggetto è unico.
 
-## Decision: System.Collections.Immutable
-- **Rationale**: To strictly adhere to the functional paradigm, we use immutable collections. This ensures that any "change" to the fleet results in a new instance, preventing side effects.
-- **Alternatives considered**:
-  - `IEnumerable` with LINQ: Functional in spirit but doesn't provide the structured "non-destructive mutation" patterns (like `Add`, `Remove`) that `ImmutableList` offers.
+### Funzionale: Uguaglianza per Valore
+I record in C# 9+ forniscono l'uguaglianza basata sul valore. Due istanze di un record con le stesse proprietà sono considerate uguali. Questo si adatta bene al concetto di "Value Object".
+
+## Scelta della Collezione per l'Immutabilità
+Abbiamo scelto `System.Collections.Immutable.ImmutableList<T>` per il percorso funzionale perché:
+1. Fornisce un'immutabilità vera (non solo in sola lettura).
+2. Supporta lo structural sharing efficiente per le operazioni di aggiunta e rimozione.
+3. È la libreria standard per le strutture dati immutabili in .NET.

@@ -1,54 +1,54 @@
-# Implementation Plan: Phase 1 - Minimal Fleet Management
+# Piano di Implementazione: Fase 1 - Gestione Parco Mezzi Minimale
 
-**Branch**: `001-phase-1-implementation` | **Date**: 2026-01-12 | **Spec**: [/home/nando/Source/Github/jesuswasrasta/car-sharp/specs/001-phase-1-implementation/spec.md]
-**Input**: Feature specification from `/specs/001-phase-1-implementation/spec.md`
+**Branch**: `001-phase-1-implementation` | **Data**: 12-01-2026 | **Spec**: [/home/nando/Source/Github/jesuswasrasta/car-sharp/specs/001-phase-1-implementation/spec.md]
+**Input**: Specifica della funzionalità da `/specs/001-phase-1-implementation/spec.md`
 
-## Summary
+## Sintesi
 
-Implement a minimal fleet management system comparing OOP (mutable state) and Functional (immutable state) approaches in C# 12. Focus on educational clarity and paradigm contrast.
+Implementare un sistema di gestione del parco mezzi minimale confrontando gli approcci OOP (stato mutabile) e Funzionale (stato immutabile) in C# 12. Focus sulla chiarezza educativa e sul contrasto tra paradigmi.
 
-## Technical Context
+## Contesto Tecnico
 
-**Languages**: C# 12 (.NET 10.0)
-**Testing**: xUnit (OOP Facts), xUnit + FsCheck (Functional Properties)
-**Phase Goal**: Phase 1 - Minimal Fleet Management
+**Linguaggi**: C# 12 (.NET 10.0)
+**Testing**: xUnit (OOP Facts), xUnit + FsCheck (Proprietà Funzionali)
+**Obiettivo della Fase**: Fase 1 - Gestione Parco Mezzi Minimale
 
-## Constitution Check
+## Controllo Costituzione
 
-*GATE: Must pass before Phase 0 research.*
-1. Dual Implementation (OOP vs Functional in C#)? **YES**
-2. Narrative TDD approach planned? **YES**
-3. Proper testing strategies (Facts vs Properties) defined? **YES**
-4. Learning Purpose (comments and contrast notes) included? **YES**
+*GATE: Deve passare prima della ricerca della Fase 0.*
+1. Doppia implementazione (OOP vs Funzionale in C#)? **SÌ**
+2. Approccio TDD narrativo pianificato? **SÌ**
+3. Strategie di testing appropriate (Facts vs Properties) definite? **SÌ**
+4. Scopo didattico (commenti e note di contrasto) incluso? **SÌ**
 
-## Project Structure
+## Struttura del Progetto
 
-### Documentation (this phase)
+### Documentazione (questa fase)
 
 ```text
 specs/001-phase-1-implementation/
-├── plan.md              # This file
-├── spec.md              # Feature specification
-├── research.md          # Technical decisions and research
-├── data-model.md        # Entity definitions
-├── contracts/           # API summary
-├── quickstart.md        # Usage examples
-├── slides-intro.md      # Educational intro text/slides
-└── comparison.md        # Post-implementation comparison notes (TODO)
+├── plan.md              # Questo file
+├── spec.md              # Specifica della funzionalità
+├── research.md          # Decisioni tecniche e ricerca
+├── data-model.md        # Definizioni delle entità
+├── contracts/           # Sintesi delle API
+├── quickstart.md        # Esempi di utilizzo
+├── slides-intro.md      # Testo/slide introduttive didattiche
+└── comparison.md        # Note di confronto post-implementazione (TODO)
 ```
 
-### Source Code
+### Codice Sorgente
 
 ```text
 src/
-├── CarSharp.Oop/           # OOP Implementation
-├── CarSharp.Functional/    # Functional Implementation
-├── CarSharp.Oop.Tests/     # OOP Tests (Facts)
-└── CarSharp.Functional.Tests/ # Functional Tests (FsCheck Properties)
+├── CarSharp.Oop/           # Implementazione OOP
+├── CarSharp.Functional/    # Implementazione Funzionale
+├── CarSharp.Oop.Tests/     # Test OOP (Facts)
+└── CarSharp.Functional.Tests/ # Test Funzionali (Proprietà FsCheck)
 ```
 
-## Complexity Tracking
+## Tracciamento della Complessità
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
+| Violazione | Perché è necessaria | Alternativa più semplice rifiutata perché |
 |-----------|------------|-------------------------------------|
-| None | N/A | N/A |
+| Nessuna | N/A | N/A |

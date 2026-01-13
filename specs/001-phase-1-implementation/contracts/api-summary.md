@@ -1,36 +1,20 @@
-# API Contracts: Phase 1
+# Sintesi delle API: Fase 1
 
-## OOP Track (CarSharp.Oop)
+## Percorso OOP (`CarSharp.Oop`)
 
-```csharp
-namespace CarSharp.Oop;
+### Classe `ParcoMezzi`
+- `int TotaleAuto { get; }`
+- `void AggiungiAuto(Auto auto)`
+- `bool RimuoviAuto(Auto auto)`
 
-public class Car {}
+---
 
-public class Fleet
-{
-    public int TotalCars { get; }
-    public void AddCar(Car car);
-    public bool RemoveCar(Car car);
-}
-```
+## Percorso Funzionale (`CarSharp.Functional`)
 
-## Functional Track (CarSharp.Functional)
+### Record `ParcoMezzi`
+- `static ParcoMezzi Vuoto { get; }`
+- `int TotaleAuto { get; }`
 
-```csharp
-namespace CarSharp.Functional;
-
-public record Car();
-
-public record Fleet(ImmutableList<Car> Cars)
-{
-    public static Fleet Empty { get; }
-    public int TotalCars { get; }
-}
-
-public static class FleetExtensions
-{
-    public static Fleet AddCar(this Fleet fleet, Car car);
-    public static Fleet RemoveCar(this Fleet fleet, Car car);
-}
-```
+### Metodi di Estensione (`ParcoMezziExtensions`)
+- `ParcoMezzi AggiungiAuto(this ParcoMezzi parco, Auto auto)`
+- `ParcoMezzi RimuoviAuto(this ParcoMezzi parco, Auto auto)`

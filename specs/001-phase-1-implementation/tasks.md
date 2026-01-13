@@ -1,59 +1,59 @@
-# Tasks: Phase 1 - Minimal Fleet Management
+# Task: Fase 1 - Gestione Parco Mezzi Minimale
 
-**Input**: Design documents from `/specs/001-phase-1-implementation/`
-**Prerequisites**: plan.md, spec.md, research.md, data-model.md
+**Input**: Documenti di progettazione da `/specs/001-phase-1-implementation/`
+**Prerequisiti**: plan.md, spec.md, research.md, data-model.md
 
-## Implementation Strategy
+## Strategia di Implementazione
 
-We follow a narrative TDD approach for educational purposes.
-- **Granularity**: Exactly one commit per TDD step (Red -> Green -> Refactor).
-- **Learning Focus**: Every file must include `ABOUTME` headers. Every test and implementation must include inline comments explaining the *why*.
-- **Paradigm Contrast**: Functional implementations must include specific notes comparing the approach to the OOP version.
-- **MVP**: Completion of User Story 1 (Basic Population) in both tracks.
+Seguiamo un approccio TDD narrativo per scopi didattici.
+- **Granularità**: Esattamente un commit per ogni passaggio TDD (Red -> Green -> Refactor).
+- **Focus sull'Apprendimento**: Ogni file deve includere gli header `ABOUTME`. Ogni test e implementazione deve includere commenti inline che spieghino il *perché*.
+- **Contrasto tra Paradigmi**: Le implementazioni funzionali devono includere note specifiche che confrontino l'approccio con la versione OOP.
+- **MVP**: Completamento della User Story 1 (Popolamento Base) in entrambi i percorsi.
 
-## Dependency Graph
+## Grafo delle Dipendenze
 
 ```text
-Setup -> Foundational -> US1 (Population) -> US2 (Maintenance) -> Polish
+Setup -> Fondamenta -> US1 (Popolamento) -> US2 (Manutenzione) -> Rifinitura
 ```
 
-## Phase 1: Setup & Educational Prep
+## Fase 1: Setup e Preparazione Didattica
 
-- [x] T001 Write educational introductory slides in `specs/001-phase-1-implementation/slides-intro.md`
-- [x] T002 Update `README.md` to reflect Phase 1 progress and learning goals
-- [x] T003 [P] Verify NuGet package `FsCheck.Xunit` is present in `src/CarSharp.Functional.Tests/CarSharp.Functional.Tests.csproj`
-- [x] T004 [P] Verify NuGet package `System.Collections.Immutable` is present in `src/CarSharp.Functional/CarSharp.Functional.csproj`
+- [x] T001 Scrivere le slide introduttive didattiche in `specs/001-phase-1-implementation/slides-intro.md`
+- [x] T002 Aggiornare il `README.md` per riflettere i progressi della Fase 1 e gli obiettivi di apprendimento
+- [x] T003 [P] Verificare che il pacchetto NuGet `FsCheck.Xunit` sia presente in `src/CarSharp.Functional.Tests/CarSharp.Functional.Tests.csproj`
+- [x] T004 [P] Verificare che il pacchetto NuGet `System.Collections.Immutable` sia presente in `src/CarSharp.Functional/CarSharp.Functional.csproj`
 
-## Phase 2: Foundational (Common Entities)
+## Fase 2: Fondamenta (Entità Comuni)
 
-- [x] T005 [P] Implement `Car` class with `ABOUTME` and educational comments in `src/CarSharp.Oop/Car.cs`
-- [x] T006 [P] Implement `Car` record with `ABOUTME` and educational comments in `src/CarSharp.Functional/Car.cs`
+- [x] T005 [P] Implementare la classe `Auto` con `ABOUTME` e commenti didattici in `src/CarSharp.Oop/Auto.cs`
+- [x] T006 [P] Implementare il record `Auto` con `ABOUTME` e commenti didattici in `src/CarSharp.Functional/Auto.cs`
 
-## Phase 3: User Story 1 - Basic Fleet Population [US1]
+## Fase 3: User Story 1 - Popolamento Base del Parco Mezzi [US1]
 
-**Goal**: Enable fleet creation and adding cars to track total inventory.
-**Independent Test**: Verify empty fleet count is 0; verify adding $N$ cars results in count $N$.
+**Obiettivo**: Consentire la creazione del parco mezzi e l'aggiunta di auto per tracciare l'inventario totale.
+**Test Indipendente**: Verificare che il conteggio del parco mezzi vuoto sia 0; verificare che l'aggiunta di $N$ auto risulti in un conteggio $N$.
 
-- [x] T007 [US1] [OOP] Write failing Fact for initial empty fleet state in `src/CarSharp.Oop.Tests/FleetTests.cs`
-- [x] T008 [US1] [OOP] Implement `Fleet` class with `TotalCars` property in `src/CarSharp.Oop/Fleet.cs`
-- [x] T009 [US1] [OOP] Write failing Fact for adding a car to the fleet in `src/CarSharp.Oop.Tests/FleetTests.cs`
-- [x] T010 [US1] [OOP] Implement `AddCar` method with mutable state in `src/CarSharp.Oop/Fleet.cs`
-- [x] T011 [US1] [Functional] Write failing Property for initial state, basic addition, and large volume (10k) in `src/CarSharp.Functional.Tests/FleetTests.cs`
-- [x] T012 [US1] [Functional] Implement `Fleet` record and `AddCar` extension with immutability and contrast notes in `src/CarSharp.Functional/Fleet.cs`
+- [x] T007 [US1] [OOP] Scrivere un Fact fallimentare per lo stato iniziale del parco mezzi vuoto in `src/CarSharp.Oop.Tests/ParcoMezziTests.cs`
+- [x] T008 [US1] [OOP] Implementare la classe `ParcoMezzi` con la proprietà `TotaleAuto` in `src/CarSharp.Oop/ParcoMezzi.cs`
+- [x] T009 [US1] [OOP] Scrivere un Fact fallimentare per l'aggiunta di un'auto al parco mezzi in `src/CarSharp.Oop.Tests/ParcoMezziTests.cs`
+- [x] T010 [US1] [OOP] Implementare il metodo `AggiungiAuto` con stato mutabile in `src/CarSharp.Oop/ParcoMezzi.cs`
+- [x] T011 [US1] [Funzionale] Scrivere una Proprietà fallimentare per lo stato iniziale, l'aggiunta base e il grande volume (10k) in `src/CarSharp.Functional.Tests/ParcoMezziTests.cs`
+- [x] T012 [US1] [Funzionale] Implementare il record `ParcoMezzi` e l'estensione `AggiungiAuto` con immutabilità e note di contrasto in `src/CarSharp.Functional/ParcoMezzi.cs`
 
-## Phase 4: User Story 2 - Basic Fleet Maintenance [US2]
+## Fase 4: User Story 2 - Manutenzione Base del Parco Mezzi [US2]
 
-**Goal**: Enable removing cars from the fleet inventory.
-**Independent Test**: Add a car, remove it, and verify the count returns to its previous state.
+**Obiettivo**: Consentire la rimozione delle auto dall'inventario del parco mezzi.
+**Test Indipendente**: Aggiungere un'auto, rimuoverla e verificare che il conteggio torni allo stato precedente.
 
-- [x] T013 [US2] [OOP] Write failing Fact for removing an existing car instance in `src/CarSharp.Oop.Tests/FleetTests.cs`
-- [x] T014 [US2] [OOP] Implement `RemoveCar` method with mutable list removal in `src/CarSharp.Oop/Fleet.cs`
-- [x] T015 [US2] [Functional] Write failing Property for removing cars, including non-existent and null cases, in `src/CarSharp.Functional.Tests/FleetTests.cs`
-- [x] T016 [US2] [Functional] Implement `RemoveCar` extension using non-destructive mutation and contrast notes in `src/CarSharp.Functional/Fleet.cs`
+- [x] T013 [US2] [OOP] Scrivere un Fact fallimentare per la rimozione di un'istanza di auto esistente in `src/CarSharp.Oop.Tests/ParcoMezziTests.cs`
+- [x] T014 [US2] [OOP] Implementare il metodo `RimuoviAuto` con rimozione da lista mutabile in `src/CarSharp.Oop/ParcoMezzi.cs`
+- [x] T015 [US2] [Funzionale] Scrivere una Proprietà fallimentare per la rimozione di auto, inclusi i casi inesistenti e null, in `src/CarSharp.Functional.Tests/ParcoMezziTests.cs`
+- [x] T016 [US2] [Funzionale] Implementare l'estensione `RimuoviAuto` utilizzando la mutazione non distruttiva e note di contrasto in `src/CarSharp.Functional/ParcoMezzi.cs`
 
-## Phase 5: Polish & Educational Wrap-up
+## Fase 5: Rifinitura e Conclusione Didattica
 
-- [x] T017 Write `comparison.md` analyzing architectural differences between the two tracks in `specs/001-phase-1-implementation/comparison.md`
-- [x] T018 [P] Verify all tests pass across both implementations with `dotnet test`
-- [x] T019 [P] Final review of comments and `ABOUTME` headers for educational consistency
-- [x] T020 [P] Verify SC-002 performance (count < 10ms for 10k cars) with comments explaining the O(1) complexity of the Count property in both paradigms
+- [x] T017 Scrivere `comparison.md` analizzando le differenze architettoniche tra i due percorsi in `specs/001-phase-1-implementation/comparison.md`
+- [x] T018 [P] Verificare che tutti i test passino in entrambe le implementazioni con `dotnet test`
+- [x] T019 [P] Revisione finale dei commenti e degli header `ABOUTME` per la coerenza didattica
+- [x] T020 [P] Verificare le prestazioni SC-002 (conteggio < 10ms per 10k auto) con commenti che spieghino la complessità O(1) della proprietà TotaleAuto in entrambi i paradigmi

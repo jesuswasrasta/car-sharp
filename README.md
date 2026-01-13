@@ -14,6 +14,12 @@ Il dominio viene introdotto **per passi**, partendo da un modello volutamente po
 - È possibile rimuovere un mezzo dal parco.
 - È possibile conoscere il numero totale di mezzi nel parco.
 
+In questa fase abbiamo gettato le basi del sistema implementando la gestione del parco mezzi.   
+Il confronto tra i paradigmi evidenzia scelte architetturali divergenti: l'approccio OOP sfrutta l'incapsulamento 
+e la mutazione dello stato interno basata sull'identità di riferimento (reference equality);
+l'approccio Funzionale, invece, si affida a record immutabili, funzioni pure e collezioni persistenti 
+che sfruttano l'uguaglianza basata sul valore (value equality).
+
 ---
 
 ## Fase 2 – Disponibilità

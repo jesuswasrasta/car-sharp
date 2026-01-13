@@ -1,32 +1,34 @@
-# Quickstart: Phase 1 - Minimal Fleet Management
+# Quickstart: Fase 1
 
-## OOP Usage
+Esempi di utilizzo per entrambi i paradigmi.
 
+## Approccio OOP
 ```csharp
-using CarSharp.Oop;
+var parco = new ParcoMezzi();
+var auto = new Auto();
 
-var fleet = new Fleet();
-var car = new Car();
+parco.AggiungiAuto(auto);
+Console.WriteLine(parco.TotaleAuto); // Output: 1
 
-fleet.AddCar(car);
-Console.WriteLine($"Total cars: {fleet.TotalCars}"); // Output: 1
-
-bool removed = fleet.RemoveCar(car);
-Console.WriteLine($"Removed: {removed}, Total cars: {fleet.TotalCars}"); // Output: True, 0
+parco.RimuoviAuto(auto);
+Console.WriteLine(parco.TotaleAuto); // Output: 0
 ```
 
-## Functional Usage
-
+## Approccio Funzionale
 ```csharp
-using CarSharp.Functional;
-using System.Collections.Immutable;
+var parco = ParcoMezzi.Vuoto;
+var auto = new Auto();
 
-var fleet = Fleet.Empty;
-var car = new Car();
+// Le operazioni restituiscono nuove istanze
+var parcoConAuto = parco.AggiungiAuto(auto);
+Console.WriteLine(parcoConAuto.TotaleAuto); // Output: 1
 
-var updatedFleet = fleet.AddCar(car);
-Console.WriteLine($"Total cars: {updatedFleet.TotalCars}"); // Output: 1
+var parcoVuoto = parcoConAuto.RimuoviAuto(auto);
+Console.WriteLine(parcoVuoto.TotaleAuto); // Output: 0
 
-var finalFleet = updatedFleet.RemoveCar(car);
-Console.WriteLine($"Total cars: {finalFleet.TotalCars}"); // Output: 0
+// Chaining fluido
+var conteggio = ParcoMezzi.Vuoto
+    .AggiungiAuto(new Auto())
+    .AggiungiAuto(new Auto())
+    .TotaleAuto; // conteggio = 2
 ```

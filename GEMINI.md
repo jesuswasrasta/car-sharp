@@ -1,57 +1,61 @@
-# CarSharp - Car Rental Core Domain
+# CarSharp - Core Domain Noleggio Auto
 
-## Project Overview
+## Panoramica del Progetto
 
-CarSharp is a C# library that implements the core business logic for a car rental service. It serves as a comparative study between **Object-Oriented (OOP)** and **Functional Programming** paradigms using modern C#. The system is a backend library focusing strictly on state management, business rules, and decision-making.
+CarSharp è una libreria C# che implementa la logica di business principale per un servizio di noleggio auto. Funge da studio comparativo tra i paradigmi **Object-Oriented (OOP)** e **Funzionale** utilizzando il C# moderno. Il sistema è una libreria backend focalizzata rigorosamente sulla gestione dello stato, sulle regole di business e sul processo decisionale.
 
-### Key Technologies
-- **Language**: C# (.NET 10.0)
-- **Testing**: vanilla xUnit for OOP (Example-based testing) and xUnit with FsCheck.Xunit (Property-based testing)
+### Tecnologie Chiave
+-   **Linguaggio**: C# (.NET 10.0)
+-   **Testing**: xUnit vanilla per OOP (Testing basato su esempi) e xUnit con FsCheck.Xunit (Testing basato su proprietà)
 
-## Project Structure
+## Struttura del Progetto
 
 ```
 /
 ├── src/
-│   ├── CarSharp.Oop/               # Idiomatic OOP Implementation
-│   ├── CarSharp.Functional/        # Functional C# Implementation
-│   ├── CarSharp.Oop.Tests/         # Idiomatic OOP Testing Project
-│   ├── CarSharp.Functional.Tests/  # Functional C# Implementation Testing Project
-├── CarSharp.sln                # Solution file
-├── README.md                   # Requirements and Phases (Italian)
-└── CLAUDE.md                   # Context for AI assistants
+│   ├── CarSharp.Oop/               # Implementazione OOP Idiomatica
+│   ├── CarSharp.Functional/        # Implementazione C# Funzionale
+│   ├── CarSharp.Oop.Tests/         # Progetto di Test OOP Idiomatico
+│   ├── CarSharp.Functional.Tests/  # Progetto di Test C# Funzionale
+├── CarSharp.sln                # File della soluzione
+├── README.md                   # Requisiti e Fasi (Italiano)
+└── CLAUDE.md                   # Contesto per gli assistenti AI
 ```
 
-## Development Workflow
+## Workflow di Sviluppo
 
-### Building and Running
+### Build ed Esecuzione
 
 ```bash
-# Build the solution
+# Build della soluzione
 dotnet build
 
-# Run all tests
+# Esecuzione di tutti i test
 dotnet test
 
-# Run tests continuously (Watch mode)
+# Esecuzione dei test in modalità continua (Watch mode)
 dotnet watch test
 ```
 
-### Development Approach
+### Approccio allo Sviluppo
 
-The project is built in **Phases** (defined in `README.md`). Every phase is implemented twice to highlight the architectural differences between OOP and Functional styles in C#.
+Il progetto è costruito in **Fasi** (definite in `README.md`). Ogni fase è implementata due volte per evidenziare le differenze architettoniche tra gli stili OOP e Funzionale in C#.
 
-### Coding Conventions
+### Convenzioni di Codifica
 
-1.  **OOP Track**: Use classes, encapsulation, mutable state, and example-based testing.
-2.  **Functional Track**: Use records, immutability, pure functions, and property-based testing.
-3.  **Consistency**: Both implementations must satisfy the same business requirements but through different paradigms.
+1.  **Percorso OOP**: Utilizzare classi, incapsulamento, stato mutabile e test basati su esempi.
+2.  **Percorso Funzionale**: Utilizzare record, immutabilità, funzioni pure e test basati su proprietà.
+3.  **Coerenza**: Entrambe le implementazioni devono soddisfare gli stessi requisiti di business ma attraverso paradigmi diversi.
 
-## Key Domain Concepts
 
-*   **Car**: Modeled as an entity in OOP, as a record/value in Functional.
-*   **Fleet**: A collection managing vehicles and their states.
-*   **Operations**: Add, Remove, Count, Book (Incremental complexity).
+## Concetti Chiave del Dominio
+
+*   **Auto**: Modellata come entità in OOP, come record/valore in Funzionale.
+*   **ParcoMezzi**: Una collezione che gestisce i veicoli e i loro stati.
+*   **Operazioni**: Aggiungi, Rimuovi, Conteggio, Prenota (complessità incrementale).
+
+# Italian Language Usage
+All comments, documentation, and domain concepts MUST be expressed in Italian to cater to the target audience of Italian programmers.
 
 ## Future Requirements (Roadmap)
 

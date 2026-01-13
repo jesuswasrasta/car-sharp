@@ -42,6 +42,14 @@ Implementations must highlight the differences in error handling and state manag
 The purpose of this project is educational. The focus is on clarity, contrast, and understanding over performance or production readiness.
 *   **Comments**: Every test and every implementation must include inline comments explaining the *why* for an audience.
 *   **Functional VS OOP**: Each functional implementation must include notes on how it contrasts with the OOP version.
+*   **Content**: Don't bother the audience with info about using TDD, they know about it. Underline the paradigm differences instead.
+
+### VII. Language
+The audience is Italian programers. Use Italian language for comments, for domain concepts (classes, type records, variables) and documentation in general.
+*   **Code**: NO: "class Car" YES: "classe Auto".
+*   **Comments**: NO: "This a test for the Car class". YES: "Questo è un test per la classe Auto".
+*   **Documentation**: NO: "The Car domain represents vehicles". YES: "Il dominio Auto rappresenta i veicoli".
+
 
 ## Governance
 

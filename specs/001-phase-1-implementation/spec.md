@@ -1,74 +1,74 @@
-# Feature Specification: Phase 1 - Minimal Fleet Management
+# Specifica della Funzionalità: Fase 1 - Gestione Parco Mezzi Minimale
 
-**Feature Branch**: `001-phase-1-implementation`  
-**Created**: 2026-01-12  
-**Status**: Draft  
-**Input**: User description: "Implement Phase 1 (Minimal Fleet Management) in both OOP and Functional approaches"
+**Branch della Funzionalità**: `001-phase-1-implementation`  
+**Creato**: 12-01-2026  
+**Stato**: Draft  
+**Input**: Descrizione utente: "Implementare la Fase 1 (Gestione Parco Mezzi Minimale) sia con approccio OOP che Funzionale"
 
-## Clarifications
+## Chiarimenti
 
-### Session 2026-01-12
-- Q: How should the system identify the car to be removed in this phase? → A: **Equality**: Use language-level equality (Reference for OOP, Value for Functional).
+### Sessione 12-01-2026
+- D: Come dovrebbe il sistema identificare l'auto da rimuovere in questa fase? → R: **Uguaglianza**: Utilizzare l'uguaglianza a livello di linguaggio (Riferimento per OOP, Valore per Funzionale).
 
-## User Scenarios & Testing *(mandatory)*
+## Scenari Utente e Test *(obbligatorio)*
 
-### User Story 1 - Basic Fleet Population (Priority: P1)
+### User Story 1 - Popolamento Base del Parco Mezzi (Priorità: P1)
 
-As a fleet manager, I want to be able to add cars to my initially empty fleet so that I can start managing my assets.
+Come gestore del parco mezzi, voglio poter aggiungere auto al mio parco inizialmente vuoto in modo da poter iniziare a gestire i miei asset.
 
-**Why this priority**: This is the fundamental building block of the system. Without the ability to add cars and see the count, the system has no utility.
+**Perché questa priorità**: Questo è il blocco fondamentale del sistema. Senza la possibilità di aggiungere auto e vederne il conteggio, il sistema non ha alcuna utilità.
 
-**Independent Test**: Can be fully tested by creating an empty fleet, adding a known number of cars, and verifying that the total count matches the number of cars added.
+**Test Indipendente**: Può essere testato completamente creando un parco mezzi vuoto, aggiungendo un numero noto di auto e verificando che il conteggio totale corrisponda al numero di auto aggiunte.
 
-**Acceptance Scenarios**:
+**Scenari di Accettazione**:
 
-1. **Given** a new fleet management system, **When** I check the total number of cars, **Then** it should be 0.
-2. **Given** an empty fleet, **When** I add a single car, **Then** the total number of cars should be 1.
-3. **Given** a fleet with 1 car, **When** I add another car, **Then** the total number of cars should be 2.
-
----
-
-### User Story 2 - Basic Fleet Maintenance (Priority: P2)
-
-As a fleet manager, I want to be able to remove cars from my fleet so that I can keep my inventory up to date when cars are sold or decommissioned.
-
-**Why this priority**: Maintenance of the fleet is essential for accuracy.
-
-**Independent Test**: Can be tested by adding a car, removing it, and verifying that the count returns to its previous state.
-
-**Acceptance Scenarios**:
-
-1. **Given** a fleet containing 1 car, **When** I remove that car, **Then** the total number of cars should be 0.
-2. **Given** a fleet containing multiple cars, **When** I remove one specific car, **Then** the total number of cars should decrease by exactly 1.
-3. **Given** an empty fleet, **When** I attempt to remove a car, **Then** the operation should indicate that the car was not found and the count should remain 0.
+1. **Dato** un nuovo sistema di gestione del parco mezzi, **Quando** controllo il numero totale di auto, **Allora** dovrebbe essere 0.
+2. **Dato** un parco mezzi vuoto, **Quando** aggiungo una singola auto, **Allora** il numero totale di auto dovrebbe essere 1.
+3. **Dato** un parco mezzi con 1 auto, **Quando** aggiungo un'altra auto, **Allora** il numero totale di auto dovrebbe essere 2.
 
 ---
 
-### Edge Cases
+### User Story 2 - Manutenzione Base del Parco Mezzi (Priorità: P2)
 
-- **Removing from Empty Fleet**: System must gracefully handle requests to remove a car when the fleet is empty.
-- **Large Volume**: Adding 10,000 cars sequentially should result in an accurate count of 10,000 (satisfying SC-002).
-- **Null Inputs**: Adding a "null" or invalid car reference (if applicable to the approach) should be handled according to paradigm-specific best practices (e.g., ignored or resulting in an error).
+Come gestore del parco mezzi, voglio poter rimuovere auto dal mio parco in modo da poter mantenere aggiornato il mio inventario quando le auto vengono vendute o dismesse.
 
-## Requirements *(mandatory)*
+**Perché questa priorità**: La manutenzione del parco mezzi è essenziale per la precisione.
 
-### Functional Requirements
+**Test Indipendente**: Può essere testato aggiungendo un'auto, rimuovendola e verificando che il conteggio torni allo stato precedente.
 
-- **FR-001**: System MUST support an initially empty state for the fleet.
-- **FR-002**: System MUST allow adding an individual car to the fleet.
-- **FR-003**: System MUST allow removing an individual car from the fleet using equality-based identification (Reference equality for OOP, Value equality for Functional).
-- **FR-004**: System MUST provide a way to retrieve the current total count of cars in the fleet.
+**Scenari di Accettazione**:
 
-### Key Entities *(include if feature involves data)*
+1. **Dato** un parco mezzi contenente 1 auto, **Quando** rimuovo quell'auto, **Allora** il numero totale di auto dovrebbe essere 0.
+2. **Dato** un parco mezzi contenente più auto, **Quando** rimuovo un'auto specifica, **Allora** il numero totale di auto dovrebbe diminuire di esattamente 1.
+3. **Dato** un parco mezzi vuoto, **Quando** tento di rimuovere un'auto, **Allora** l'operazione dovrebbe indicare che l'auto non è stata trovata e il conteggio dovrebbe rimanere 0.
 
-- **Car**: Represents a single vehicle in the fleet. Identity is managed via language-native equality.
-- **Fleet**: Represents the collection of cars and provides the management operations.
+---
 
-## Success Criteria *(mandatory)*
+### Casi Limite
 
-### Measurable Outcomes
+- **Rimozione da Parco Vuoto**: Il sistema deve gestire con grazia le richieste di rimozione di un'auto quando il parco mezzi è vuoto.
+- **Grande Volume**: L'aggiunta sequenziale di 10.000 auto dovrebbe risultare in un conteggio accurato di 10.000 (soddisfacendo SC-002).
+- **Input Null**: L'aggiunta di un riferimento "null" o di un'auto non valida (se applicabile all'approccio) dovrebbe essere gestita secondo le migliori pratiche specifiche del paradigma (es. ignorata o con conseguente errore).
 
-- **SC-001**: 100% of "Add" and "Remove" operations result in an accurate update to the fleet count.
-- **SC-002**: The fleet count operation must be instantaneous (under 10ms) regardless of the number of cars (up to 10,000).
-- **SC-003**: The system must provide two distinct implementations (OOP and Functional) that both pass the same set of logic requirements.
-- **SC-004**: Implementation-specific tests (Example-based for OOP, Property-based for Functional) must achieve 100% pass rate.
+## Requisiti *(obbligatorio)*
+
+### Requisiti Funzionali
+
+- **FR-001**: Il sistema DEVE supportare uno stato inizialmente vuoto per il parco mezzi.
+- **FR-002**: Il sistema DEVE consentire l'aggiunta di una singola auto al parco mezzi.
+- **FR-003**: Il sistema DEVE consentire la rimozione di una singola auto dal parco mezzi utilizzando l'identificazione basata sull'uguaglianza (uguaglianza per riferimento per OOP, uguaglianza per valore per Funzionale).
+- **FR-004**: Il sistema DEVE fornire un modo per recuperare il conteggio totale corrente delle auto nel parco mezzi.
+
+### Entità Chiave *(includere se la funzionalità coinvolge dati)*
+
+- **Auto**: Rappresenta un singolo veicolo nel parco mezzi. L'identità è gestita tramite l'uguaglianza nativa del linguaggio.
+- **ParcoMezzi**: Rappresenta la collezione di auto e fornisce le operazioni di gestione.
+
+## Criteri di Successo *(obbligatorio)*
+
+### Risultati Misurabili
+
+- **SC-001**: Il 100% delle operazioni di "Aggiunta" e "Rimozione" risulta in un aggiornamento accurato del conteggio del parco mezzi.
+- **SC-002**: L'operazione di conteggio del parco mezzi deve essere istantanea (inferiore a 10ms) indipendentemente dal numero di auto (fino a 10.000).
+- **SC-003**: Il sistema deve fornire due implementazioni distinte (OOP e Funzionale) che soddisfino entrambe lo stesso insieme di requisiti logici.
+- **SC-004**: I test specifici dell'implementazione (basati su esempi per OOP, basati su proprietà per Funzionale) devono raggiungere un tasso di superamento del 100%.
