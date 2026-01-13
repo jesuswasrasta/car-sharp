@@ -50,45 +50,97 @@ public class ParcoMezzi
     }
 
     /// <summary>
-    /// Noleggia un batch di auto identificandole tramite targa.
-    /// L'operazione deve essere atomica: o tutte le auto vengono noleggiate, o nessuna.
+    /// Noleggia un'auto che soddisfi il requisito minimo di posti.
+    /// Viene scelta la prima auto disponibile in ordine di inserimento che ha capacità sufficiente.
     /// </summary>
-    /// <param name="targhe">Elenco delle targhe delle auto da noleggiare.</param>
-    public void NoleggiaBatch(IEnumerable<Guid> targhe)
+    /// <param name="postiMinimi">Il numero minimo di posti richiesti.</param>
+    /// <returns>L'istanza dell'auto noleggiata.</returns>
+    /// <exception cref="InvalidOperationException">Lanciata se nessuna auto idonea è disponibile.</exception>
+    public Auto Noleggia(int postiMinimi)
     {
-        // In OOP, l'atomicità in-memory può essere garantita con un approccio "Check-Then-Act".
-        // Prima validiamo che l'intera operazione sia possibile, poi applichiamo le mutazioni.
+        // Cerchiamo la prima auto che sia Disponibile E abbia Capacita >= postiMinimi.
+        var autoIdonea = _auto.FirstOrDefault(a => a.Stato == StatoAuto.Disponibile && a.Capacita >= postiMinimi);
 
-        var listaTarghe = targhe.ToList();
-
-        // Nota per l'audience: Iniziamo con i controlli di pre-condizione.
-        // Se il batch contiene duplicati, è una richiesta invalida a priori.
-        if (listaTarghe.Distinct().Count() != listaTarghe.Count)
+        if (autoIdonea == null)
         {
-            throw new ArgumentException("Il batch contiene dei duplicati.");
+            throw new InvalidOperationException($"Nessuna auto disponibile con almeno {postiMinimi} posti.");
         }
 
-        // FASE CHECK: Cerchiamo tutte le auto e verifichiamo la loro disponibilità.
-        // Se una sola auto non è disponibile, interrompiamo tutto PRIMA di modificare lo stato.
-        var autoDaNoleggiare = new List<Auto>();
-        foreach (var id in listaTarghe)
+        autoIdonea.Noleggia();
+        return autoIdonea;
+    }
+
+    /// <summary>
+    /// Noleggia un batch di richieste di noleggio.
+    /// L'operazione è atomica (Check-Then-Act).
+    /// </summary>
+    public void NoleggiaBatch(IEnumerable<RichiestaNoleggio> richieste)
+    {
+        var listaRichieste = richieste.ToList();
+
+        // Controllo preventivo duplicati ID (se presenti)
+        var idsSemplici = listaRichieste.Where(r => r.IdAuto.HasValue).Select(r => r.IdAuto!.Value).ToList();
+        if (idsSemplici.Distinct().Count() != idsSemplici.Count)
         {
-            var auto = _auto.FirstOrDefault(a => a.Id == id);
-            
-            // Verifichiamo l'esistenza e lo stato. 
-            // In OOP, l'oggetto ParcoMezzi coordina gli oggetti Auto.
-            if (auto == null || auto.Stato == StatoAuto.Noleggiata)
+            throw new ArgumentException("Il batch contiene dei duplicati di ID auto.");
+        }
+
+        // FASE CHECK: Validiamo tutte le richieste senza modificare lo stato.
+        var autoAssegnate = new List<Auto>();
+        var idsImpegnatiInQuestoBatch = new HashSet<Guid>();
+
+        foreach (var richiesta in listaRichieste)
+        {
+            Auto? autoIdonea;
+
+            if (richiesta.IdAuto.HasValue)
             {
-                throw new InvalidOperationException($"L'auto con ID {id} non è disponibile o non esiste.");
+                // Richiesta specifica per ID
+                var id = richiesta.IdAuto.Value;
+                autoIdonea = _auto.FirstOrDefault(a => a.Id == id);
+
+                if (autoIdonea == null || autoIdonea.Stato == StatoAuto.Noleggiata || idsImpegnatiInQuestoBatch.Contains(id))
+                {
+                    throw new InvalidOperationException($"L'auto specifica con ID {id} non è disponibile.");
+                }
+
+                // FR-006: Verifica capacità se specificata
+                if (autoIdonea.Capacita < richiesta.PostiMinimi)
+                {
+                    throw new InvalidOperationException($"L'auto con ID {id} ha capacità {autoIdonea.Capacita}, insufficiente per i {richiesta.PostiMinimi} posti richiesti.");
+                }
             }
-            autoDaNoleggiare.Add(auto);
+            else
+            {
+                // Richiesta per capacità (prima disponibile)
+                autoIdonea = _auto.FirstOrDefault(a => 
+                    a.Stato == StatoAuto.Disponibile && 
+                    a.Capacita >= richiesta.PostiMinimi && 
+                    !idsImpegnatiInQuestoBatch.Contains(a.Id));
+
+                if (autoIdonea == null)
+                {
+                    throw new InvalidOperationException($"Nessuna auto disponibile con almeno {richiesta.PostiMinimi} posti.");
+                }
+            }
+
+            autoAssegnate.Add(autoIdonea);
+            idsImpegnatiInQuestoBatch.Add(autoIdonea.Id);
         }
 
-        // FASE ACT: Solo se siamo sicuri che tutto il batch sia valido, procediamo alla mutazione.
-        // Questo garantisce l'atomicità in-memory senza bisogno di rollback complessi.
-        foreach (var auto in autoDaNoleggiare)
+        // FASE ACT: Applichiamo le mutazioni.
+        foreach (var auto in autoAssegnate)
         {
             auto.Noleggia();
         }
+    }
+
+    /// <summary>
+    /// Noleggia un batch di auto identificandole tramite targa (compatibilità Fase 3).
+    /// </summary>
+    public void NoleggiaBatch(IEnumerable<Guid> ids)
+    {
+        // Trasformiamo i semplici ID in oggetti RichiestaNoleggio.
+        NoleggiaBatch(ids.Select(id => RichiestaNoleggio.PerId(id)));
     }
 }

@@ -12,12 +12,12 @@ public static class AutoExtensions
     /// Non serve validazione interna perché un'AutoDisponibile può sempre passare a AutoNoleggiata.
     /// </summary>
     public static AutoNoleggiata Noleggia(this AutoDisponibile auto) =>
-        new(auto.Id, auto.Targa);
+        new(auto.Id, auto.Targa, auto.Capacita);
 
     /// <summary>
     /// Trasforma un'auto noleggiata in un'auto disponibile.
     /// La transizione inversa è anch'essa una funzione pura totale.
     /// </summary>
     public static AutoDisponibile Restituisci(this AutoNoleggiata auto) =>
-        new(auto.Id, auto.Targa);
+        new(auto.Id, auto.Targa, auto.Capacita);
 }

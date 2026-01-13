@@ -26,13 +26,24 @@ public class Auto
     public StatoAuto Stato { get; private set; }
 
     /// <summary>
-    /// Inizializza una nuova istanza dell'auto con un'identità e uno stato iniziale.
+    /// Capacità dell'auto espressa in numero di posti.
     /// </summary>
-    public Auto(Guid id, string targa, StatoAuto stato)
+    public int Capacita { get; }
+
+    /// <summary>
+    /// Inizializza una nuova istanza dell'auto con un'identità, uno stato iniziale e la capacità.
+    /// </summary>
+    public Auto(Guid id, string targa, StatoAuto stato, int capacita)
     {
+        if (capacita <= 0)
+        {
+            throw new ArgumentException("La capacità deve essere almeno di 1 posto.", nameof(capacita));
+        }
+
         Id = id;
         Targa = targa;
         Stato = stato;
+        Capacita = capacita;
     }
 
     /// <summary>

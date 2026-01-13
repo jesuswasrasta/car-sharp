@@ -1,8 +1,4 @@
-## Contesto
-
-Stai sviluppando il core di un **servizio di car renting**.
-Il sistema non ha interfaccia grafica: è una libreria che gestisce **stato**, **regole di business** e **decisioni automatiche**.
-Il dominio viene introdotto **per passi**, partendo da un modello volutamente povero e arricchendolo progressivamente.
+# APPUNTI
 
 ---
 

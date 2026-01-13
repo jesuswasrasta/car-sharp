@@ -61,55 +61,76 @@ public static class ParcoMezziExtensions
     }
 
     /// <summary>
-    /// Tenta di noleggiare un'auto specifica dal parco.
-    /// In Type-Driven Design, usiamo il pattern matching per agire solo se l'auto è nello stato corretto.
+    /// Tenta di noleggiare un'auto in base a una richiesta specifica.
+    /// In FP, validiamo i vincoli (disponibilità, capacità) tramite pattern matching e Result.
     /// </summary>
-    public static Result<ParcoMezzi> NoleggiaAuto(this ParcoMezzi parco, Guid id)
+    public static Result<ParcoMezzi> NoleggiaAuto(this ParcoMezzi parco, RichiestaNoleggio richiesta)
     {
-        var autoTrovata = parco.auto.FirstOrDefault(a => a.Id == id);
+        IAuto? autoTrovata;
+
+        if (richiesta.IdAuto.HasValue)
+        {
+            autoTrovata = parco.auto.FirstOrDefault(a => a.Id == richiesta.IdAuto.Value);
+        }
+        else
+        {
+            autoTrovata = parco.auto
+                .OfType<AutoDisponibile>()
+                .FirstOrDefault(a => a.Capacita >= richiesta.PostiMinimi);
+        }
         
         if (autoTrovata == null)
-            return Result<ParcoMezzi>.Failure(new Error("Auto non trovata"));
+            return Result<ParcoMezzi>.Failure(new Error("Auto non trovata o non disponibile per i requisiti richiesti"));
 
         return autoTrovata switch
         {
-            AutoDisponibile disponibile => 
+            AutoDisponibile disponibile when disponibile.Capacita >= richiesta.PostiMinimi => 
                 Result<ParcoMezzi>.Success(parco with { 
                     auto = parco.auto.Replace(disponibile, disponibile.Noleggia()) 
                 }),
+            AutoDisponibile => Result<ParcoMezzi>.Failure(new Error($"L'auto scelta non ha capacità sufficiente ({richiesta.PostiMinimi} richiesti)")),
             _ => Result<ParcoMezzi>.Failure(new Error("Auto già noleggiata o in stato non valido"))
         };
     }
 
     /// <summary>
-    /// Noleggia un batch di auto atomicamente.
-    /// In FP, utilizziamo la composizione di funzioni (Bind) per garantire che
-    /// il risultato sia Success solo se tutte le operazioni intermedie hanno successo.
+    /// Tenta di noleggiare un'auto specifica dal parco (compatibilità).
     /// </summary>
-    /// <param name="parco">Il parco mezzi corrente.</param>
-    /// <param name="targhe">Elenco delle targhe da noleggiare.</param>
-    public static Result<ParcoMezzi> NoleggiaBatch(this ParcoMezzi parco, IEnumerable<Guid> targhe)
+    public static Result<ParcoMezzi> NoleggiaAuto(this ParcoMezzi parco, Guid id) =>
+        parco.NoleggiaAuto(new RichiestaNoleggio(1, id));
+
+    /// <summary>
+    /// Tenta di noleggiare un'auto che soddisfi il requisito di capacità.
+    /// </summary>
+    public static Result<ParcoMezzi> NoleggiaPerCapacita(this ParcoMezzi parco, int postiMinimi) =>
+        parco.NoleggiaAuto(new RichiestaNoleggio(postiMinimi));
+
+    /// <summary>
+    /// Noleggia un batch di richieste atomicamente.
+    /// In FP, utilizziamo la composizione di funzioni (Bind) su una sequenza di richieste.
+    /// </summary>
+    public static Result<ParcoMezzi> NoleggiaBatch(this ParcoMezzi parco, IEnumerable<RichiestaNoleggio> richieste)
     {
-        // APPLYING "PARSE, DON'T VALIDATE":
-        // Invece di controllare "if (duplicati) return error", proviamo a costruire
-        // una struttura dati che PER DEFINIZIONE non ha duplicati (un Set).
-        // Se la cardinalità cambia durante la trasformazione, significa che l'input 
-        // non era valido per il nostro dominio (che richiede unicità).
-        
-        var listaInput = targhe.ToImmutableList();
-        var setTarghe = listaInput.ToImmutableHashSet();
-
-        if (listaInput.Count != setTarghe.Count)
-        {
-            // Il parsing è fallito: l'input non è un "Batch valido di richieste uniche".
-            return Result<ParcoMezzi>.Failure(new Error("Il batch contiene duplicati"));
-        }
-
-        // Da qui in poi, lavoriamo con 'setTarghe', che è garantito essere unico.
-        // Non dobbiamo più preoccuparci dei duplicati.
-        return setTarghe.Aggregate(
+        // Nota per l'audience: L'uso di Aggregate con Bind garantisce l'atomicità:
+        // Se una sola richiesta fallisce (es. capacità insufficiente o auto occupata),
+        // l'intera catena si interrompe e restituisce l'errore, lasciando il parco originale intatto.
+        return richieste.Aggregate(
             Result<ParcoMezzi>.Success(parco),
-            (risultatoCorrente, id) => risultatoCorrente.Bind(p => p.NoleggiaAuto(id))
+            (risultatoCorrente, richiesta) => risultatoCorrente.Bind(p => p.NoleggiaAuto(richiesta))
         );
+    }
+
+    /// <summary>
+    /// Noleggia un batch di auto identificandole tramite ID (compatibilità Fase 3).
+    /// </summary>
+    public static Result<ParcoMezzi> NoleggiaBatch(this ParcoMezzi parco, IEnumerable<Guid> ids)
+    {
+        // In questa fase, per i semplici ID, controlliamo i duplicati espliciti 
+        // per mantenere il comportamento atteso dalla Fase 3 (Parse, don't validate).
+        var listaIds = ids.ToList();
+        if (listaIds.Distinct().Count() != listaIds.Count)
+            return Result<ParcoMezzi>.Failure(new Error("Il batch contiene duplicati"));
+
+        return parco.NoleggiaBatch(listaIds.Select(id => new RichiestaNoleggio(1, id)));
     }
 }

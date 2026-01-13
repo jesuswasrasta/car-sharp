@@ -12,17 +12,18 @@ public interface IAuto
 {
     Guid Id { get; init; }
     string Targa { get; init; }
+    int Capacita { get; init; }
 }
 
 /// <summary>
 /// Rappresenta un'auto pronta per il noleggio.
 /// </summary>
-public record AutoDisponibile(Guid Id, string Targa) : IAuto;
+public record AutoDisponibile(Guid Id, string Targa, int Capacita) : IAuto;
 
 /// <summary>
 /// Rappresenta un'auto attualmente impegnata in un noleggio.
 /// </summary>
-public record AutoNoleggiata(Guid Id, string Targa) : IAuto;
+public record AutoNoleggiata(Guid Id, string Targa, int Capacita) : IAuto;
 
 // Nota per l'audience: In questa fase non usiamo un record base per evitare
 // la 'falsa eredità'. Ogni stato ha il suo tipo, e il parco mezzi conterrà 
