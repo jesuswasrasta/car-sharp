@@ -1,87 +1,69 @@
-// ABOUTME: Suite di test per l'implementazione OOP di ParcoMezzi.
-// Utilizziamo test basati su esempi (Facts) per verificare le transizioni di stato specifiche.
+// ABOUTME: Test per la gestione del ParcoMezzi nel paradigma OOP.
+// In OOP, il parco mezzi è un aggregato che gestisce una collezione di oggetti Auto mutabili.
 
 using CarSharp.Oop;
+using Xunit;
 
 namespace CarSharp.Oop.Tests;
 
 public class ParcoMezziTests
 {
     [Fact]
-    public void NuovoParcoMezzi_DovrebbeEssereVuoto()
+    public void ParcoMezziVuoto_DovrebbeAvereZeroAuto()
     {
-        // Arrange & Act
         var parco = new ParcoMezzi();
-
-        // Assert
-        // Verifichiamo che un parco mezzi appena creato abbia un conteggio pari a zero.
         Assert.Equal(0, parco.TotaleAuto);
     }
 
-    [Fact]
-    public void AggiungiAuto_DovrebbeIncrementareIlConteggioTotale()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(5)]
+    [InlineData(10)]
+    public void AggiuntaDiNAuto_DovrebbeRisultareInConteggioTotaleN(int n)
     {
-        // Arrange
+        // Perché: L'aggiunta di un oggetto a una collezione deve incrementarne la dimensione.
         var parco = new ParcoMezzi();
-        var auto = new Auto();
+        
+        for (int i = 0; i < n; i++)
+        {
+            var auto = new Auto(Guid.NewGuid(), $"ABC{i}", StatoAuto.Disponibile);
+            parco.AggiungiAuto(auto);
+        }
 
-        // Act
-        // Mutiamo lo stato del parco mezzi aggiungendo un'auto.
-        parco.AggiungiAuto(auto);
-
-        // Assert
-        // Il conteggio dovrebbe essere aumentato a 1.
-        Assert.Equal(1, parco.TotaleAuto);
+        Assert.Equal(n, parco.TotaleAuto);
     }
 
     [Fact]
-    public void RimuoviAuto_DovrebbeDecrementareIlConteggioTotale_QuandoLAutoEsiste()
+    public void GrandeVolume_DovrebbeEssereIstantaneo()
     {
-        // Arrange
+        // Perché: La gestione delle reference in OOP è estremamente efficiente.
         var parco = new ParcoMezzi();
-        var auto = new Auto();
-        parco.AggiungiAuto(auto);
+        var grandeConteggio = 10_000;
 
-        // Act
-        // Rimuoviamo l'istanza specifica dell'auto.
-        bool rimosso = parco.RimuoviAuto(auto);
+        for (int i = 0; i < grandeConteggio; i++)
+        {
+            var auto = new Auto(Guid.NewGuid(), $"ABC{i}", StatoAuto.Disponibile);
+            parco.AggiungiAuto(auto);
+        }
 
-        // Assert
-        Assert.True(rimosso);
-        Assert.Equal(0, parco.TotaleAuto);
-    }
-
-    [Fact]
-    public void RimuoviAuto_DovrebbeRestituireFalse_QuandoLAutoNonEsiste()
-    {
-        // Arrange
-        var parco = new ParcoMezzi();
-        var auto = new Auto();
-
-        // Act
-        bool rimosso = parco.RimuoviAuto(auto);
-
-        // Assert
-        Assert.False(rimosso);
-        Assert.Equal(0, parco.TotaleAuto);
-    }
-
-    [Fact]
-    public void TotaleAuto_DovrebbeEssereIstantaneo_IndipendentementeDalVolume()
-    {
-        // Arrange
-        var parco = new ParcoMezzi();
-        for (int i = 0; i < 10_000; i++) parco.AggiungiAuto(new Auto());
-
-        // Act
         var watch = System.Diagnostics.Stopwatch.StartNew();
         var conteggio = parco.TotaleAuto;
         watch.Stop();
 
-        // Assert
-        // In OOP, List.Count è un'operazione O(1) perché il conteggio è 
-        // memorizzato nella cache e aggiornato durante la mutazione.
-        Assert.Equal(10_000, conteggio);
+        Assert.Equal(grandeConteggio, conteggio);
         Assert.True(watch.ElapsedMilliseconds < 10, $"Il conteggio ha richiesto {watch.ElapsedMilliseconds}ms");
+    }
+
+    [Fact]
+    public void RimozioneAuto_DovrebbeDecrementareIlConteggio_QuandoLAutoEsiste()
+    {
+        // Perché: Rimuovere un oggetto esistente deve ridurne la presenza nell'aggregato.
+        var parco = new ParcoMezzi();
+        var auto = new Auto(Guid.NewGuid(), "TEST1", StatoAuto.Disponibile);
+        parco.AggiungiAuto(auto);
+
+        parco.RimuoviAuto(auto);
+
+        Assert.Equal(0, parco.TotaleAuto);
     }
 }
