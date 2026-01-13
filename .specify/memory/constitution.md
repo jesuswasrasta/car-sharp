@@ -45,10 +45,15 @@ The purpose of this project is educational. The focus is on clarity, contrast, a
 *   **Content**: Don't bother the audience with info about using TDD, they know about it. Underline the paradigm differences instead.
 
 ### VII. Language
-The audience is Italian programers. Use Italian language for comments, for domain concepts (classes, type records, variables) and documentation in general.
+The audience is Italian programers. 
+Use Italian language for comments, for domain concepts (classes, type records, variables) and documentation in general.
+Use italian language for commit messages.
+
+Examples:
 *   **Code**: NO: "class Car" YES: "classe Auto".
 *   **Comments**: NO: "This a test for the Car class". YES: "Questo è un test per la classe Auto".
 *   **Documentation**: NO: "The Car domain represents vehicles". YES: "Il dominio Auto rappresenta i veicoli".
+*   **Commit message**: NO: "feat: add car rental functionality" YES: "feat: aggiunge funzionalità di noleggio auto".
 
 
 ## Governance
