@@ -1,16 +1,37 @@
-// ABOUTME: Questo file definisce l'entità Auto per il percorso OOP.
-// Nella Fase 1, l'Auto è un semplice contenitore senza proprietà,
-// sottolineando che l'identità nell'OOP deriva spesso dal riferimento all'oggetto.
+// ABOUTME: Rappresentazione dell'entità Auto nel paradigma Object-Oriented.
+// L'oggetto incapsula il proprio stato (Id, Targa, Stato) e ne garantisce la consistenza.
 
 namespace CarSharp.Oop;
 
 /// <summary>
-/// Rappresenta un'auto nel parco mezzi.
-/// In questa implementazione Object-Oriented, l'Auto è un'entità la cui
-/// identità è definita dalla sua esistenza in memoria (uguaglianza per riferimento).
+/// Rappresenta un'auto nel sistema di noleggio.
+/// In OOP, questa è un'entità con identità (Id) e stato mutabile (Stato).
 /// </summary>
 public class Auto
 {
-    // Al momento, un'Auto è solo un token oggetto.
-    // Proprietà come Targa o Modello verranno aggiunte nelle fasi successive.
+    /// <summary>
+    /// Identificativo univoco tecnico (GUID). Stabile per tutta la vita dell'oggetto.
+    /// </summary>
+    public Guid Id { get; }
+
+    /// <summary>
+    /// Identificativo di dominio (Targa). 
+    /// </summary>
+    public string Targa { get; }
+
+    /// <summary>
+    /// Stato operativo corrente dell'auto.
+    /// In OOP, questo stato è mutabile internamente.
+    /// </summary>
+    public StatoAuto Stato { get; private set; }
+
+    /// <summary>
+    /// Inizializza una nuova istanza dell'auto con un'identità e uno stato iniziale.
+    /// </summary>
+    public Auto(Guid id, string targa, StatoAuto stato)
+    {
+        Id = id;
+        Targa = targa;
+        Stato = stato;
+    }
 }
