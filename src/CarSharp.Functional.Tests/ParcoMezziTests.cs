@@ -24,7 +24,7 @@ public class ParcoMezziTests
 
         for (int i = 0; i < conteggio; i++)
         {
-            parco = parco.AggiungiAuto(new Auto()).Value!;
+            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}")).Value!;
         }
 
         return (parco.TotaleAuto == conteggio);
@@ -38,7 +38,7 @@ public class ParcoMezziTests
 
         for (int i = 0; i < grandeConteggio; i++)
         {
-            parco = parco.AggiungiAuto(new Auto()).Value!;
+            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}")).Value!;
         }
 
         var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -53,10 +53,10 @@ public class ParcoMezziTests
     public bool RimozioneAuto_DovrebbeDecrementareIlConteggio_QuandoLAutoEsiste(PositiveInt n)
     {
         var parco = ParcoMezzi.Vuoto;
-        var autoList = new List<Auto>();
+        var autoList = new List<IAuto>();
         for (int i = 0; i < n.Get; i++)
         {
-            var auto = new Auto();
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}");
             autoList.Add(auto);
             parco = parco.AggiungiAuto(auto).Value!;
         }
@@ -69,10 +69,23 @@ public class ParcoMezziTests
     }
 
     [Fact]
+    public void ConteggioDisponibili_DovrebbeContareSoloLeIstanzeDiAutoDisponibile()
+    {
+        // Perché: In Type-Driven Design, lo stato è espresso dal tipo. 
+        // Filtrare per tipo è l'equivalente funzionale del filtraggio per proprietà.
+        var parco = ParcoMezzi.Vuoto
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "AA111AA")).Value!
+            .AggiungiAuto(new AutoNoleggiata(Guid.NewGuid(), "BB222BB")).Value!
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "CC333CC")).Value!;
+
+        Assert.Equal(2, parco.ConteggioDisponibili);
+    }
+
+    [Fact]
     public void RimozioneDaParcoVuoto_DovrebbeRestituireUnFallimento()
     {
         var parco = ParcoMezzi.Vuoto;
-        var auto = new Auto();
+        var auto = new AutoDisponibile(Guid.NewGuid(), "TEST1");
 
         var risultato = parco.RimuoviAuto(auto);
 

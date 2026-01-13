@@ -11,18 +11,24 @@ namespace CarSharp.Functional;
 /// In FP, il ParcoMezzi è un 'Dato' piuttosto che un 'Oggetto' con stato interno.
 /// </summary>
 /// <param name="auto">La collezione immutabile di auto.</param>
-public record ParcoMezzi(ImmutableList<Auto> auto)
+public record ParcoMezzi(ImmutableList<IAuto> auto)
 {
     /// <summary>
     /// Restituisce un'istanza di parco mezzi vuota.
     /// Questo è il punto di partenza per tutte le trasformazioni.
     /// </summary>
-    public static ParcoMezzi Vuoto { get; } = new(ImmutableList<Auto>.Empty);
+    public static ParcoMezzi Vuoto { get; } = new(ImmutableList<IAuto>.Empty);
 
     /// <summary>
     /// Ottiene il numero totale di auto nel parco mezzi.
     /// </summary>
     public int TotaleAuto => auto.Count;
+
+    /// <summary>
+    /// Ottiene il numero di auto attualmente disponibili per il noleggio.
+    /// In Type-Driven Design, filtriamo per il tipo specifico che rappresenta lo stato disponibile.
+    /// </summary>
+    public int ConteggioDisponibili => auto.OfType<AutoDisponibile>().Count();
 }
 
 /// <summary>
@@ -35,7 +41,7 @@ public static class ParcoMezziExtensions
     /// 'Aggiunge' un'auto al parco mezzi restituendo una nuova istanza di ParcoMezzi.
     /// In questa fase, l'aggiunta ha sempre successo.
     /// </summary>
-    public static Result<ParcoMezzi> AggiungiAuto(this ParcoMezzi parco, Auto auto) =>
+    public static Result<ParcoMezzi> AggiungiAuto(this ParcoMezzi parco, IAuto auto) =>
         Result<ParcoMezzi>.Success(parco with { auto = parco.auto.Add(auto) });
 
     /// <summary>
@@ -43,7 +49,7 @@ public static class ParcoMezziExtensions
     /// Se l'auto viene trovata, restituisce Success con il nuovo parco.
     /// Se l'auto non viene trovata, restituisce un Failure (approccio ROP).
     /// </summary>
-    public static Result<ParcoMezzi> RimuoviAuto(this ParcoMezzi parco, Auto auto)
+    public static Result<ParcoMezzi> RimuoviAuto(this ParcoMezzi parco, IAuto auto)
     {
         var nuoveAuto = parco.auto.Remove(auto);
         
