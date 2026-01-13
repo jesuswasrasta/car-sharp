@@ -1,17 +1,29 @@
-// ABOUTME: Questo file definisce il record Auto per il percorso Funzionale.
-// Utilizziamo un 'record' per sfruttare l'uguaglianza basata sul valore, un concetto
-// fondamentale nella programmazione funzionale dove i dati sono trattati come valori immutabili.
+// ABOUTME: Evoluzione del dominio Auto verso il Type-Driven Design.
+// Invece di una proprietà 'Stato', utilizziamo tipi distinti per rappresentare 
+// stati mutuamente esclusivi, rendendo il codice più sicuro e auto-documentante.
 
 namespace CarSharp.Functional;
 
 /// <summary>
-/// Rappresenta un'auto nel parco mezzi.
-/// In questa implementazione Funzionale, l'Auto è un 'Value Object'.
-/// Anche se vuoti, i record forniscono un'uguaglianza integrata basata sul valore.
-/// 
-/// Contrasto con OOP:
-/// In OOP, due istanze 'new Auto()' sono diverse perché sono oggetti diversi 
-/// in memoria. In C# Funzionale, due record 'new Auto()' sono considerati 
-/// uguali perché contengono gli stessi dati (che al momento sono nulli).
+/// Interfaccia base per tutti i tipi di auto.
+/// Permette di mantenere l'identità tecnica e di dominio indipendentemente dallo stato.
 /// </summary>
-public record Auto();
+public interface IAuto
+{
+    Guid Id { get; init; }
+    string Targa { get; init; }
+}
+
+/// <summary>
+/// Rappresenta un'auto pronta per il noleggio.
+/// </summary>
+public record AutoDisponibile(Guid Id, string Targa) : IAuto;
+
+/// <summary>
+/// Rappresenta un'auto attualmente impegnata in un noleggio.
+/// </summary>
+public record AutoNoleggiata(Guid Id, string Targa) : IAuto;
+
+// Nota per l'audience: In questa fase non usiamo un record base per evitare
+// la 'falsa eredità'. Ogni stato ha il suo tipo, e il parco mezzi conterrà 
+// una collezione di IAuto (o una Union Type simulata).
