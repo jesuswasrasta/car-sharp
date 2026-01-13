@@ -40,4 +40,15 @@ public class AutoTests
 
         return noleggiata.Id == id && noleggiata.Targa == targa;
     }
+
+    [Property]
+    public bool Restituisci_DovrebbeTrasformareInAutoDisponibile(Guid id, string targa)
+    {
+        // Perché: La restituzione è l'operazione inversa, una trasformazione da Noleggiata a Disponibile.
+        var noleggiata = new AutoNoleggiata(id, targa);
+
+        AutoDisponibile disponibile = noleggiata.Restituisci();
+
+        return disponibile.Id == id && disponibile.Targa == targa;
+    }
 }

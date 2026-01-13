@@ -13,4 +13,11 @@ public static class AutoExtensions
     /// </summary>
     public static AutoNoleggiata Noleggia(this AutoDisponibile auto) =>
         new(auto.Id, auto.Targa);
+
+    /// <summary>
+    /// Trasforma un'auto noleggiata in un'auto disponibile.
+    /// Perché: La transizione inversa è anch'essa una funzione pura totale.
+    /// </summary>
+    public static AutoDisponibile Restituisci(this AutoNoleggiata auto) =>
+        new(auto.Id, auto.Targa);
 }
