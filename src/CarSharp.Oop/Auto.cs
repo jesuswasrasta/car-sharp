@@ -41,7 +41,7 @@ public class Auto
     /// <exception cref="InvalidOperationException">Lanciata se l'auto è già noleggiata.</exception>
     public void Noleggia()
     {
-        // Perché: In OOP, l'oggetto è responsabile di proteggere i propri invarianti.
+        // In OOP, l'oggetto è responsabile di proteggere i propri invarianti.
         // Impedire un noleggio doppio è una regola di business critica.
         if (Stato == StatoAuto.Noleggiata)
         {
@@ -56,7 +56,7 @@ public class Auto
     /// </summary>
     public void Restituisci()
     {
-        // Perché: L'operazione di restituzione è idempotente in questa fase, 
+        // L'operazione di restituzione è idempotente in questa fase, 
         // ma muta lo stato verso Disponibile.
         Stato = StatoAuto.Disponibile;
     }

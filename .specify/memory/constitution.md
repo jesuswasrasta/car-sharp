@@ -20,7 +20,32 @@ The objective is to demonstrate how the same language can be used to solve the s
 ### II. Narrative Test-Driven Development
 Code is documentation. Development MUST follow a strict, granular Red-Green-Refactor cycle intended for presentation.
 *   **Granularity**: One commit per TDD step.
-*   **Clarity**: Code and tests must include comments explaining the *why* for an audience. These comments are the primary source of explanation during live presentations. Always underline patterns used, design decision, paradigm specific choices.
+*   **Clarity**: Code and tests must include comments explaining the motivation behind, the *why*. These comments are the primary source of explanation during live presentations. Always underline patterns used, design decision, paradigm specific choices.
+
+Example: 
+YES:
+```csharp
+    [Fact]
+    public void ParcoMezziVuoto_DovrebbeAvereZeroAuto()
+    {
+        //Il punto di partenza del dominio è un valore immutabile vuoto.
+        Assert.Equal(0, ParcoMezzi.Vuoto.TotaleAuto);
+    }
+```
+NO:
+```csharp
+    [Fact]
+    public void Test1()
+    {
+    [Fact]
+    public void ParcoMezziVuoto_DovrebbeAvereZeroAuto()
+    {
+        //Perché: Il punto di partenza del dominio è un valore immutabile vuoto.
+        Assert.Equal(0, ParcoMezzi.Vuoto.TotaleAuto);
+    }
+    }
+```
+
 
 ### III. Paradigm-Specific Testing
 Testing strategies must reflect the strengths of each paradigm:

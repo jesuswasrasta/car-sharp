@@ -11,7 +11,7 @@ public class AutoTests
     [Fact]
     public void Costruttore_DovrebbeInizializzareCorrettamenteLeProprieta()
     {
-        // Perché: Un'entità deve avere un'identità stabile (Id) e uno stato iniziale definito.
+        // Un'entità deve avere un'identità stabile (Id) e uno stato iniziale definito.
         var id = Guid.NewGuid();
         var targa = "AA123BB";
         var statoIniziale = StatoAuto.Disponibile;
@@ -26,7 +26,7 @@ public class AutoTests
     [Fact]
     public void Noleggia_DovrebbeCambiareLoStatoInNoleggiata_QuandoDisponibile()
     {
-        // Perché: L'azione di noleggio deve mutare lo stato interno dell'oggetto per riflettere l'operazione avvenuta.
+        // L'azione di noleggio deve mutare lo stato interno dell'oggetto per riflettere l'operazione avvenuta.
         var auto = new Auto(Guid.NewGuid(), "AA123BB", StatoAuto.Disponibile);
 
         auto.Noleggia();
@@ -37,7 +37,7 @@ public class AutoTests
     [Fact]
     public void Noleggia_DovrebbeLanciareInvalidOperationException_QuandoGiaNoleggiata()
     {
-        // Perché: In OOP, le eccezioni sono il modo idiomatico per segnalare violazioni di regole di business o stati invalidi.
+        // In OOP, le eccezioni sono il modo idiomatico per segnalare violazioni di regole di business o stati invalidi.
         var auto = new Auto(Guid.NewGuid(), "AA123BB", StatoAuto.Noleggiata);
 
         var ex = Assert.Throws<InvalidOperationException>(() => auto.Noleggia());
@@ -47,7 +47,7 @@ public class AutoTests
     [Fact]
     public void Restituisci_DovrebbeCambiareLoStatoInDisponibile_QuandoNoleggiata()
     {
-        // Perché: L'azione di restituzione deve mutare lo stato interno per rendere l'auto nuovamente disponibile.
+        // L'azione di restituzione deve mutare lo stato interno per rendere l'auto nuovamente disponibile.
         var auto = new Auto(Guid.NewGuid(), "AA123BB", StatoAuto.Noleggiata);
 
         auto.Restituisci();

@@ -21,7 +21,7 @@ public class ParcoMezziTests
     [InlineData(10)]
     public void AggiuntaDiNAuto_DovrebbeRisultareInConteggioTotaleN(int n)
     {
-        // Perché: L'aggiunta di un oggetto a una collezione deve incrementarne la dimensione.
+        // L'aggiunta di un oggetto a una collezione deve incrementarne la dimensione.
         var parco = new ParcoMezzi();
         
         for (int i = 0; i < n; i++)
@@ -36,7 +36,7 @@ public class ParcoMezziTests
     [Fact]
     public void GrandeVolume_DovrebbeEssereIstantaneo()
     {
-        // Perché: La gestione delle reference in OOP è estremamente efficiente.
+        // La gestione delle reference in OOP è estremamente efficiente.
         var parco = new ParcoMezzi();
         var grandeConteggio = 10_000;
 
@@ -57,7 +57,7 @@ public class ParcoMezziTests
     [Fact]
     public void RimozioneAuto_DovrebbeDecrementareIlConteggio_QuandoLAutoEsiste()
     {
-        // Perché: Rimuovere un oggetto esistente deve ridurne la presenza nell'aggregato.
+        // Rimuovere un oggetto esistente deve ridurne la presenza nell'aggregato.
         var parco = new ParcoMezzi();
         var auto = new Auto(Guid.NewGuid(), "TEST1", StatoAuto.Disponibile);
         parco.AggiungiAuto(auto);
@@ -70,7 +70,7 @@ public class ParcoMezziTests
     [Fact]
     public void TotaleDisponibili_DovrebbeContareSoloLeAutoInStatoDisponibile()
     {
-        // Perché: Il sistema deve essere in grado di filtrare la flotta in base allo stato mutabile degli oggetti.
+        // Il sistema deve essere in grado di filtrare la flotta in base allo stato mutabile degli oggetti.
         var parco = new ParcoMezzi();
         var auto1 = new Auto(Guid.NewGuid(), "AA111AA", StatoAuto.Disponibile);
         var auto2 = new Auto(Guid.NewGuid(), "BB222BB", StatoAuto.Noleggiata);

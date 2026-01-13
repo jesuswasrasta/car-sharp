@@ -13,7 +13,7 @@ public class AutoTests
     [Property]
     public bool AutoDisponibile_DovrebbeAvereValueEquality(Guid id, string targa)
     {
-        // Perché: In FP, due dati con lo stesso valore sono considerati identici.
+        // In FP, due dati con lo stesso valore sono considerati identici.
         var auto1 = new AutoDisponibile(id, targa);
         var auto2 = new AutoDisponibile(id, targa);
 
@@ -23,7 +23,7 @@ public class AutoTests
     [Property]
     public bool AutoNoleggiata_DovrebbeAvereValueEquality(Guid id, string targa)
     {
-        // Perché: L'uguaglianza basata sul valore deve valere per tutti i tipi di record del dominio.
+        // L'uguaglianza basata sul valore deve valere per tutti i tipi di record del dominio.
         var auto1 = new AutoNoleggiata(id, targa);
         var auto2 = new AutoNoleggiata(id, targa);
 
@@ -33,7 +33,7 @@ public class AutoTests
     [Property]
     public bool Noleggia_DovrebbeTrasformareInAutoNoleggiata(Guid id, string targa)
     {
-        // Perché: In FP, le operazioni di business sono trasformazioni di dati (Type-Driven Design).
+        // In FP, le operazioni di business sono trasformazioni di dati (Type-Driven Design).
         // Il successo è garantito dalla firma: un'auto disponibile può sempre essere noleggiata.
         var disponibile = new AutoDisponibile(id, targa);
 
@@ -45,7 +45,7 @@ public class AutoTests
     [Property]
     public bool Restituisci_DovrebbeTrasformareInAutoDisponibile(Guid id, string targa)
     {
-        // Perché: La restituzione è l'operazione inversa, una trasformazione da Noleggiata a Disponibile.
+        // La restituzione è l'operazione inversa, una trasformazione da Noleggiata a Disponibile.
         var noleggiata = new AutoNoleggiata(id, targa);
 
         AutoDisponibile disponibile = noleggiata.Restituisci();
