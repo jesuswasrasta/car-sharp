@@ -56,6 +56,16 @@ Examples:
 *   **Commit message**: NO: "feat: add car rental functionality" YES: "feat: aggiunge funzionalità di noleggio auto".
 
 
+### VIII. Git Strategy
+Develop every phase in a dedicated branch as per Spec Driven Development using SpecKit commands.
+After closing a phase, ask to merge branch into `main`.
+After merging, add a tag with the same name of the branch.
+
+Example:
+*   Branch name: `001-fase-1-parco-mezzi`
+*   Tag name: `001-fase-1-parco-mezzi`
+
+
 ## Governance
 
 This constitution defines the rules for the CarSharp educational project.
