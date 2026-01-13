@@ -43,8 +43,8 @@ Il progetto è costruito in **Fasi** (definite in `README.md`). Ogni fase è imp
 
 ### Convenzioni di Codifica
 
-1.  **Percorso OOP**: Utilizzare classi, incapsulamento, stato mutabile e test basati su esempi.
-2.  **Percorso Funzionale**: Utilizzare record, immutabilità, funzioni pure e test basati su proprietà.
+1.  **Percorso OOP**: fare riferimento alla skill peresente nel file @.skills/csharp-OOP-developer per implementazioni orientate agli oggetti idiomatiche.
+2.  **Percorso Funzionale**: fare riferimento alla skill presente nel file @.skills/csharp-FP-developer per implementazioni funzionali idiomatiche.
 3.  **Coerenza**: Entrambe le implementazioni devono soddisfare gli stessi requisiti di business ma attraverso paradigmi diversi.
 
 

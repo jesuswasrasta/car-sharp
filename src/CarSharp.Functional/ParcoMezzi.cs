@@ -35,22 +35,22 @@ public static class ParcoMezziExtensions
     /// 'Aggiunge' un'auto al parco mezzi restituendo una nuova istanza di ParcoMezzi.
     /// In questa fase, l'aggiunta ha sempre successo.
     /// </summary>
-    public static Risultato<ParcoMezzi> AggiungiAuto(this ParcoMezzi parco, Auto auto) =>
-        Risultato<ParcoMezzi>.Successo(parco with { auto = parco.auto.Add(auto) });
+    public static Result<ParcoMezzi> AggiungiAuto(this ParcoMezzi parco, Auto auto) =>
+        Result<ParcoMezzi>.Success(parco with { auto = parco.auto.Add(auto) });
 
     /// <summary>
     /// 'Rimuovi' un'auto dal parco mezzi.
-    /// Se l'auto viene trovata, restituisce Successo con il nuovo parco.
-    /// Se l'auto non viene trovata, restituisce un Fallimento (approccio ROP).
+    /// Se l'auto viene trovata, restituisce Success con il nuovo parco.
+    /// Se l'auto non viene trovata, restituisce un Failure (approccio ROP).
     /// </summary>
-    public static Risultato<ParcoMezzi> RimuoviAuto(this ParcoMezzi parco, Auto auto)
+    public static Result<ParcoMezzi> RimuoviAuto(this ParcoMezzi parco, Auto auto)
     {
         var nuoveAuto = parco.auto.Remove(auto);
         
         // Se la collezione risultante è la stessa istanza dell'originale,
         // significa che nulla è stato rimosso (l'auto non era presente).
         return ReferenceEquals(nuoveAuto, parco.auto)
-            ? Risultato<ParcoMezzi>.Fallimento(new Errore("Auto non trovata nel parco mezzi"))
-            : Risultato<ParcoMezzi>.Successo(parco with { auto = nuoveAuto });
+            ? Result<ParcoMezzi>.Failure(new Error("Auto non trovata nel parco mezzi"))
+            : Result<ParcoMezzi>.Success(parco with { auto = nuoveAuto });
     }
 }
