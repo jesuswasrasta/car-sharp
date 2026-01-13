@@ -50,4 +50,14 @@ public class Auto
 
         Stato = StatoAuto.Noleggiata;
     }
+
+    /// <summary>
+    /// Registra la restituzione dell'auto.
+    /// </summary>
+    public void Restituisci()
+    {
+        // Perché: L'operazione di restituzione è idempotente in questa fase, 
+        // ma muta lo stato verso Disponibile.
+        Stato = StatoAuto.Disponibile;
+    }
 }

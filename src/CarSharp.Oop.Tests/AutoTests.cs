@@ -43,4 +43,15 @@ public class AutoTests
         var ex = Assert.Throws<InvalidOperationException>(() => auto.Noleggia());
         Assert.Equal("L'auto è già noleggiata.", ex.Message);
     }
+
+    [Fact]
+    public void Restituisci_DovrebbeCambiareLoStatoInDisponibile_QuandoNoleggiata()
+    {
+        // Perché: L'azione di restituzione deve mutare lo stato interno per rendere l'auto nuovamente disponibile.
+        var auto = new Auto(Guid.NewGuid(), "AA123BB", StatoAuto.Noleggiata);
+
+        auto.Restituisci();
+
+        Assert.Equal(StatoAuto.Disponibile, auto.Stato);
+    }
 }
