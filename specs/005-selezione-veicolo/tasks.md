@@ -32,8 +32,8 @@
 
 - [x] T007 [OOP] RED: Test "Best Fit" (sceglie auto più piccola sufficiente)
 - [x] T008 [OOP] GREEN: Implementazione `OrderBy(Capacita)` in `ParcoMezzi.cs`
-- [ ] T009 [FP] RED: Property "Capacity Invariant" (auto scelta sempre >= richiesta)
-- [ ] T010 [FP] GREEN: Implementazione pipeline LINQ con `OrderBy` in `ParcoMezzi.cs`
+- [x] T009 [FP] RED: Property "Capacity Invariant" (auto scelta sempre >= richiesta)
+- [x] T010 [FP] GREEN: Implementazione pipeline LINQ con `OrderBy` in `ParcoMezzi.cs`
 
 ## Fase 4: User Story 2 - Determinismo [US2]
 

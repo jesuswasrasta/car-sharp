@@ -206,4 +206,60 @@ public class ParcoMezziTests
 
         return !risultato.IsSuccess;
     }
+
+    [Fact]
+    public void NoleggiaPerCapacita_ConPiuAutoDisponibili_DovrebbeSelezionareQuellaPiuPiccola()
+    {
+        // In FP, verifichiamo che l'algoritmo Best Fit selezioni sempre l'auto
+        // con la capacità minima sufficiente tra quelle disponibili.
+        var parco = ParcoMezzi.Vuoto;
+        var auto4Posti = new AutoDisponibile(Guid.NewGuid(), "SMALL", 4);
+        var auto7Posti = new AutoDisponibile(Guid.NewGuid(), "LARGE", 7);
+
+        parco = parco.AggiungiAuto(auto7Posti).Value!;
+        parco = parco.AggiungiAuto(auto4Posti).Value!;
+
+        var risultato = parco.NoleggiaPerCapacita(4, "CLIENTE");
+
+        // L'algoritmo deve scegliere l'auto da 4 posti (minima capacità sufficiente).
+        Assert.True(risultato.IsSuccess);
+        var parcoAggiornato = risultato.Value!;
+
+        // L'auto da 4 posti deve essere stata trasformata in AutoNoleggiata.
+        Assert.Contains(parcoAggiornato.auto, a => a.Id == auto4Posti.Id && a is AutoNoleggiata);
+        Assert.Contains(parcoAggiornato.auto, a => a.Id == auto7Posti.Id && a is AutoDisponibile);
+    }
+
+    [Property]
+    public bool NoleggiaPerCapacita_SempreSelezionaAutoConCapacitaMinimaValida(PositiveInt postiRichiesti)
+    {
+        // Property: dato un parco con N auto disponibili e una richiesta di capacità,
+        // l'auto selezionata deve SEMPRE avere la capacità minima tra tutte quelle >= postiRichiesti.
+        var posti = Math.Min(postiRichiesti.Get, 10); 
+
+        var parco = ParcoMezzi.Vuoto;
+        var autoCreate = new List<IAuto>();
+        for (int i = 1; i <= 5; i++)
+        {
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"CAR{i * 2}", i * 2);
+            autoCreate.Add(auto);
+            parco = parco.AggiungiAuto(auto).Value!;
+        }
+
+        var risultato = parco.NoleggiaPerCapacita(posti, "CLIENTE");
+
+        if (!risultato.IsSuccess)
+            return autoCreate.All(a => a.Capacita < posti);
+
+        var parcoAggiornato = risultato.Value!;
+        var autoNoleggiata = parcoAggiornato.auto.OfType<AutoNoleggiata>().First();
+
+        var capacitaValide = autoCreate
+            .Where(a => a.Capacita >= posti)
+            .Select(a => a.Capacita)
+            .ToList();
+
+        var capacitaMinima = capacitaValide.Min();
+        return autoNoleggiata.Capacita == capacitaMinima;
+    }
 }

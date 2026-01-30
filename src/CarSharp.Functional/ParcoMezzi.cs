@@ -111,10 +111,13 @@ public static class ParcoMezziExtensions
         }
         else
         {
-            // In questa fase, scegliamo la prima auto disponibile che soddisfi il requisito.
+            // Best Fit Algorithm: filtriamo le auto disponibili con capacità sufficiente
+            // e ordiniamo per capacità crescente (minimo spreco di posti).
             autoTrovata = parco.auto
                 .OfType<AutoDisponibile>()
-                .FirstOrDefault(a => a.Capacita >= richiesta.PostiMinimi);
+                .Where(a => a.Capacita >= richiesta.PostiMinimi)
+                .OrderBy(a => a.Capacita)
+                .FirstOrDefault();
         }
 
         if (autoTrovata == null)
