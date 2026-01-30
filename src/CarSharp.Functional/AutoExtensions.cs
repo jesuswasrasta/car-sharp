@@ -5,5 +5,12 @@ namespace CarSharp.Functional;
 
 public static class AutoExtensions
 {
-    // Placeholder per permettere la compilazione del test RED
+    /// <summary>
+    /// Trasforma un'AutoDisponibile in AutoNoleggiata.
+    /// È una funzione pura: non modifica l'oggetto originale ma ne restituisce uno nuovo.
+    /// </summary>
+    public static AutoNoleggiata Noleggia(this AutoDisponibile auto)
+    {
+        return new AutoNoleggiata(auto.Id, auto.Targa);
+    }
 }
