@@ -46,9 +46,9 @@
 
 ## Fase 5: Rifinitura e Conclusione
 
-- [ ] T017 Creare `comparison.md` con analisi architetturale
-- [ ] T018 Eseguire regressione `dotnet test`
-- [ ] T019 Revisione narrativa dei commenti (Costituzione v2.2.0)
-- [ ] T020 Validazione performance SC-002
+- [x] T017 Creare `comparison.md` con analisi architetturale
+- [x] T018 Eseguire regressione `dotnet test`
+- [x] T019 Revisione narrativa dei commenti (Costituzione v2.2.0)
+- [x] T020 Validazione performance SC-002
 
 **Checkpoint**: ✅ Fase 1 completata e allineata agli standard qualitativi della Fase 7.
