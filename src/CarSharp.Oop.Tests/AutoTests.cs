@@ -62,4 +62,16 @@ public class AutoTests
 
         Assert.Throws<InvalidOperationException>(() => auto.Noleggia());
     }
+
+    [Fact]
+    public void Restituisci_DovrebbeRiportareStatoADisponibile()
+    {
+        // US2: Quando un'auto noleggiata viene restituita, torna disponibile.
+        var auto = new Auto(Guid.NewGuid(), "AA123BB");
+        auto.Noleggia();
+        
+        auto.Restituisci();
+        
+        Assert.Equal(StatoAuto.Disponibile, auto.Stato);
+    }
 }
