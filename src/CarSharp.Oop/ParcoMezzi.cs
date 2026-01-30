@@ -15,4 +15,14 @@ public class ParcoMezzi
     /// Ottiene il numero totale di auto attualmente nel parco mezzi.
     /// </summary>
     public int TotaleAuto => _auto.Count;
+
+    /// <summary>
+    /// Aggiunge un'auto al parco mezzi.
+    /// In questo modello OOP, modifichiamo la lista interna sul posto (in-place).
+    /// </summary>
+    /// <param name="auto">L'auto da aggiungere.</param>
+    public void AggiungiAuto(Auto auto)
+    {
+        _auto.Add(auto);
+    }
 }
