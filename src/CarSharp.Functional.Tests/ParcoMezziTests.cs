@@ -30,10 +30,31 @@ public class ParcoMezziTests
 
         for (int i = 0; i < conteggio; i++)
         {
-            parco = parco.AggiungiAuto(new Auto());
+            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}"));
         }
 
         return (parco.TotaleAuto == conteggio);
+    }
+
+    [Fact]
+    public void GrandeVolume_DovrebbeEssereIstantaneo()
+    {
+        // L'uso di strutture dati persistenti (Immutable Collections) garantisce performance 
+        // comparabili alla mutazione tramite la condivisione strutturale (structural sharing).
+        var parco = ParcoMezzi.Vuoto;
+        var grandeConteggio = 10_000;
+
+        for (int i = 0; i < grandeConteggio; i++)
+        {
+            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}"));
+        }
+
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        var conteggio = parco.TotaleAuto;
+        watch.Stop();
+
+        Assert.Equal(grandeConteggio, conteggio);
+        Assert.True(watch.ElapsedMilliseconds < 10, $"Il conteggio ha richiesto {watch.ElapsedMilliseconds}ms");
     }
 
     [Property]
@@ -44,10 +65,10 @@ public class ParcoMezziTests
         // Verifichiamo che per qualsiasi parco di dimensione N, la rimozione di 
         // un elemento esistente restituisca sempre un nuovo parco di dimensione N-1.
         var parco = ParcoMezzi.Vuoto;
-        var autoList = new List<Auto>();
+        var autoList = new List<IAuto>();
         for (int i = 0; i < n.Get; i++)
         {
-            var auto = new Auto();
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}");
             autoList.Add(auto);
             parco = parco.AggiungiAuto(auto);
         }

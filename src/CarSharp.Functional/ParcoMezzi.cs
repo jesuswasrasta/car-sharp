@@ -11,13 +11,13 @@ namespace CarSharp.Functional;
 /// In FP, il ParcoMezzi è un 'Dato' piuttosto che un 'Oggetto' con stato interno.
 /// </summary>
 /// <param name="auto">La collezione immutabile di auto.</param>
-public record ParcoMezzi(ImmutableList<Auto> auto)
+public record ParcoMezzi(ImmutableList<IAuto> auto)
 {
     /// <summary>
     /// Restituisce un'istanza di parco mezzi vuota.
     /// Questo è il punto di partenza per tutte le trasformazioni.
     /// </summary>
-    public static ParcoMezzi Vuoto { get; } = new(ImmutableList<Auto>.Empty);
+    public static ParcoMezzi Vuoto { get; } = new(ImmutableList<IAuto>.Empty);
 
     /// <summary>
     /// Ottiene il numero totale di auto nel parco mezzi.
@@ -34,7 +34,7 @@ public static class ParcoMezziExtensions
     /// <summary>
     /// 'Aggiunge' un'auto al parco mezzi restituendo una nuova istanza di ParcoMezzi.
     /// </summary>
-    public static ParcoMezzi AggiungiAuto(this ParcoMezzi parco, Auto auto)
+    public static ParcoMezzi AggiungiAuto(this ParcoMezzi parco, IAuto auto)
     {
         return parco with { auto = parco.auto.Add(auto) };
     }
@@ -44,7 +44,7 @@ public static class ParcoMezziExtensions
     /// L'uguaglianza dei record si basa sul valore delle proprietà, rendendo l'identità 
     /// indipendente dal riferimento in memoria.
     /// </summary>
-    public static ParcoMezzi RimuoviAuto(this ParcoMezzi parco, Auto auto)
+    public static ParcoMezzi RimuoviAuto(this ParcoMezzi parco, IAuto auto)
     {
         return parco with { auto = parco.auto.Remove(auto) };
     }
