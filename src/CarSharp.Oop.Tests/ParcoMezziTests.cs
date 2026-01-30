@@ -134,4 +134,36 @@ public class ParcoMezziTests
 
         Assert.Throws<ArgumentException>(() => parco.NoleggiaBatch(batch));
     }
+
+    [Fact]
+    public void NoleggiaPerCapacita_DovrebbeAssegnareLaPrimaAutoIdonea()
+    {
+        // Verifichiamo che il sistema scelga un'auto con capacità sufficiente.
+        // Secondo la nostra chiarificazione, deve essere la prima inserita tra quelle valide.
+        var parco = new ParcoMezzi();
+        var autoPiccola = new Auto(Guid.NewGuid(), "SMALL", 2);
+        var autoMedia = new Auto(Guid.NewGuid(), "MEDIUM", 5);
+        var autoGrande = new Auto(Guid.NewGuid(), "LARGE", 7);
+
+        parco.AggiungiAuto(autoPiccola);
+        parco.AggiungiAuto(autoMedia);
+        parco.AggiungiAuto(autoGrande);
+
+        // Richiediamo 4 posti. autoPiccola (2) non va bene, autoMedia (5) sì.
+        var autoAssegnata = parco.Noleggia(4);
+
+        Assert.Equal(autoMedia.Id, autoAssegnata.Id);
+        Assert.Equal(StatoAuto.Noleggiata, autoMedia.Stato);
+        Assert.Equal(2, parco.TotaleDisponibili);
+    }
+
+    [Fact]
+    public void NoleggiaPerCapacita_DovrebbeLanciareInvalidOperationException_QuandoNessunaAutoIdonea()
+    {
+        // Se non ci sono auto con capacità sufficiente, il noleggio deve fallire.
+        var parco = new ParcoMezzi();
+        parco.AggiungiAuto(new Auto(Guid.NewGuid(), "SMALL", 2));
+
+        Assert.Throws<InvalidOperationException>(() => parco.Noleggia(5));
+    }
 }

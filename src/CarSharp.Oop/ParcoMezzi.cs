@@ -86,4 +86,24 @@ public class ParcoMezzi
             auto.Noleggia();
         }
     }
+
+    /// <summary>
+    /// Noleggia un'auto che soddisfi il requisito minimo di posti.
+    /// In questa fase, viene scelta la prima auto disponibile con capacità sufficiente.
+    /// </summary>
+    /// <param name="postiMinimi">Il numero minimo di posti richiesti.</param>
+    /// <returns>L'istanza dell'auto noleggiata.</returns>
+    /// <exception cref="InvalidOperationException">Lanciata se nessuna auto idonea è disponibile.</exception>
+    public Auto Noleggia(int postiMinimi)
+    {
+        var autoIdonea = _auto.FirstOrDefault(a => a.Stato == StatoAuto.Disponibile && a.Capacita >= postiMinimi);
+
+        if (autoIdonea == null)
+        {
+            throw new InvalidOperationException($"Nessuna auto disponibile con almeno {postiMinimi} posti.");
+        }
+
+        autoIdonea.Noleggia();
+        return autoIdonea;
+    }
 }
