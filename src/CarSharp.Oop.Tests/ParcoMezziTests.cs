@@ -40,4 +40,20 @@ public class ParcoMezziTests
 
         Assert.Equal(n, parco.TotaleAuto);
     }
+
+    [Fact]
+    public void RimozioneAuto_DovrebbeDecrementareIlConteggio_QuandoLAutoEsiste()
+    {
+        // La rimozione si basa sull'uguaglianza per riferimento. Per rimuovere un'auto, 
+        // dobbiamo passare all'aggregato esattamente lo stesso oggetto (stessa identità) 
+        // che era stato precedentemente aggiunto. Questo garantisce che stiamo operando 
+        // sull'asset corretto all'interno della flotta gestita.
+        var parco = new ParcoMezzi();
+        var auto = new Auto();
+        parco.AggiungiAuto(auto);
+
+        parco.RimuoviAuto(auto);
+
+        Assert.Equal(0, parco.TotaleAuto);
+    }
 }

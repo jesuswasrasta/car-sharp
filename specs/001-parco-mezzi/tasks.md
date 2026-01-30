@@ -39,7 +39,7 @@
 
 ## Fase 4: User Story 2 - Manutenzione Base [US2]
 
-- [ ] T013 [US2] [OOP] RED: Fact rimozione auto esistente
+- [x] T013 [US2] [OOP] RED: Fact rimozione auto esistente
 - [ ] T014 [US2] [OOP] GREEN: Metodo `RimuoviAuto` (rimozione da lista mutabile)
 - [ ] T015 [US2] [FP] RED: Property rimozione auto
 - [ ] T016 [US2] [FP] GREEN: Estensione `RimuoviAuto` (non-destructive mutation)
