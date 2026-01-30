@@ -18,4 +18,26 @@ public class ParcoMezziTests
         var parco = new ParcoMezzi();
         Assert.Equal(0, parco.TotaleAuto);
     }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(5)]
+    [InlineData(10)]
+    public void AggiuntaDiNAuto_DovrebbeRisultareInConteggioTotaleN(int n)
+    {
+        // L'operazione di aggiunta dimostra la natura mutabile del nostro aggregato. 
+        // Quando aggiungiamo un'auto, non creiamo un nuovo parco, ma modifichiamo 
+        // internamente la collezione dell'oggetto esistente. Questo riflette il modello 
+        // mentale OOP dove gli oggetti hanno un'identità stabile che persiste nel tempo 
+        // nonostante i cambiamenti del loro stato interno.
+        var parco = new ParcoMezzi();
+        
+        for (int i = 0; i < n; i++)
+        {
+            var auto = new Auto();
+            parco.AggiungiAuto(auto);
+        }
+
+        Assert.Equal(n, parco.TotaleAuto);
+    }
 }

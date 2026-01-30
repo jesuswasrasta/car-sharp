@@ -32,7 +32,7 @@
 
 - [x] T007 [US1] [OOP] RED: Fact stato iniziale vuoto in `src/CarSharp.Oop.Tests/ParcoMezziTests.cs`
 - [x] T008 [US1] [OOP] GREEN: Classe `ParcoMezzi` con `TotaleAuto`
-- [ ] T009 [US1] [OOP] RED: Fact aggiunta auto
+- [x] T009 [US1] [OOP] RED: Fact aggiunta auto
 - [ ] T010 [US1] [OOP] GREEN: Metodo `AggiungiAuto` (mutazione)
 - [ ] T011 [US1] [FP] RED: Property stato iniziale e aggiunta in `src/CarSharp.Functional.Tests/ParcoMezziTests.cs`
 - [ ] T012 [US1] [FP] GREEN: Record `ParcoMezzi` e estensione `AggiungiAuto` (immutabilità)
