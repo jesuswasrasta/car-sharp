@@ -29,7 +29,7 @@
 - [x] T006 [OOP] GREEN: Implementazione metodo `Noleggia` con validazione (Exception)
 - [x] T007 [OOP] RED: Test `Restituisci` riporta lo stato a `Disponibile`
 - [x] T008 [OOP] GREEN: Implementazione metodo `Restituisci`
-- [ ] T009 [OOP] RED: Test `TotaleDisponibili` nel parco mezzi
+- [x] T009 [OOP] RED: Test `TotaleDisponibili` nel parco mezzi
 - [ ] T010 [OOP] GREEN: Implementazione logica di filtraggio in `ParcoMezzi.cs`
 
 ## Fase 3: Percorso Funzionale (C# Moderno) 🎯 MVP

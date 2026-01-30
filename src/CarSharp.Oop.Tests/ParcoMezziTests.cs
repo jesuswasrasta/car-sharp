@@ -56,4 +56,22 @@ public class ParcoMezziTests
 
         Assert.Equal(0, parco.TotaleAuto);
     }
+
+    [Fact]
+    public void TotaleDisponibili_DovrebbeContareSoloLeAutoInStatoDisponibile()
+    {
+        // Il sistema deve essere in grado di filtrare la flotta in base allo stato mutabile degli oggetti.
+        var parco = new ParcoMezzi();
+        var auto1 = new Auto(Guid.NewGuid(), "AA111AA");
+        var auto2 = new Auto(Guid.NewGuid(), "BB222BB");
+        var auto3 = new Auto(Guid.NewGuid(), "CC333CC");
+
+        parco.AggiungiAuto(auto1);
+        parco.AggiungiAuto(auto2);
+        parco.AggiungiAuto(auto3);
+
+        auto2.Noleggia();
+
+        Assert.Equal(2, parco.TotaleDisponibili);
+    }
 }
