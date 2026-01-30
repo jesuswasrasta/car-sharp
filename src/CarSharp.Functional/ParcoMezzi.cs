@@ -38,4 +38,14 @@ public static class ParcoMezziExtensions
     {
         return parco with { auto = parco.auto.Add(auto) };
     }
+
+    /// <summary>
+    /// 'Rimuovi' un'auto dal parco mezzi producendo un nuovo valore.
+    /// L'uguaglianza dei record si basa sul valore delle proprietà, rendendo l'identità 
+    /// indipendente dal riferimento in memoria.
+    /// </summary>
+    public static ParcoMezzi RimuoviAuto(this ParcoMezzi parco, Auto auto)
+    {
+        return parco with { auto = parco.auto.Remove(auto) };
+    }
 }
