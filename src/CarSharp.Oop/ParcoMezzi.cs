@@ -53,9 +53,34 @@ public class ParcoMezzi
     /// </summary>
     public void NoleggiaBatch(IEnumerable<Guid> ids)
     {
-        // Per ora implementiamo solo la parte Act (per il test GREEN), 
-        // la validazione (Check) arriverà con la US2.
-        foreach (var id in ids)
+        var listaIds = ids.ToList();
+
+        // CHECK 1: Duplicati
+        if (listaIds.Distinct().Count() != listaIds.Count)
+        {
+            throw new ArgumentException("Il batch contiene duplicati.", nameof(ids));
+        }
+
+        // CHECK 2: Disponibilità
+        // Verifichiamo che tutte le auto esistano e siano disponibili PRIMA di modificare qualsiasi stato.
+        foreach (var id in listaIds)
+        {
+            var auto = _auto.FirstOrDefault(a => a.Id == id);
+            
+            if (auto == null)
+            {
+                throw new InvalidOperationException($"L'auto con ID {id} non esiste.");
+            }
+
+            if (auto.Stato == StatoAuto.Noleggiata)
+            {
+                throw new InvalidOperationException($"L'auto con targa {auto.Targa} è già noleggiata.");
+            }
+        }
+
+        // ACT: Esecuzione delle mutazioni
+        // A questo punto siamo sicuri che tutte le operazioni avranno successo.
+        foreach (var id in listaIds)
         {
             var auto = _auto.First(a => a.Id == id);
             auto.Noleggia();
