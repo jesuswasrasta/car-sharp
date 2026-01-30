@@ -30,8 +30,8 @@
 
 ## Fase 3: User Story 1 - Selezione Best Fit [US1] 🎯 MVP
 
-- [ ] T007 [OOP] RED: Test "Best Fit" (sceglie auto più piccola sufficiente)
-- [ ] T008 [OOP] GREEN: Implementazione `OrderBy(Capacita)` in `ParcoMezzi.cs`
+- [x] T007 [OOP] RED: Test "Best Fit" (sceglie auto più piccola sufficiente)
+- [x] T008 [OOP] GREEN: Implementazione `OrderBy(Capacita)` in `ParcoMezzi.cs`
 - [ ] T009 [FP] RED: Property "Capacity Invariant" (auto scelta sempre >= richiesta)
 - [ ] T010 [FP] GREEN: Implementazione pipeline LINQ con `OrderBy` in `ParcoMezzi.cs`
 

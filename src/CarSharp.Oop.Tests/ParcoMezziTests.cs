@@ -200,4 +200,26 @@ public class ParcoMezziTests
         Assert.Equal(StatoAuto.Noleggiata, auto1.Stato);
         Assert.Equal(StatoAuto.Noleggiata, auto2.Stato);
     }
+
+    [Fact]
+    public void Noleggia_ConBestFit_DovrebbeSelezionareAutoConCapacitaMinimaSufficiente()
+    {
+        // US1: Se più auto soddisfano la richiesta, il sistema deve scegliere la più piccola.
+        // Questo ottimizza l'uso della flotta lasciando i mezzi grandi per i gruppi numerosi.
+        var parco = new ParcoMezzi();
+        var autoPiccola = new Auto(Guid.NewGuid(), "AA111AA", 4);
+        var autoMedia = new Auto(Guid.NewGuid(), "BB222BB", 5);
+        var autoGrande = new Auto(Guid.NewGuid(), "CC333CC", 7);
+
+        // Aggiungiamo prima le auto grandi. Senza Best Fit, il sistema sceglierebbe la prima idonea (7).
+        parco.AggiungiAuto(autoGrande);
+        parco.AggiungiAuto(autoMedia);
+        parco.AggiungiAuto(autoPiccola);
+
+        // Richiesta per 4 posti.
+        // Best Fit deve scegliere autoPiccola (4) anche se è stata inserita per ultima.
+        var autoScelta = parco.Noleggia(4);
+
+        Assert.Equal(autoPiccola.Id, autoScelta.Id);
+    }
 }

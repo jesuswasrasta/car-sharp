@@ -124,14 +124,22 @@ public class ParcoMezzi
 
     /// <summary>
     /// Noleggia un'auto che soddisfi il requisito minimo di posti.
-    /// In questa fase, viene scelta la prima auto disponibile con capacità sufficiente.
+    /// In questa fase, viene scelta l'auto con la capacità minima che soddisfi il requisito (Best Fit).
+    /// A parità di capacità, viene scelta la prima in ordine di inserimento (determinismo).
     /// </summary>
     /// <param name="postiMinimi">Il numero minimo di posti richiesti.</param>
     /// <returns>L'istanza dell'auto noleggiata.</returns>
     /// <exception cref="InvalidOperationException">Lanciata se nessuna auto idonea è disponibile.</exception>
     public Auto Noleggia(int postiMinimi)
     {
-        var autoIdonea = _auto.FirstOrDefault(a => a.Stato == StatoAuto.Disponibile && a.Capacita >= postiMinimi);
+        // Best Fit Algorithm: ordiniamo per capacità crescente e prendiamo la prima.
+        // Questo garantisce di assegnare l'auto più piccola che soddisfa il requisito,
+        // preservando le auto più grandi per richieste future con maggiore capacità.
+        // OrderBy è stabile in LINQ, quindi a parità di capacità mantiene l'ordine originale.
+        var autoIdonea = _auto
+            .Where(a => a.Stato == StatoAuto.Disponibile && a.Capacita >= postiMinimi)
+            .OrderBy(a => a.Capacita)
+            .FirstOrDefault();
 
         if (autoIdonea == null)
         {
