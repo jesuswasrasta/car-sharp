@@ -24,7 +24,7 @@
 ## Fase 2: User Story 1 - Processamento Happy Path [US1] 🎯 MVP
 
 - [x] T003 [OOP] RED: Test `NoleggiaBatch` con auto tutte disponibili
-- [ ] T004 [OOP] GREEN: Implementazione ciclo base di noleggio in `ParcoMezzi.cs`
+- [x] T004 [OOP] GREEN: Implementazione ciclo base di noleggio in `ParcoMezzi.cs`
 - [ ] T005 [FP] RED: Property `NoleggiaBatch` con auto tutte disponibili
 - [ ] T006 [FP] GREEN: Implementazione logica tramite `Aggregate` e `Bind`
 

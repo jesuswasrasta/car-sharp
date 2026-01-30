@@ -2,6 +2,7 @@
 // Questo è un classico approccio OOP in cui l'oggetto incapsula i dati 
 // e fornisce metodi per modificarli.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,5 +45,20 @@ public class ParcoMezzi
         // Pertanto, la rimozione ha successo solo se passiamo esattamente lo stesso puntatore 
         // che è stato aggiunto originariamente alla collezione.
         return _auto.Remove(auto);
+    }
+
+    /// <summary>
+    /// Noleggia un batch di richieste di noleggio.
+    /// L'operazione è atomica (Check-Then-Act).
+    /// </summary>
+    public void NoleggiaBatch(IEnumerable<Guid> ids)
+    {
+        // Per ora implementiamo solo la parte Act (per il test GREEN), 
+        // la validazione (Check) arriverà con la US2.
+        foreach (var id in ids)
+        {
+            var auto = _auto.First(a => a.Id == id);
+            auto.Noleggia();
+        }
     }
 }
