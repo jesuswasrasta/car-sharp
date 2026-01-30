@@ -74,4 +74,27 @@ public class ParcoMezziTests
 
         Assert.Equal(2, parco.TotaleDisponibili);
     }
+
+    [Fact]
+    public void NoleggiaBatch_ConAutoDisponibili_DovrebbeNoleggiarleTutte()
+    {
+        // Questo test verifica il caso d'uso principale del noleggio batch.
+        // In OOP, ci aspettiamo che il parco mezzi coordini la mutazione dello stato
+        // di più oggetti Auto contemporaneamente.
+        var parco = new ParcoMezzi();
+        var auto1 = new Auto(Guid.NewGuid(), "AA111AA");
+        var auto2 = new Auto(Guid.NewGuid(), "BB222BB");
+        
+        parco.AggiungiAuto(auto1);
+        parco.AggiungiAuto(auto2);
+
+        var batch = new List<Guid> { auto1.Id, auto2.Id };
+
+        parco.NoleggiaBatch(batch);
+
+        // Verifichiamo che la mutazione sia avvenuta correttamente su tutti gli oggetti coinvolti.
+        Assert.Equal(StatoAuto.Noleggiata, auto1.Stato);
+        Assert.Equal(StatoAuto.Noleggiata, auto2.Stato);
+        Assert.Equal(0, parco.TotaleDisponibili);
+    }
 }
