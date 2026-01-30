@@ -21,4 +21,14 @@ public class Auto
         Targa = targa;
         Stato = StatoAuto.Disponibile;
     }
+
+    public void Noleggia()
+    {
+        if (Stato == StatoAuto.Noleggiata)
+        {
+            throw new InvalidOperationException($"L'auto con targa {Targa} è già noleggiata.");
+        }
+
+        Stato = StatoAuto.Noleggiata;
+    }
 }
