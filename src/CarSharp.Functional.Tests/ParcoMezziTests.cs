@@ -188,4 +188,22 @@ public class ParcoMezziTests
         // Se fallisce, non devono esserci auto disponibili con capacità sufficiente.
         return !parco.auto.OfType<AutoDisponibile>().Any(a => a.Capacita >= postiRichiesti.Get);
     }
+
+    [Property]
+    public bool NoleggiaBatch_DovrebbeEssereAtomicoSuVincoliCapacita(PositiveInt n)
+    {
+        // Se un batch ha una richiesta non soddisfabile per capacità,
+        // l'intero risultato deve essere un errore e lo stato non deve cambiare.
+        var parco = ParcoMezzi.Vuoto.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "SMALL", 2)).Value!;
+
+        var richieste = new List<RichiestaNoleggio>
+        {
+            new RichiestaNoleggio("CLIENTE", 1), // Soddisfabile
+            new RichiestaNoleggio("CLIENTE", 5)  // Non soddisfabile
+        };
+
+        var risultato = parco.NoleggiaBatch(richieste);
+
+        return !risultato.IsSuccess;
+    }
 }

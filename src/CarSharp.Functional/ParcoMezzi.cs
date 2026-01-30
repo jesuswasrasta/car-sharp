@@ -119,6 +119,21 @@ public static class ParcoMezziExtensions
     }
 
     /// <summary>
+    /// Noleggia un batch di richieste di noleggio.
+    /// In FP, utilizziamo la composizione di funzioni (Bind) su una sequenza di richieste.
+    /// </summary>
+    public static Result<ParcoMezzi> NoleggiaBatch(this ParcoMezzi parco, IEnumerable<RichiestaNoleggio> richieste)
+    {
+        // Nota per l'audience: L'uso di Aggregate con Bind garantisce l'atomicità:
+        // Se una sola richiesta fallisce (es. capacità insufficiente o auto occupata),
+        // l'intera catena si interrompe e restituisce l'errore, lasciando il parco originale intatto.
+        return richieste.Aggregate(
+            Result<ParcoMezzi>.From(parco),
+            (risultatoCorrente, richiesta) => risultatoCorrente.Bind(p => p.NoleggiaAuto(richiesta))
+        );
+    }
+
+    /// <summary>
     /// Noleggia un batch di auto identificandole tramite ID.
     /// In FP, utilizziamo la composizione di funzioni (Bind) su una sequenza di richieste.
     /// </summary>
@@ -130,12 +145,6 @@ public static class ParcoMezziExtensions
         if (listaIds.Distinct().Count() != listaIds.Count)
             return Result<ParcoMezzi>.Fail(new Error("Il batch contiene duplicati"));
 
-        // Nota per l'audience: L'uso di Aggregate con Bind garantisce l'atomicità:
-        // Se una sola richiesta fallisce, l'intera catena si interrompe e restituisce l'errore,
-        // lasciando il parco originale intatto (poiché è immutabile).
-        return listaIds.Aggregate(
-            Result<ParcoMezzi>.From(parco),
-            (risultatoCorrente, id) => risultatoCorrente.Bind(p => p.NoleggiaAuto(id, clienteId))
-        );
+        return parco.NoleggiaBatch(listaIds.Select(id => new RichiestaNoleggio(clienteId, 1, id)));
     }
 }
