@@ -24,4 +24,19 @@ public class AutoTests
                autoNoleggiata.Id == id &&
                autoNoleggiata.Targa == targa;
     }
+
+    [Property]
+    public bool Restituisci_TrasformaAutoNoleggiataInAutoDisponibile(Guid id, string targa)
+    {
+        // Property: Data un'auto noleggiata, la funzione Restituisci deve SEMPRE
+        // restituire un'auto disponibile con lo stesso ID e Targa.
+        if (string.IsNullOrWhiteSpace(targa)) return true; // Skip invalid inputs
+
+        var auto = new AutoNoleggiata(id, targa);
+        var autoDisponibile = auto.Restituisci();
+
+        return autoDisponibile is AutoDisponibile &&
+               autoDisponibile.Id == id &&
+               autoDisponibile.Targa == targa;
+    }
 }
