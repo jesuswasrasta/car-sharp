@@ -34,7 +34,7 @@
 
 ## Fase 3: Percorso Funzionale (C# Moderno) 🎯 MVP
 
-- [ ] T011 [FP] RED: Property `Noleggia` trasforma `AutoDisponibile` in `AutoNoleggiata`
+- [x] T011 [FP] RED: Property `Noleggia` trasforma `AutoDisponibile` in `AutoNoleggiata`
 - [ ] T012 [FP] GREEN: Implementazione funzione `Noleggia` in `AutoExtensions.cs`
 - [ ] T013 [FP] RED: Property `Restituisci` trasforma `AutoNoleggiata` in `AutoDisponibile`
 - [ ] T014 [FP] GREEN: Implementazione funzione `Restituisci`
