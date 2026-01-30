@@ -35,7 +35,7 @@
 - [x] T009 [US1] [OOP] RED: Fact aggiunta auto
 - [x] T010 [US1] [OOP] GREEN: Metodo `AggiungiAuto` (mutazione)
 - [x] T011 [US1] [FP] RED: Property stato iniziale e aggiunta in `src/CarSharp.Functional.Tests/ParcoMezziTests.cs`
-- [ ] T012 [US1] [FP] GREEN: Record `ParcoMezzi` e estensione `AggiungiAuto` (immutabilità)
+- [x] T012 [US1] [FP] GREEN: Record `ParcoMezzi` e estensione `AggiungiAuto` (immutabilità)
 
 ## Fase 4: User Story 2 - Manutenzione Base [US2]
 
