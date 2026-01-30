@@ -1,0 +1,10 @@
+<Solution>
+  <File Path="README.md" />
+  <Folder Name="/src/">
+    <File Path="README.md" />
+    <Project Path="src/CarSharp.Functional.Tests/CarSharp.Functional.Tests.csproj" />
+    <Project Path="src/CarSharp.Functional/CarSharp.Functional.csproj" />
+    <Project Path="src/CarSharp.Oop.Tests/CarSharp.Oop.Tests.csproj" />
+    <Project Path="src/CarSharp.Oop/CarSharp.Oop.csproj" />
+  </Folder>
+</Solution>
