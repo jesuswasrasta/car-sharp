@@ -58,4 +58,37 @@ public static class ParcoMezziExtensions
     {
         return parco with { auto = parco.auto.Remove(auto) };
     }
+
+    /// <summary>
+    /// Tenta di noleggiare un'auto specifica dal parco.
+    /// </summary>
+    public static Result<ParcoMezzi> NoleggiaAuto(this ParcoMezzi parco, Guid id, string clienteId)
+    {
+        var autoTrovata = parco.auto.FirstOrDefault(a => a.Id == id);
+
+        if (autoTrovata == null)
+            return Result<ParcoMezzi>.Fail(new Error("Auto non trovata o non disponibile"));
+
+        return autoTrovata switch
+        {
+            AutoDisponibile disponibile => Result<ParcoMezzi>.From(
+                parco with { auto = parco.auto.Replace(disponibile, disponibile.Noleggia()) }),
+            _ => Result<ParcoMezzi>.Fail(new Error("Auto già noleggiata o in stato non valido"))
+        };
+    }
+
+    /// <summary>
+    /// Noleggia un batch di auto identificandole tramite ID.
+    /// In FP, utilizziamo la composizione di funzioni (Bind) su una sequenza di richieste.
+    /// </summary>
+    public static Result<ParcoMezzi> NoleggiaBatch(this ParcoMezzi parco, IEnumerable<Guid> ids, string clienteId)
+    {
+        // Nota per l'audience: L'uso di Aggregate con Bind garantisce l'atomicità:
+        // Se una sola richiesta fallisce, l'intera catena si interrompe e restituisce l'errore,
+        // lasciando il parco originale intatto (poiché è immutabile).
+        return ids.Aggregate(
+            Result<ParcoMezzi>.From(parco),
+            (risultatoCorrente, id) => risultatoCorrente.Bind(p => p.NoleggiaAuto(id, clienteId))
+        );
+    }
 }

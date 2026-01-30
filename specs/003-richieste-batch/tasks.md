@@ -26,7 +26,7 @@
 - [x] T003 [OOP] RED: Test `NoleggiaBatch` con auto tutte disponibili
 - [x] T004 [OOP] GREEN: Implementazione ciclo base di noleggio in `ParcoMezzi.cs`
 - [x] T005 [FP] RED: Property `NoleggiaBatch` con auto tutte disponibili
-- [ ] T006 [FP] GREEN: Implementazione logica tramite `Aggregate` e `Bind`
+- [x] T006 [FP] GREEN: Implementazione logica tramite `Aggregate` e `Bind`
 
 ## Fase 3: User Story 2 - Rifiuto Atomico [US2]
 
