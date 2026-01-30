@@ -30,7 +30,7 @@ public class ParcoMezziTests
 
         for (int i = 0; i < conteggio; i++)
         {
-            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5)).Value!;
+            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5, 50m)).Value!;
         }
 
         return (parco.TotaleAuto == conteggio);
@@ -46,7 +46,7 @@ public class ParcoMezziTests
 
         for (int i = 0; i < grandeConteggio; i++)
         {
-            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5)).Value!;
+            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5, 50m)).Value!;
         }
 
         var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -68,7 +68,7 @@ public class ParcoMezziTests
         var autoList = new List<IAuto>();
         for (int i = 0; i < n.Get; i++)
         {
-            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5);
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5, 50m);
             autoList.Add(auto);
             parco = parco.AggiungiAuto(auto).Value!;
         }
@@ -86,9 +86,9 @@ public class ParcoMezziTests
         // In Type-Driven Design, lo stato è espresso dal tipo. 
         // Filtrare per tipo è l'equivalente funzionale del filtraggio per proprietà.
         var parco = ParcoMezzi.Vuoto
-            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "AA111AA", 5)).Value!
-            .AggiungiAuto(new AutoNoleggiata(Guid.NewGuid(), "BB222BB", 5)).Value!
-            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "CC333CC", 5)).Value!;
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "AA111AA", 5, 50m)).Value!
+            .AggiungiAuto(new AutoNoleggiata(Guid.NewGuid(), "BB222BB", 5, 50m)).Value!
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "CC333CC", 5, 50m)).Value!;
 
         Assert.Equal(2, parco.ConteggioDisponibili);
     }
@@ -104,7 +104,7 @@ public class ParcoMezziTests
 
         for (int i = 0; i < conteggio; i++)
         {
-            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5);
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5, 50m);
             autoList.Add(auto);
             parco = parco.AggiungiAuto(auto).Value!;
         }
@@ -130,7 +130,7 @@ public class ParcoMezziTests
 
         for (int i = 0; i < conteggio; i++)
         {
-            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5);
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5, 50m);
             autoList.Add(auto);
             parco = parco.AggiungiAuto(auto).Value!;
         }
@@ -154,7 +154,7 @@ public class ParcoMezziTests
     {
         // Anche in FP, inviare lo stesso ID più volte nel batch è considerato un errore.
         var autoId = Guid.NewGuid();
-        var parco = ParcoMezzi.Vuoto.AggiungiAuto(new AutoDisponibile(autoId, "AA111AA", 5)).Value!;
+        var parco = ParcoMezzi.Vuoto.AggiungiAuto(new AutoDisponibile(autoId, "AA111AA", 5, 50m)).Value!;
 
         var batch = new List<Guid> { autoId, autoId };
 
@@ -170,9 +170,9 @@ public class ParcoMezziTests
         // Proprietà: Un noleggio per capacità deve restituire un'auto idonea O un errore.
         // Se ha successo, la capacità dell'auto deve essere >= ai posti richiesti.
         var parco = ParcoMezzi.Vuoto
-            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "SMALL", 2)).Value!
-            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "MEDIUM", 5)).Value!
-            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "LARGE", 7)).Value!;
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "SMALL", 2, 20m)).Value!
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "MEDIUM", 5, 50m)).Value!
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "LARGE", 7, 70m)).Value!;
 
         var risultato = parco.NoleggiaPerCapacita(postiRichiesti.Get, "CLIENTE");
 
@@ -194,7 +194,7 @@ public class ParcoMezziTests
     {
         // Se un batch ha una richiesta non soddisfabile per capacità,
         // l'intero risultato deve essere un errore e lo stato non deve cambiare.
-        var parco = ParcoMezzi.Vuoto.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "SMALL", 2)).Value!;
+        var parco = ParcoMezzi.Vuoto.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "SMALL", 2, 20m)).Value!;
 
         var richieste = new List<RichiestaNoleggio>
         {
@@ -213,8 +213,8 @@ public class ParcoMezziTests
         // In FP, verifichiamo che l'algoritmo Best Fit selezioni sempre l'auto
         // con la capacità minima sufficiente tra quelle disponibili.
         var parco = ParcoMezzi.Vuoto;
-        var auto4Posti = new AutoDisponibile(Guid.NewGuid(), "SMALL", 4);
-        var auto7Posti = new AutoDisponibile(Guid.NewGuid(), "LARGE", 7);
+        var auto4Posti = new AutoDisponibile(Guid.NewGuid(), "SMALL", 4, 40m);
+        var auto7Posti = new AutoDisponibile(Guid.NewGuid(), "LARGE", 7, 70m);
 
         parco = parco.AggiungiAuto(auto7Posti).Value!;
         parco = parco.AggiungiAuto(auto4Posti).Value!;
@@ -241,7 +241,7 @@ public class ParcoMezziTests
         var autoCreate = new List<IAuto>();
         for (int i = 1; i <= 5; i++)
         {
-            var auto = new AutoDisponibile(Guid.NewGuid(), $"CAR{i * 2}", i * 2);
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"CAR{i * 2}", i * 2, i * 20m);
             autoCreate.Add(auto);
             parco = parco.AggiungiAuto(auto).Value!;
         }
@@ -264,54 +264,13 @@ public class ParcoMezziTests
     }
 
     [Fact]
-    public void NoleggiaPerCapacita_ConAutoStessaCapacita_DovrebbeSelezionareLaPrimaInserita()
-    {
-        // Nel paradigma FP, il determinismo è ancora più critico perché la prevedibilità
-        // è un pilastro fondamentale. Dato lo stesso input (parco con auto identiche),
-        // dobbiamo sempre ottenere lo stesso output (prima auto inserita selezionata).
-        var parco = ParcoMezzi.Vuoto;
-        var primaAuto = new AutoDisponibile(Guid.NewGuid(), "FIRST5", 5);
-        var secondaAuto = new AutoDisponibile(Guid.NewGuid(), "SECOND5", 5);
-        var terzaAuto = new AutoDisponibile(Guid.NewGuid(), "THIRD5", 5);
-
-        parco = parco.AggiungiAuto(primaAuto).Value!;
-        parco = parco.AggiungiAuto(secondaAuto).Value!;
-        parco = parco.AggiungiAuto(terzaAuto).Value!;
-
-        var risultato = parco.NoleggiaPerCapacita(5, "CLIENTE");
-
-        Assert.True(risultato.IsSuccess);
-        var parcoAggiornato = risultato.Value!;
-        Assert.Contains(parcoAggiornato.auto, a => a.Id == primaAuto.Id && a is AutoNoleggiata);
-    }
-
-    [Property]
-    public bool NoleggiaPerCapacita_Determinismo(PositiveInt capacita)
-    {
-        // Property: Per qualsiasi capacità N, se inseriamo K auto identiche,
-        // il sistema deve sempre selezionare la prima inserita.
-        var cap = Math.Min(capacita.Get, 10);
-        var parco = ParcoMezzi.Vuoto;
-        var primaAuto = new AutoDisponibile(Guid.NewGuid(), "AUTO1", cap);
-        var secondaAuto = new AutoDisponibile(Guid.NewGuid(), "AUTO2", cap);
-
-        parco = parco.AggiungiAuto(primaAuto).Value!;
-        parco = parco.AggiungiAuto(secondaAuto).Value!;
-
-        var risultato = parco.NoleggiaPerCapacita(cap, "CLIENTE");
-
-        return risultato.IsSuccess && 
-               risultato.Value!.auto.OfType<AutoNoleggiata>().First().Id == primaAuto.Id;
-    }
-
-    [Fact]
     public void NoleggiaBatch_ConRichiesteMultiple_DovrebbeOttimizzareOgniSelezione()
     {
         // Verifichiamo che il batch processing applichi Best Fit a OGNI richiesta.
         var parco = ParcoMezzi.Vuoto;
-        var auto2Posti = new AutoDisponibile(Guid.NewGuid(), "CAR2", 2);
-        var auto4Posti = new AutoDisponibile(Guid.NewGuid(), "CAR4", 4);
-        var auto7Posti = new AutoDisponibile(Guid.NewGuid(), "CAR7", 7);
+        var auto2Posti = new AutoDisponibile(Guid.NewGuid(), "CAR2", 2, 20m);
+        var auto4Posti = new AutoDisponibile(Guid.NewGuid(), "CAR4", 4, 40m);
+        var auto7Posti = new AutoDisponibile(Guid.NewGuid(), "CAR7", 7, 70m);
 
         parco = parco.AggiungiAuto(auto7Posti).Value!;
         parco = parco.AggiungiAuto(auto4Posti).Value!;
@@ -332,5 +291,94 @@ public class ParcoMezziTests
         Assert.Contains(parcoAggiornato.auto, a => a.Id == auto2Posti.Id && a is AutoNoleggiata);
         Assert.Contains(parcoAggiornato.auto, a => a.Id == auto4Posti.Id && a is AutoNoleggiata);
         Assert.Contains(parcoAggiornato.auto, a => a.Id == auto7Posti.Id && a is AutoDisponibile);
+    }
+
+    // ========== TEST FASE 5 - US2: DETERMINISMO ==========
+
+    [Fact]
+    public void NoleggiaPerCapacita_ConAutoStessaCapacita_DovrebbeSelezionareLaPrimaInserita()
+    {
+        // Nel paradigma FP, il determinismo è ancora più critico perché la prevedibilità
+        // è un pilastro fondamentale. Dato lo stesso input (parco con auto identiche),
+        // dobbiamo sempre ottenere lo stesso output (prima auto inserita selezionata).
+        // OrderBy in LINQ è stabile: preserva l'ordine originale a parità di chiave.
+        var parco = ParcoMezzi.Vuoto;
+        var primaAuto = new AutoDisponibile(Guid.NewGuid(), "FIRST5", 5, 50m);
+        var secondaAuto = new AutoDisponibile(Guid.NewGuid(), "SECOND5", 5, 50m);
+        var terzaAuto = new AutoDisponibile(Guid.NewGuid(), "THIRD5", 5, 50m);
+
+        parco = parco.AggiungiAuto(primaAuto).Value!;
+        parco = parco.AggiungiAuto(secondaAuto).Value!;
+        parco = parco.AggiungiAuto(terzaAuto).Value!;
+
+        var risultato = parco.NoleggiaPerCapacita(5, "CLIENTE");
+
+        Assert.True(risultato.IsSuccess);
+        var parcoAggiornato = risultato.Value!;
+        Assert.Contains(parcoAggiornato.auto, a => a.Id == primaAuto.Id && a is AutoNoleggiata);
+    }
+
+    [Property]
+    public bool NoleggiaPerCapacita_Determinismo(PositiveInt capacita)
+    {
+        // Property: Per qualsiasi capacità N, se inseriamo K auto identiche,
+        // il sistema deve sempre selezionare la prima inserita.
+        var cap = Math.Min(capacita.Get, 10);
+        var parco = ParcoMezzi.Vuoto;
+        var primaAuto = new AutoDisponibile(Guid.NewGuid(), "AUTO1", cap, 50m);
+        var secondaAuto = new AutoDisponibile(Guid.NewGuid(), "AUTO2", cap, 50m);
+
+        parco = parco.AggiungiAuto(primaAuto).Value!;
+        parco = parco.AggiungiAuto(secondaAuto).Value!;
+
+        var risultato = parco.NoleggiaPerCapacita(cap, "CLIENTE");
+
+        return risultato.IsSuccess && 
+               risultato.Value!.auto.OfType<AutoNoleggiata>().First().Id == primaAuto.Id;
+    }
+
+    // ========== TEST FASE 6 - US1: NOLEGGIO CON COSTO ==========
+
+    [Property]
+    public bool NoleggiaConCosto_DovrebbeRestituireRisultatoConCostoCorretto(
+        Guid id, string targa, PositiveInt capacitaWrapper, PositiveInt costoWrapper)
+    {
+        // Property: Per ogni auto con costo X, il noleggio deve restituire X.
+        var capacita = Math.Max(capacitaWrapper.Get, 1);
+        var costoGiornaliero = (decimal)costoWrapper.Get;
+
+        var auto = new AutoDisponibile(id, targa ?? "TEST", capacita, costoGiornaliero);
+        var parco = ParcoMezzi.Vuoto.AggiungiAuto(auto).Value!;
+
+        var risultato = parco.NoleggiaConCosto(new RichiestaNoleggio("CLIENTE", 1));
+
+        if (!risultato.IsSuccess)
+            return false;
+
+        return risultato.Value!.Costo == costoGiornaliero &&
+               risultato.Value.Auto.CostoGiornaliero == costoGiornaliero;
+    }
+
+    [Fact]
+    public void PrenotaBatch_DovrebbeRestituireRisultatoBatch()
+    {
+        // US3: Il batch di noleggi deve restituire un RisultatoBatch contenente
+        // la lista dei noleggi, il costo totale e il parco aggiornato.
+        var parco = ParcoMezzi.Vuoto;
+        var auto1 = new AutoDisponibile(Guid.NewGuid(), "AUTO1", 4, 40m);
+        var auto2 = new AutoDisponibile(Guid.NewGuid(), "AUTO2", 6, 60m);
+        parco = parco.AggiungiAuto(auto1).Value!;
+        parco = parco.AggiungiAuto(auto2).Value!;
+
+        var risultato = parco.PrenotaBatch(new[] {
+            new RichiestaNoleggio("CLIENTE", 3),
+            new RichiestaNoleggio("CLIENTE", 5)
+        }, 0m);
+
+        Assert.True(risultato.IsSuccess);
+        Assert.Equal(2, risultato.Value!.Noleggi.Count);
+        Assert.Equal(40m, risultato.Value.Noleggi[0].Costo);
+        Assert.Equal(60m, risultato.Value.Noleggi[1].Costo);
+        Assert.Equal(100m, risultato.Value.TotaleGenerale);
     }
 }

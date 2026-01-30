@@ -2,22 +2,28 @@
 // Invece di modificare il parco mezzi, le operazioni restituiscono una nuova istanza 
 // che rappresenta lo stato aggiornato.
 
+using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
-
 using System.Linq;
 
 namespace CarSharp.Functional;
 
 /// <summary>
 /// Rappresenta un parco mezzi di auto come una struttura dati immutabile.
-/// In FP, il ParcoMezzi è un 'Dato' piuttosto che un 'Oggetto' con stato interno.
+/// In FP, il ParcoMezzi non è un contenitore che cambia nel tempo, ma un 'Valore' 
+/// che descrive lo stato della flotta in un istante preciso. Ogni operazione non 
+/// altera questo valore, ma ne produce uno nuovo, garantendo la thread-safety 
+/// e la predicibilità del comportamento.
 /// </summary>
 /// <param name="auto">La collezione immutabile di auto.</param>
 public record ParcoMezzi(ImmutableList<IAuto> auto)
 {
     /// <summary>
     /// Restituisce un'istanza di parco mezzi vuota.
-    /// Questo è il punto di partenza per tutte le trasformazioni.
+    /// Invece di un costruttore, utilizziamo una costante (Singleton) che funge da 
+    /// 'Elemento Neutro' per le nostre operazioni di trasformazione. Questo è il 
+    /// punto di partenza (Seed) per popolare la nostra flotta.
     /// </summary>
     public static ParcoMezzi Vuoto { get; } = new(ImmutableList<IAuto>.Empty);
 
@@ -53,24 +59,57 @@ public record RichiestaNoleggio(string ClienteId, int PostiMinimi, Guid? IdAuto 
     }
 }
 
+public record DettaglioCliente(
+    string ClienteId,
+    int NumeroPrenotazioni,
+    decimal TotaleLordo,
+    decimal ScontoApplicato,
+    decimal TotaleNetto
+);
+
 /// <summary>
 /// Metodi di estensione per trasformare un ParcoMezzi.
-/// In FP, spesso separiamo i dati dalle funzioni che operano su di essi.
+/// Coerentemente con il paradigma FP, separiamo i dati (record) dalle funzioni 
+/// (metodi di estensione) che operano su di essi, mantenendo la logica pura e 
+/// facilmente componibile.
 /// </summary>
 public static class ParcoMezziExtensions
 {
     /// <summary>
-    /// 'Aggiunge' un'auto al parco mezzi restituendo una nuova istanza di ParcoMezzi.
+    /// 'Aggiunge' un'auto al parco mezzi restituendo una nuova istanza.
     /// </summary>
     public static Result<ParcoMezzi> AggiungiAuto(this ParcoMezzi parco, IAuto auto)
     {
+        // US2: Verifica invariante capacità-prezzo.
+        // Nel mondo funzionale, la validazione restituisce un Failure invece di lanciare eccezioni.
+        foreach (var esistente in parco.auto)
+        {
+            if (esistente.Capacita == auto.Capacita)
+                continue;
+
+            // Invariante commerciale: mezzi più grandi non possono costare meno di mezzi più piccoli.
+            if (auto.Capacita > esistente.Capacita && auto.CostoGiornaliero < esistente.CostoGiornaliero)
+            {
+                return Result<ParcoMezzi>.Fail(
+                    $"Violazione invariante capacità-prezzo: l'auto con capacità {auto.Capacita} " +
+                    $"non può costare meno ({auto.CostoGiornaliero}€) di un'auto con capacità {esistente.Capacita} " +
+                    $"({esistente.CostoGiornaliero}€).");
+            }
+
+            if (auto.Capacita < esistente.Capacita && auto.CostoGiornaliero > esistente.CostoGiornaliero)
+            {
+                return Result<ParcoMezzi>.Fail(
+                    $"Violazione invariante capacità-prezzo: l'auto con capacità {auto.Capacita} " +
+                    $"non può costare più ({auto.CostoGiornaliero}€) di un'auto con capacità {esistente.Capacita} " +
+                    $"({esistente.CostoGiornaliero}€).");
+            }
+        }
+
         return Result<ParcoMezzi>.From(parco with { auto = parco.auto.Add(auto) });
     }
 
     /// <summary>
     /// 'Rimuovi' un'auto dal parco mezzi producendo un nuovo valore.
-    /// L'uguaglianza dei record si basa sul valore delle proprietà, rendendo l'identità 
-    /// indipendente dal riferimento in memoria.
     /// </summary>
     public static Result<ParcoMezzi> RimuoviAuto(this ParcoMezzi parco, IAuto auto)
     {
@@ -98,40 +137,55 @@ public static class ParcoMezziExtensions
     }
 
     /// <summary>
-    /// Tenta di noleggiare un'auto in base a una richiesta specifica.
-    /// In FP, validiamo i vincoli (disponibilità, capacità) tramite pattern matching e Result.
+    /// Noleggia un'auto e restituisce un RisultatoNoleggio contenente l'auto,
+    /// il costo giornaliero e il nuovo stato del parco.
     /// </summary>
-    public static Result<ParcoMezzi> NoleggiaAuto(this ParcoMezzi parco, RichiestaNoleggio richiesta)
+    public static Result<RisultatoNoleggio> NoleggiaConCosto(this ParcoMezzi parco, RichiestaNoleggio richiesta)
     {
-        IAuto? autoTrovata;
+        IAuto? autoIdonea;
 
         if (richiesta.IdAuto.HasValue)
         {
-            autoTrovata = parco.auto.FirstOrDefault(a => a.Id == richiesta.IdAuto.Value);
+            autoIdonea = parco.auto.FirstOrDefault(a => a.Id == richiesta.IdAuto.Value);
         }
         else
         {
-            // Best Fit Algorithm: filtriamo le auto disponibili con capacità sufficiente
-            // e ordiniamo per capacità crescente (minimo spreco di posti).
-            autoTrovata = parco.auto
+            // Best Fit Algorithm: ordiniamo per capacità crescente.
+            autoIdonea = parco.auto
                 .OfType<AutoDisponibile>()
                 .Where(a => a.Capacita >= richiesta.PostiMinimi)
                 .OrderBy(a => a.Capacita)
                 .FirstOrDefault();
         }
 
-        if (autoTrovata == null)
-            return Result<ParcoMezzi>.Fail(new Error("Auto non trovata o non disponibile per i requisiti richiesti"));
+        if (autoIdonea == null)
+            return Result<RisultatoNoleggio>.Fail($"Nessuna auto disponibile con almeno {richiesta.PostiMinimi} posti");
 
-        return autoTrovata switch
+        return autoIdonea switch
         {
             AutoDisponibile disponibile when disponibile.Capacita >= richiesta.PostiMinimi =>
-                Result<ParcoMezzi>.From(parco with {
-                    auto = parco.auto.Replace(disponibile, disponibile.Noleggia())
-                }),
-            AutoDisponibile => Result<ParcoMezzi>.Fail(new Error($"L'auto scelta non ha capacità sufficiente ({richiesta.PostiMinimi} richiesti)")),
-            _ => Result<ParcoMezzi>.Fail(new Error("Auto già noleggiata o in stato non valido"))
+                Result<RisultatoNoleggio>.From(ExecuteNoleggio(parco, disponibile, richiesta.ClienteId)),
+            AutoDisponibile => Result<RisultatoNoleggio>.Fail($"L'auto scelta non ha capacità sufficiente ({richiesta.PostiMinimi} richiesti)"),
+            _ => Result<RisultatoNoleggio>.Fail("Auto già noleggiata o in stato non valido")
         };
+    }
+
+    private static RisultatoNoleggio ExecuteNoleggio(ParcoMezzi parco, AutoDisponibile autoIdonea, string clienteId)
+    {
+        var autoNoleggiata = autoIdonea.Noleggia();
+        var nuovoParco = parco with {
+            auto = parco.auto.Replace(autoIdonea, autoNoleggiata)
+        };
+
+        return new RisultatoNoleggio(autoNoleggiata, autoNoleggiata.CostoGiornaliero, clienteId, nuovoParco);
+    }
+
+    /// <summary>
+    /// Tenta di noleggiare un'auto in base a una richiesta specifica.
+    /// </summary>
+    public static Result<ParcoMezzi> NoleggiaAuto(this ParcoMezzi parco, RichiestaNoleggio richiesta)
+    {
+        return parco.NoleggiaConCosto(richiesta).Bind(r => Result<ParcoMezzi>.From(r.ParcoAggiornato));
     }
 
     /// <summary>
@@ -140,9 +194,6 @@ public static class ParcoMezziExtensions
     /// </summary>
     public static Result<ParcoMezzi> NoleggiaBatch(this ParcoMezzi parco, IEnumerable<RichiestaNoleggio> richieste)
     {
-        // Nota per l'audience: L'uso di Aggregate con Bind garantisce l'atomicità:
-        // Se una sola richiesta fallisce (es. capacità insufficiente o auto occupata),
-        // l'intera catena si interrompe e restituisce l'errore, lasciando il parco originale intatto.
         return richieste.Aggregate(
             Result<ParcoMezzi>.From(parco),
             (risultatoCorrente, richiesta) => risultatoCorrente.Bind(p => p.NoleggiaAuto(richiesta))
@@ -151,16 +202,61 @@ public static class ParcoMezziExtensions
 
     /// <summary>
     /// Noleggia un batch di auto identificandole tramite ID.
-    /// In FP, utilizziamo la composizione di funzioni (Bind) su una sequenza di richieste.
     /// </summary>
     public static Result<ParcoMezzi> NoleggiaBatch(this ParcoMezzi parco, IEnumerable<Guid> ids, string clienteId)
     {
-        // Parse, Don't Validate: Validiamo la struttura dell'input prima di processarlo.
-        // Se il batch contiene duplicati, è strutturalmente invalido per la nostra logica di dominio atomica.
         var listaIds = ids.ToList();
         if (listaIds.Distinct().Count() != listaIds.Count)
-            return Result<ParcoMezzi>.Fail(new Error("Il batch contiene duplicati"));
+            return Result<ParcoMezzi>.Fail("Il batch contiene duplicati");
 
         return parco.NoleggiaBatch(listaIds.Select(id => new RichiestaNoleggio(clienteId, 1, id)));
+    }
+
+    /// <summary>
+    /// Processa un batch di richieste e restituisce un RisultatoBatch contenente
+    /// la lista dei noleggi, il riepilogo per cliente e il costo totale.
+    /// L'operazione è atomica: se una richiesta fallisce, nessuna viene effettuata.
+    /// </summary>
+    public static Result<RisultatoBatch> PrenotaBatch(this ParcoMezzi parco, IEnumerable<RichiestaNoleggio> richieste, decimal scontoPercentuale)
+    {
+        if (scontoPercentuale < 0 || scontoPercentuale > 1)
+            return Result<RisultatoBatch>.Fail("La percentuale di sconto deve essere compresa tra 0 e 1.");
+
+        var listaRichieste = richieste.ToList();
+        var risultatiNoleggi = new List<RisultatoNoleggio>();
+        var parcoCorrente = parco;
+
+        foreach (var richiesta in listaRichieste)
+        {
+            var risultatoNoleggio = parcoCorrente.NoleggiaConCosto(richiesta);
+
+            if (!risultatoNoleggio.IsSuccess)
+            {
+                return Result<RisultatoBatch>.Fail(risultatoNoleggio.Error!);
+            }
+
+            risultatiNoleggi.Add(risultatoNoleggio.Value!);
+            parcoCorrente = risultatoNoleggio.Value!.ParcoAggiornato;
+        }
+
+        var noleggiImmutabili = ImmutableList.CreateRange(risultatiNoleggi);
+        
+        var riepilogoClienti = risultatiNoleggi
+            .GroupBy(r => r.ClienteId)
+            .Select(g =>
+            {
+                var lordo = g.Sum(r => r.Costo);
+                var numPrenotazioni = g.Count();
+                var importoSconto = numPrenotazioni > 1 ? lordo * scontoPercentuale : 0m;
+                var netto = Math.Max(0, lordo - importoSconto);
+
+                return new DettaglioCliente(g.Key, numPrenotazioni, lordo, importoSconto, netto);
+            })
+            .ToList();
+
+        var costoTotaleGenerale = riepilogoClienti.Sum(d => d.TotaleNetto);
+
+        return Result<RisultatoBatch>.From(
+            new RisultatoBatch(noleggiImmutabili, costoTotaleGenerale, parcoCorrente));
     }
 }

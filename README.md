@@ -81,12 +81,27 @@ Il confronto ha evidenziato l'eleganza di entrambi i paradigmi nell'esprimere un
 
 ---
 
-## Fase 6 – Prezzi base
+## Fase 6 – Prezzi base (✅ COMPLETATA)
 
 - Ogni mezzo ha un costo base giornaliero.
 - Il costo di una prenotazione dipende dal mezzo.
 - Mezzi più grandi non possono costare meno di mezzi più piccoli.
 - Il costo totale di un batch è la somma dei costi delle singole prenotazioni.
+
+In questa fase abbiamo introdotto il **CostoGiornaliero** e gli **invarianti di coerenza prezzo-capacità**.
+Il confronto ha evidenziato approcci complementari nella gestione dei vincoli economici:
+- **OOP**: Il `CostoGiornaliero` è una proprietà validata nel costruttore (`> 0`). L'invariante capacità-prezzo è verificato in `AggiungiAuto()` con eccezione se violato. I metodi `NoleggiaConCosto()` e `PrenotaBatch()` restituiscono oggetti risultato che includono il costo calcolato. L'atomicità del batch è garantita dal pattern **Check-Then-Act**: se una richiesta fallisce, nessuna mutazione viene applicata.
+- **FP**: Il `CostoGiornaliero` è parte dei record `AutoDisponibile` e `AutoNoleggiata`. L'invariante capacità-prezzo è verificato in `AggiungiAuto()` restituendo un `Failure` se violato. I metodi `NoleggiaConCosto()` e `PrenotaBatch()` restituiscono `Result<RisultatoNoleggio>` e `Result<RisultatoBatch>`. L'atomicità è intrinseca: grazie all'immutabilità, un fallimento non modifica lo stato originale.
+
+**Pattern Evidenziati**:
+- **Value Objects per il denaro**: L'uso di `decimal` garantisce precisione monetaria senza errori di arrotondamento floating-point.
+- **Invariante di dominio**: L'invariante "capacità maggiore → costo maggiore o uguale" protegge la coerenza economica del parco mezzi.
+- **Risultato arricchito**: Invece di restituire solo l'auto o lo stato, i metodi `*ConCosto()` restituiscono un risultato che include tutte le informazioni rilevanti (auto, costo, stato aggiornato).
+- **Invariante sommativo**: Il costo totale di un batch è sempre la somma dei costi individuali, verificato tramite property-based testing.
+
+**Trade-offs**:
+- **OOP**: Pro: API familiare con `void` per mutazioni e valori di ritorno per query; eccezioni per errori chiari. Contro: La mutabilità richiede una doppia passata (Check-Then-Act) per garantire l'atomicità nel batch.
+- **FP**: Pro: Composabilità perfetta; `RisultatoBatch` include già il parco aggiornato permettendo chaining. Contro: API più verbosa con `Result<T>` da unwrappare.
 
 ---
 

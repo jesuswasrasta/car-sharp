@@ -34,7 +34,7 @@ public class ParcoMezziTests
         
         for (int i = 0; i < n; i++)
         {
-            var auto = new Auto(Guid.NewGuid(), $"ABC{i}", 5);
+            var auto = new Auto(Guid.NewGuid(), $"ABC{i}", 5, 50m);
             parco.AggiungiAuto(auto);
         }
 
@@ -49,7 +49,7 @@ public class ParcoMezziTests
         // che era stato precedentemente aggiunto. Questo garantisce che stiamo operando 
         // sull'asset corretto all'interno della flotta gestita.
         var parco = new ParcoMezzi();
-        var auto = new Auto(Guid.NewGuid(), "TEST1", 5);
+        var auto = new Auto(Guid.NewGuid(), "TEST1", 5, 50m);
         parco.AggiungiAuto(auto);
 
         parco.RimuoviAuto(auto);
@@ -62,9 +62,9 @@ public class ParcoMezziTests
     {
         // Il sistema deve essere in grado di filtrare la flotta in base allo stato mutabile degli oggetti.
         var parco = new ParcoMezzi();
-        var auto1 = new Auto(Guid.NewGuid(), "AA111AA", 5);
-        var auto2 = new Auto(Guid.NewGuid(), "BB222BB", 5);
-        var auto3 = new Auto(Guid.NewGuid(), "CC333CC", 5);
+        var auto1 = new Auto(Guid.NewGuid(), "AA111AA", 5, 50m);
+        var auto2 = new Auto(Guid.NewGuid(), "BB222BB", 5, 50m);
+        var auto3 = new Auto(Guid.NewGuid(), "CC333CC", 5, 50m);
 
         parco.AggiungiAuto(auto1);
         parco.AggiungiAuto(auto2);
@@ -78,12 +78,12 @@ public class ParcoMezziTests
     [Fact]
     public void NoleggiaBatch_ConAutoDisponibili_DovrebbeNoleggiarleTutte()
     {
-        // Questo test verifica il caso d'uso principale del noleggio batch.
+        // Questo test verifica l'caso d'uso principale del noleggio batch.
         // In OOP, ci aspettiamo che il parco mezzi coordini la mutazione dello stato
         // di più oggetti Auto contemporaneamente.
         var parco = new ParcoMezzi();
-        var auto1 = new Auto(Guid.NewGuid(), "AA111AA", 5);
-        var auto2 = new Auto(Guid.NewGuid(), "BB222BB", 5);
+        var auto1 = new Auto(Guid.NewGuid(), "AA111AA", 5, 50m);
+        var auto2 = new Auto(Guid.NewGuid(), "BB222BB", 5, 50m);
         
         parco.AggiungiAuto(auto1);
         parco.AggiungiAuto(auto2);
@@ -104,8 +104,8 @@ public class ParcoMezziTests
         // Questo test verifica l'atomicità in caso di errore.
         // Se un'auto nel batch non è disponibile, nessuna deve essere noleggiata.
         var parco = new ParcoMezzi();
-        var auto1 = new Auto(Guid.NewGuid(), "AA111AA", 5);
-        var auto2 = new Auto(Guid.NewGuid(), "BB222BB", 5);
+        var auto1 = new Auto(Guid.NewGuid(), "AA111AA", 5, 50m);
+        var auto2 = new Auto(Guid.NewGuid(), "BB222BB", 5, 50m);
         
         parco.AggiungiAuto(auto1);
         parco.AggiungiAuto(auto2);
@@ -127,7 +127,7 @@ public class ParcoMezziTests
         // Un batch non deve contenere la stessa auto più volte. 
         // In OOP, validiamo questo vincolo prima di procedere.
         var parco = new ParcoMezzi();
-        var auto = new Auto(Guid.NewGuid(), "AA111AA", 5);
+        var auto = new Auto(Guid.NewGuid(), "AA111AA", 5, 50m);
         parco.AggiungiAuto(auto);
 
         var batch = new List<Guid> { auto.Id, auto.Id };
@@ -141,9 +141,9 @@ public class ParcoMezziTests
         // Verifichiamo che il sistema scelga un'auto con capacità sufficiente.
         // Secondo la nostra chiarificazione, deve essere la prima inserita tra quelle valide.
         var parco = new ParcoMezzi();
-        var autoPiccola = new Auto(Guid.NewGuid(), "SMALL", 2);
-        var autoMedia = new Auto(Guid.NewGuid(), "MEDIUM", 5);
-        var autoGrande = new Auto(Guid.NewGuid(), "LARGE", 7);
+        var autoPiccola = new Auto(Guid.NewGuid(), "SMALL", 2, 20m);
+        var autoMedia = new Auto(Guid.NewGuid(), "MEDIUM", 5, 50m);
+        var autoGrande = new Auto(Guid.NewGuid(), "LARGE", 7, 70m);
 
         parco.AggiungiAuto(autoPiccola);
         parco.AggiungiAuto(autoMedia);
@@ -162,7 +162,7 @@ public class ParcoMezziTests
     {
         // Se non ci sono auto con capacità sufficiente, il noleggio deve fallire.
         var parco = new ParcoMezzi();
-        parco.AggiungiAuto(new Auto(Guid.NewGuid(), "SMALL", 2));
+        parco.AggiungiAuto(new Auto(Guid.NewGuid(), "SMALL", 2, 20m));
 
         Assert.Throws<InvalidOperationException>(() => parco.Noleggia(5));
     }
@@ -172,7 +172,7 @@ public class ParcoMezziTests
     {
         // FR-006: Se chiedo un'auto specifica ma voglio più posti di quelli che ha, deve fallire.
         var parco = new ParcoMezzi();
-        var auto = new Auto(Guid.NewGuid(), "SMALL", 2);
+        var auto = new Auto(Guid.NewGuid(), "SMALL", 2, 20m);
         parco.AggiungiAuto(auto);
 
         var richiesta = RichiestaNoleggio.PerId(auto.Id, 5);
@@ -184,8 +184,8 @@ public class ParcoMezziTests
     public void NoleggiaBatchMisto_DovrebbeAvereSuccesso_QuandoTutteRichiesteCompatibili()
     {
         var parco = new ParcoMezzi();
-        var auto1 = new Auto(Guid.NewGuid(), "AUTO1", 5);
-        var auto2 = new Auto(Guid.NewGuid(), "AUTO2", 2);
+        var auto1 = new Auto(Guid.NewGuid(), "AUTO1", 5, 50m);
+        var auto2 = new Auto(Guid.NewGuid(), "AUTO2", 2, 20m);
         parco.AggiungiAuto(auto1);
         parco.AggiungiAuto(auto2);
 
@@ -207,9 +207,9 @@ public class ParcoMezziTests
         // US1: Se più auto soddisfano la richiesta, il sistema deve scegliere la più piccola.
         // Questo ottimizza l'uso della flotta lasciando i mezzi grandi per i gruppi numerosi.
         var parco = new ParcoMezzi();
-        var autoPiccola = new Auto(Guid.NewGuid(), "AA111AA", 4);
-        var autoMedia = new Auto(Guid.NewGuid(), "BB222BB", 5);
-        var autoGrande = new Auto(Guid.NewGuid(), "CC333CC", 7);
+        var autoPiccola = new Auto(Guid.NewGuid(), "AA111AA", 4, 40m);
+        var autoMedia = new Auto(Guid.NewGuid(), "BB222BB", 5, 50m);
+        var autoGrande = new Auto(Guid.NewGuid(), "CC333CC", 7, 70m);
 
         // Aggiungiamo prima le auto grandi. Senza Best Fit, il sistema sceglierebbe la prima idonea (7).
         parco.AggiungiAuto(autoGrande);
@@ -229,9 +229,9 @@ public class ParcoMezziTests
         // US2: In caso di più auto con la stessa capacità ottimale, 
         // il sistema deve scegliere costantemente la prima inserita.
         var parco = new ParcoMezzi();
-        var auto1 = new Auto(Guid.NewGuid(), "AUTO1", 5);
-        var auto2 = new Auto(Guid.NewGuid(), "AUTO2", 5);
-        var auto3 = new Auto(Guid.NewGuid(), "AUTO3", 5);
+        var auto1 = new Auto(Guid.NewGuid(), "AUTO1", 5, 50m);
+        var auto2 = new Auto(Guid.NewGuid(), "AUTO2", 5, 50m);
+        var auto3 = new Auto(Guid.NewGuid(), "AUTO3", 5, 50m);
 
         parco.AggiungiAuto(auto1);
         parco.AggiungiAuto(auto2);
@@ -248,10 +248,10 @@ public class ParcoMezziTests
     {
         // US3: Anche in un batch, ogni richiesta deve essere ottimizzata singolarmente.
         var parco = new ParcoMezzi();
-        var auto2Posti = new Auto(Guid.NewGuid(), "CAR2", 2);
-        var auto4Posti = new Auto(Guid.NewGuid(), "CAR4", 4);
-        var auto5Posti = new Auto(Guid.NewGuid(), "CAR5", 5);
-        var auto7Posti = new Auto(Guid.NewGuid(), "CAR7", 7);
+        var auto2Posti = new Auto(Guid.NewGuid(), "CAR2", 2, 20m);
+        var auto4Posti = new Auto(Guid.NewGuid(), "CAR4", 4, 40m);
+        var auto5Posti = new Auto(Guid.NewGuid(), "CAR5", 5, 50m);
+        var auto7Posti = new Auto(Guid.NewGuid(), "CAR7", 7, 70m);
 
         parco.AggiungiAuto(auto7Posti);
         parco.AggiungiAuto(auto2Posti);
@@ -270,5 +270,78 @@ public class ParcoMezziTests
         Assert.Equal(StatoAuto.Noleggiata, auto4Posti.Stato);
         Assert.Equal(StatoAuto.Disponibile, auto5Posti.Stato);
         Assert.Equal(StatoAuto.Disponibile, auto7Posti.Stato);
+    }
+
+    [Fact]
+    public void NoleggiaConCosto_DovrebbeRestituireRisultatoConCostoCorretto()
+    {
+        // US1: Quando viene noleggiata un'auto, il sistema deve restituire
+        // il costo giornaliero dell'operazione insieme all'auto noleggiata.
+        var parco = new ParcoMezzi();
+        var costoGiornaliero = 75.50m;
+        var auto = new Auto(Guid.NewGuid(), "PRICED", 5, costoGiornaliero);
+        parco.AggiungiAuto(auto);
+
+        var risultato = parco.NoleggiaConCosto(4, "CLIENTE_TEST");
+
+        Assert.Equal(auto.Id, risultato.Auto.Id);
+        Assert.Equal(costoGiornaliero, risultato.Costo);
+        Assert.Equal(StatoAuto.Noleggiata, auto.Stato);
+    }
+
+    [Fact]
+    public void AggiungiAuto_DovrebbeAccettareAutoCoerentiConInvarianteCapacitaPrezzo()
+    {
+        // US2: Auto con capacità maggiore possono avere costo maggiore o uguale.
+        var parco = new ParcoMezzi();
+        var autoPiccola = new Auto(Guid.NewGuid(), "SMALL", 2, 30m);
+        var autoMedia = new Auto(Guid.NewGuid(), "MEDIUM", 5, 50m);
+        var autoGrande = new Auto(Guid.NewGuid(), "LARGE", 7, 70m);
+
+        parco.AggiungiAuto(autoPiccola);
+        parco.AggiungiAuto(autoMedia);
+        parco.AggiungiAuto(autoGrande);
+
+        Assert.Equal(3, parco.TotaleAuto);
+    }
+
+    [Fact]
+    public void PrenotaBatch_DovrebbeRestituireListaDiRisultatoNoleggio()
+    {
+        // US3: Il batch di noleggi deve restituire una lista di risultati,
+        // ognuno con l'auto noleggiata e il rispettivo costo.
+        var parco = new ParcoMezzi();
+        var auto1 = new Auto(Guid.NewGuid(), "AUTO1", 4, 40m);
+        var auto2 = new Auto(Guid.NewGuid(), "AUTO2", 6, 60m);
+        parco.AggiungiAuto(auto1);
+        parco.AggiungiAuto(auto2);
+
+        var risultatoBatch = parco.PrenotaBatch(new[] {
+            RichiestaNoleggio.PerCapacita(3),
+            RichiestaNoleggio.PerCapacita(5)
+        }, 0m);
+
+        var noleggi = risultatoBatch.Noleggi.ToList();
+        Assert.Equal(2, noleggi.Count);
+        Assert.Equal(40m, noleggi[0].Costo); // Best Fit: auto1 per 3 posti
+        Assert.Equal(60m, noleggi[1].Costo); // Best Fit: auto2 per 5 posti
+    }
+
+    [Fact]
+    public void PrenotaBatch_CostoTotale_DovrebbeEssereSommaCostiIndividuali()
+    {
+        // US3: Il costo totale del batch deve essere la somma dei costi individuali.
+        var parco = new ParcoMezzi();
+        parco.AggiungiAuto(new Auto(Guid.NewGuid(), "AUTO1", 2, 25m));
+        parco.AggiungiAuto(new Auto(Guid.NewGuid(), "AUTO2", 4, 45m));
+        parco.AggiungiAuto(new Auto(Guid.NewGuid(), "AUTO3", 7, 70m));
+
+        var risultatoBatch = parco.PrenotaBatch(new[] {
+            RichiestaNoleggio.PerCapacita(1), // 25€
+            RichiestaNoleggio.PerCapacita(3), // 45€
+            RichiestaNoleggio.PerCapacita(6)  // 70€
+        }, 0m);
+
+        Assert.Equal(140m, risultatoBatch.TotaleGenerale); // 25 + 45 + 70 = 140
     }
 }

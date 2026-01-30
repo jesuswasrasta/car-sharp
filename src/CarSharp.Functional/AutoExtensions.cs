@@ -11,7 +11,7 @@ public static class AutoExtensions
     /// </summary>
     public static AutoNoleggiata Noleggia(this AutoDisponibile auto)
     {
-        return new AutoNoleggiata(auto.Id, auto.Targa, auto.Capacita);
+        return new AutoNoleggiata(auto.Id, auto.Targa, auto.Capacita, auto.CostoGiornaliero);
     }
 
     /// <summary>
@@ -20,6 +20,6 @@ public static class AutoExtensions
     /// </summary>
     public static AutoDisponibile Restituisci(this AutoNoleggiata auto)
     {
-        return new AutoDisponibile(auto.Id, auto.Targa, auto.Capacita);
+        return new AutoDisponibile(auto.Id, auto.Targa, auto.Capacita, auto.CostoGiornaliero);
     }
 }

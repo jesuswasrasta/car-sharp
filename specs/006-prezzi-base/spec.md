@@ -1,96 +1,115 @@
-# Feature Specification: Prezzi Base
+# Feature Specification: [FEATURE NAME]
 
-**Feature Branch**: `006-prezzi-base`
-**Created**: 2026-01-30
-**Status**: Draft
-**Input**: User description: "Fase 6 – Prezzi base: Ogni mezzo ha un costo base giornaliero. Il costo di una prenotazione dipende dal mezzo. Mezzi più grandi non possono costare meno di mezzi più piccoli. Il costo totale di un batch è la somma dei costi delle singole prenotazioni."
+**Feature Branch**: `[###-feature-name]`  
+**Created**: [DATE]  
+**Status**: Draft  
+**Input**: User description: "$ARGUMENTS"
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Calcolo costo prenotazione singola (Priority: P1)
+<!--
+  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
+  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
+  you should still have a viable MVP (Minimum Viable Product) that delivers value.
+  
+  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
+  Think of each story as a standalone slice of functionality that can be:
+  - Developed independently
+  - Tested independently
+  - Deployed independently
+  - Demonstrated to users independently
+-->
 
-Il sistema calcola automaticamente il costo di una prenotazione in base al mezzo assegnato. Quando un utente noleggia un'auto, il sistema deve restituire il costo giornaliero associato a quel mezzo.
+### User Story 1 - [Brief Title] (Priority: P1)
 
-**Why this priority**: È il requisito fondamentale della fase: senza questa funzionalità non è possibile calcolare alcun costo.
+[Describe this user journey in plain language]
 
-**Independent Test**: Può essere testato creando un parco mezzi con auto a diversi prezzi e verificando che il noleggio restituisca il costo corretto.
+**Why this priority**: [Explain the value and why it has this priority level]
 
-**Acceptance Scenarios**:
-
-1. **Given** un parco mezzi con una Fiat 500 (4 posti, 30€/giorno) disponibile, **When** noleggio la Fiat 500, **Then** il sistema restituisce un costo di 30€.
-2. **Given** un parco mezzi con un Ford Transit (9 posti, 80€/giorno) disponibile, **When** noleggio il Ford Transit, **Then** il sistema restituisce un costo di 80€.
-3. **Given** un parco mezzi con più auto disponibili, **When** noleggio per 4 posti (Best Fit seleziona la Fiat 500 a 30€/giorno), **Then** il costo restituito è 30€.
-
----
-
-### User Story 2 - Vincolo di coerenza prezzo-capacità (Priority: P1)
-
-Il sistema garantisce che mezzi con capacità maggiore non possano avere un costo inferiore a mezzi con capacità minore. Questo vincolo assicura la coerenza commerciale del listino prezzi.
-
-**Why this priority**: È un invariante di business che deve essere garantito fin dall'inizio per evitare configurazioni incoerenti.
-
-**Independent Test**: Può essere testato tentando di creare auto con prezzi incoerenti rispetto alla capacità.
+**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
 
 **Acceptance Scenarios**:
 
-1. **Given** una configurazione di mezzo con 5 posti e 25€/giorno, **When** tento di aggiungere un mezzo con 4 posti e 30€/giorno, **Then** l'operazione è valida (il mezzo più piccolo può costare meno).
-2. **Given** una configurazione di mezzo con 5 posti e 40€/giorno, **When** tento di aggiungere un mezzo con 7 posti e 35€/giorno, **Then** l'operazione viene rifiutata (mezzo più grande non può costare meno).
-3. **Given** un parco vuoto, **When** aggiungo un mezzo con 4 posti e 30€/giorno, **Then** l'operazione è valida (primo mezzo, nessun confronto necessario).
+1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+2. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
 ---
 
-### User Story 3 - Calcolo costo batch (Priority: P2)
+### User Story 2 - [Brief Title] (Priority: P2)
 
-Quando il sistema elabora un batch di richieste, il costo totale è la somma dei costi delle singole prenotazioni. Ogni richiesta nel batch viene valutata indipendentemente e il costo complessivo viene calcolato.
+[Describe this user journey in plain language]
 
-**Why this priority**: Estende la funzionalità base al contesto batch già implementato nelle fasi precedenti.
+**Why this priority**: [Explain the value and why it has this priority level]
 
-**Independent Test**: Può essere testato creando un batch di più richieste e verificando che il totale sia la somma dei singoli costi.
+**Independent Test**: [Describe how this can be tested independently]
 
 **Acceptance Scenarios**:
 
-1. **Given** un parco con Fiat 500 (30€) e VW Golf (40€), **When** invio un batch con richieste per 2 e 4 posti, **Then** il costo totale è 70€ (30€ + 40€).
-2. **Given** un parco con tre auto disponibili a 30€, 40€ e 80€, **When** invio un batch con due richieste, **Then** il costo totale è la somma dei due mezzi assegnati (Best Fit).
-3. **Given** un batch che non può essere soddisfatto (atomicità), **When** il batch fallisce, **Then** il costo restituito è zero o errore (nessuna prenotazione effettuata).
+1. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
 ---
+
+### User Story 3 - [Brief Title] (Priority: P3)
+
+[Describe this user journey in plain language]
+
+**Why this priority**: [Explain the value and why it has this priority level]
+
+**Independent Test**: [Describe how this can be tested independently]
+
+**Acceptance Scenarios**:
+
+1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+
+---
+
+[Add more user stories as needed, each with an assigned priority]
 
 ### Edge Cases
 
-- Cosa succede quando si tenta di noleggiare da un parco vuoto? Il costo non viene calcolato e viene restituito un errore.
-- Cosa succede se il prezzo è zero o negativo? Il sistema deve rifiutare configurazioni con prezzi non validi (prezzo deve essere maggiore di zero).
-- Come si comporta il vincolo capacità-prezzo con capacità uguali? Auto con la stessa capacità possono avere prezzi diversi.
+<!--
+  ACTION REQUIRED: The content in this section represents placeholders.
+  Fill them out with the right edge cases.
+-->
+
+- What happens when [boundary condition]?
+- How does system handle [error scenario]?
 
 ## Requirements *(mandatory)*
 
+<!--
+  ACTION REQUIRED: The content in this section represents placeholders.
+  Fill them out with the right functional requirements.
+-->
+
 ### Functional Requirements
 
-- **FR-001**: Ogni mezzo DEVE avere un attributo `CostoGiornaliero` (prezzo base per giorno di noleggio).
-- **FR-002**: Il `CostoGiornaliero` DEVE essere un valore positivo maggiore di zero.
-- **FR-003**: Il sistema DEVE restituire il costo del mezzo assegnato quando viene effettuato un noleggio singolo.
-- **FR-004**: Il sistema DEVE garantire l'invariante: per ogni coppia di mezzi A e B, se `Capacita(A) > Capacita(B)`, allora `CostoGiornaliero(A) >= CostoGiornaliero(B)`.
-- **FR-005**: Il sistema DEVE calcolare il costo totale di un batch come somma dei costi delle singole prenotazioni.
-- **FR-006**: Se un batch fallisce (per atomicità), il sistema DEVE restituire un errore senza costi parziali.
-- **FR-007**: L'algoritmo Best Fit (già implementato) DEVE continuare a funzionare: la selezione avviene per capacità minima sufficiente, il costo è quello del mezzo selezionato.
+- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
+- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
+- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
+- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
+- **FR-005**: System MUST [behavior, e.g., "log all security events"]
 
-### Key Entities
+*Example of marking unclear requirements:*
 
-- **Auto**: Estensione con attributo `CostoGiornaliero` (decimal > 0). Rappresenta il prezzo base giornaliero del mezzo.
-- **RisultatoNoleggio** (nuovo): Contiene riferimento al mezzo noleggiato e il costo calcolato.
-- **RisultatoBatch** (estensione): Contiene la lista dei noleggi effettuati e il costo totale.
+- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
+- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
-## Success Criteria *(obbligatorio)*
+### Key Entities *(include if feature involves data)*
 
-### Risultati Misurabili
+- **[Entity 1]**: [What it represents, key attributes without implementation]
+- **[Entity 2]**: [What it represents, relationships to other entities]
 
-- **SC-001**: Il sistema restituisce il costo corretto per ogni noleggio singolo nel 100% dei casi (Costo = CostoGiornaliero del mezzo).
-- **SC-002**: Il sistema rifiuta il 100% delle configurazioni che violano l'invariante capacità-prezzo all'aggiunta al parco.
-- **SC-003**: Il costo totale di un batch è matematicamente uguale alla somma dei costi individuali (precisione decimale assoluta).
-- **SC-004**: L'atomicità è preservata: un batch fallito non deve produrre alcun calcolo di costo o variazione di stato.
+## Success Criteria *(mandatory)*
 
-## Assunzioni
+<!--
+  ACTION REQUIRED: Define measurable success criteria.
+  These must be technology-agnostic and measurable.
+-->
 
-- Il costo giornaliero è un valore fisso per mezzo e non varia in base alla durata (la durata sarà introdotta in fasi successive).
-- Non esistono sconti o maggiorazioni in questa fase; il prezzo è puramente additivo.
-- L'unità monetaria è l'euro (€) rappresentata tramite precisione `decimal`.
-- Il vincolo capacità-prezzo è assoluto: un mezzo più grande NON può costare meno di uno più piccolo, indipendentemente da altri fattori (segmento, lusso, etc.) non ancora modellati.
+### Measurable Outcomes
+
+- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
+- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
+- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
+- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
