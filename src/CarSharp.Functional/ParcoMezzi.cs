@@ -83,10 +83,16 @@ public static class ParcoMezziExtensions
     /// </summary>
     public static Result<ParcoMezzi> NoleggiaBatch(this ParcoMezzi parco, IEnumerable<Guid> ids, string clienteId)
     {
+        // Parse, Don't Validate: Validiamo la struttura dell'input prima di processarlo.
+        // Se il batch contiene duplicati, è strutturalmente invalido per la nostra logica di dominio atomica.
+        var listaIds = ids.ToList();
+        if (listaIds.Distinct().Count() != listaIds.Count)
+            return Result<ParcoMezzi>.Fail(new Error("Il batch contiene duplicati"));
+
         // Nota per l'audience: L'uso di Aggregate con Bind garantisce l'atomicità:
         // Se una sola richiesta fallisce, l'intera catena si interrompe e restituisce l'errore,
         // lasciando il parco originale intatto (poiché è immutabile).
-        return ids.Aggregate(
+        return listaIds.Aggregate(
             Result<ParcoMezzi>.From(parco),
             (risultatoCorrente, id) => risultatoCorrente.Bind(p => p.NoleggiaAuto(id, clienteId))
         );

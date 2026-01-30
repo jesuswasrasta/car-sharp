@@ -35,7 +35,7 @@
 - [x] T009 [OOP] GREEN: Refactor `NoleggiaBatch` aggiungendo validazione preventiva (Check-Then-Act)
 - [x] T010 [FP] RED: Property `NoleggiaBatch` fallisce se un'auto è inesistente o occupata
 - [x] T011 [FP] RED: Property `NoleggiaBatch` fallisce su duplicati (Parse, don't validate)
-- [ ] T012 [FP] GREEN: Refactor pipeline per propagazione errori e gestione set di ID
+- [x] T012 [FP] GREEN: Refactor pipeline per propagazione errori e gestione set di ID
 
 ## Fase 4: Conclusione Didattica
 
