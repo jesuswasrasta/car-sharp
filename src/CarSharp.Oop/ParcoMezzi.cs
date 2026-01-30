@@ -100,10 +100,14 @@ public class ParcoMezzi
             else
             {
                 // Richiesta per capacità: prendiamo la prima disponibile che soddisfa il requisito.
-                autoIdonea = _auto.FirstOrDefault(a => 
-                    a.Stato == StatoAuto.Disponibile && 
-                    a.Capacita >= richiesta.PostiMinimi &&
-                    !idsImpegnatiInQuestoBatch.Contains(a.Id));
+                // US1: Applichiamo l'algoritmo Best Fit ordinando per capacità.
+                autoIdonea = _auto
+                    .Where(a => 
+                        a.Stato == StatoAuto.Disponibile && 
+                        a.Capacita >= richiesta.PostiMinimi &&
+                        !idsImpegnatiInQuestoBatch.Contains(a.Id))
+                    .OrderBy(a => a.Capacita)
+                    .FirstOrDefault();
 
                 if (autoIdonea == null)
                 {

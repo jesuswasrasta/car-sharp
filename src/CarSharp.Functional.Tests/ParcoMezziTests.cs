@@ -303,4 +303,34 @@ public class ParcoMezziTests
         return risultato.IsSuccess && 
                risultato.Value!.auto.OfType<AutoNoleggiata>().First().Id == primaAuto.Id;
     }
+
+    [Fact]
+    public void NoleggiaBatch_ConRichiesteMultiple_DovrebbeOttimizzareOgniSelezione()
+    {
+        // Verifichiamo che il batch processing applichi Best Fit a OGNI richiesta.
+        var parco = ParcoMezzi.Vuoto;
+        var auto2Posti = new AutoDisponibile(Guid.NewGuid(), "CAR2", 2);
+        var auto4Posti = new AutoDisponibile(Guid.NewGuid(), "CAR4", 4);
+        var auto7Posti = new AutoDisponibile(Guid.NewGuid(), "CAR7", 7);
+
+        parco = parco.AggiungiAuto(auto7Posti).Value!;
+        parco = parco.AggiungiAuto(auto4Posti).Value!;
+        parco = parco.AggiungiAuto(auto2Posti).Value!;
+
+        var richieste = new List<RichiestaNoleggio>
+        {
+            new RichiestaNoleggio("CLIENTE", 2), // Deve selezionare CAR2
+            new RichiestaNoleggio("CLIENTE", 4)  // Deve selezionare CAR4
+        };
+
+        var risultato = parco.NoleggiaBatch(richieste);
+
+        Assert.True(risultato.IsSuccess);
+        var parcoAggiornato = risultato.Value!;
+
+        // Verifichiamo che siano state noleggiate le auto ottimali.
+        Assert.Contains(parcoAggiornato.auto, a => a.Id == auto2Posti.Id && a is AutoNoleggiata);
+        Assert.Contains(parcoAggiornato.auto, a => a.Id == auto4Posti.Id && a is AutoNoleggiata);
+        Assert.Contains(parcoAggiornato.auto, a => a.Id == auto7Posti.Id && a is AutoDisponibile);
+    }
 }

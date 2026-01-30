@@ -242,4 +242,33 @@ public class ParcoMezziTests
 
         Assert.Equal(auto1.Id, autoScelta.Id);
     }
+
+    [Fact]
+    public void NoleggiaBatch_ConRichiesteMultiple_DovrebbeOttimizzareOgniAssegnazione()
+    {
+        // US3: Anche in un batch, ogni richiesta deve essere ottimizzata singolarmente.
+        var parco = new ParcoMezzi();
+        var auto2Posti = new Auto(Guid.NewGuid(), "CAR2", 2);
+        var auto4Posti = new Auto(Guid.NewGuid(), "CAR4", 4);
+        var auto5Posti = new Auto(Guid.NewGuid(), "CAR5", 5);
+        var auto7Posti = new Auto(Guid.NewGuid(), "CAR7", 7);
+
+        parco.AggiungiAuto(auto7Posti);
+        parco.AggiungiAuto(auto2Posti);
+        parco.AggiungiAuto(auto5Posti);
+        parco.AggiungiAuto(auto4Posti);
+
+        var richieste = new List<RichiestaNoleggio>
+        {
+            RichiestaNoleggio.PerCapacita(2), // Deve prendere CAR2
+            RichiestaNoleggio.PerCapacita(4)  // Deve prendere CAR4, non CAR5 o CAR7
+        };
+
+        parco.NoleggiaBatch(richieste);
+
+        Assert.Equal(StatoAuto.Noleggiata, auto2Posti.Stato);
+        Assert.Equal(StatoAuto.Noleggiata, auto4Posti.Stato);
+        Assert.Equal(StatoAuto.Disponibile, auto5Posti.Stato);
+        Assert.Equal(StatoAuto.Disponibile, auto7Posti.Stato);
+    }
 }

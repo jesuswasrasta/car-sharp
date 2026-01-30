@@ -44,10 +44,10 @@
 
 ## Fase 5: User Story 3 - Ottimizzazione in Batch [US3]
 
-- [ ] T015 [OOP] RED: Test ottimizzazione sequenziale nel batch
-- [ ] T016 [OOP] GREEN: Assicurarsi che `NoleggiaBatch` utilizzi la nuova logica di selezione
-- [ ] T017 [FP] RED: Property ottimizzazione batch
-- [ ] T018 [FP] GREEN: Assicurarsi che `NoleggiaBatch` componga correttamente le selezioni Best Fit
+- [x] T015 [OOP] RED: Test ottimizzazione sequenziale nel batch
+- [x] T016 [OOP] GREEN: Assicurarsi che `NoleggiaBatch` utilizzi la nuova logica di selezione
+- [x] T017 [FP] RED: Property ottimizzazione batch
+- [x] T018 [FP] GREEN: Assicurarsi che `NoleggiaBatch` componga correttamente le selezioni Best Fit
 
 ## Fase 6: Rifinitura e Documentazione
 
