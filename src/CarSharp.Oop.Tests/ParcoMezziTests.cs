@@ -166,4 +166,38 @@ public class ParcoMezziTests
 
         Assert.Throws<InvalidOperationException>(() => parco.Noleggia(5));
     }
+
+    [Fact]
+    public void NoleggiaPerIdECapacita_DovrebbeFallire_QuandoCapacitaInsufficiente()
+    {
+        // FR-006: Se chiedo un'auto specifica ma voglio più posti di quelli che ha, deve fallire.
+        var parco = new ParcoMezzi();
+        var auto = new Auto(Guid.NewGuid(), "SMALL", 2);
+        parco.AggiungiAuto(auto);
+
+        var richiesta = RichiestaNoleggio.PerId(auto.Id, 5);
+
+        Assert.Throws<InvalidOperationException>(() => parco.NoleggiaBatch(new[] { richiesta }));
+    }
+
+    [Fact]
+    public void NoleggiaBatchMisto_DovrebbeAvereSuccesso_QuandoTutteRichiesteCompatibili()
+    {
+        var parco = new ParcoMezzi();
+        var auto1 = new Auto(Guid.NewGuid(), "AUTO1", 5);
+        var auto2 = new Auto(Guid.NewGuid(), "AUTO2", 2);
+        parco.AggiungiAuto(auto1);
+        parco.AggiungiAuto(auto2);
+
+        var richieste = new List<RichiestaNoleggio>
+        {
+            RichiestaNoleggio.PerId(auto2.Id), // Prende AUTO2
+            RichiestaNoleggio.PerCapacita(4)    // Deve prendere AUTO1
+        };
+
+        parco.NoleggiaBatch(richieste);
+
+        Assert.Equal(StatoAuto.Noleggiata, auto1.Stato);
+        Assert.Equal(StatoAuto.Noleggiata, auto2.Stato);
+    }
 }

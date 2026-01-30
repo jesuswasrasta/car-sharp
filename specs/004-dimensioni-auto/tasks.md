@@ -34,8 +34,8 @@
 
 ## Fase 3: Richieste Batch con Capacità (US3)
 
-- [ ] T011 [OOP] Aggiornare `NoleggiaBatch` per gestire requisiti di capacità (Check-Then-Act)
-- [ ] T012 [OOP] Aggiungere test per rifiuto atomico dovuto a violazione capacità
+- [x] T011 [OOP] Aggiornare `NoleggiaBatch` per gestire requisiti di capacità (Check-Then-Act)
+- [x] T012 [OOP] Aggiungere test per rifiuto atomico dovuto a violazione capacità
 - [ ] T013 [FP] Aggiornare pipeline `NoleggiaBatch` per supportare requisiti di capacità
 - [ ] T014 [FP] Aggiungere property test per vincoli di capacità in batch
 
