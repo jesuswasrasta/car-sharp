@@ -3,6 +3,7 @@
 // e fornisce metodi per modificarli.
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CarSharp.Oop;
 
@@ -15,6 +16,11 @@ public class ParcoMezzi
     /// Ottiene il numero totale di auto attualmente nel parco mezzi.
     /// </summary>
     public int TotaleAuto => _auto.Count;
+
+    /// <summary>
+    /// Ottiene il numero di auto attualmente disponibili per il noleggio.
+    /// </summary>
+    public int TotaleDisponibili => _auto.Count(a => a.Stato == StatoAuto.Disponibile);
 
     /// <summary>
     /// Aggiunge un'auto al parco mezzi.
