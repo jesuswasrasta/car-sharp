@@ -18,15 +18,15 @@
 
 ## Fase 1: Setup e Validazione Iniziale
 
-- [ ] T001 Verificare stato build del progetto
-- [ ] T002 Verificare che tutti i test esistenti passino (regressione)
+- [x] T001 Verificare stato build del progetto
+- [x] T002 Verificare che tutti i test esistenti passino (regressione)
 
 ## Fase 2: Fondamentali (Validazione Richieste)
 
-- [ ] T003 [OOP] RED: Test validazione capacità richiesta (fail-fast su <= 0)
-- [ ] T004 [OOP] GREEN: Implementazione validazione nel costruttore di `RichiestaNoleggio.cs`
-- [ ] T005 [FP] RED: Property test validazione capacità richiesta (Failure su <= 0)
-- [ ] T006 [FP] GREEN: Implementazione validazione nella factory di `RichiestaNoleggio.cs`
+- [x] T003 [OOP] RED: Test validazione capacità richiesta (fail-fast su <= 0)
+- [x] T004 [OOP] GREEN: Implementazione validazione nel costruttore di `RichiestaNoleggio.cs`
+- [x] T005 [FP] RED: Property test validazione capacità richiesta (Failure su <= 0)
+- [x] T006 [FP] GREEN: Implementazione validazione nella factory di `RichiestaNoleggio.cs`
 
 ## Fase 3: User Story 1 - Selezione Best Fit [US1] 🎯 MVP
 

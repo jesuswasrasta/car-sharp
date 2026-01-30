@@ -38,7 +38,20 @@ public record ParcoMezzi(ImmutableList<IAuto> auto)
 /// <summary>
 /// Rappresenta l'intenzione di noleggiare un mezzo con determinati requisiti.
 /// </summary>
-public record RichiestaNoleggio(string ClienteId, int PostiMinimi, Guid? IdAuto = null);
+public record RichiestaNoleggio(string ClienteId, int PostiMinimi, Guid? IdAuto = null)
+{
+    /// <summary>
+    /// Factory method per creare una richiesta validata.
+    /// In FP, preferiamo validare i dati al momento della creazione (Parse, don't validate).
+    /// </summary>
+    public static Result<RichiestaNoleggio> Crea(string clienteId, int postiMinimi, Guid? idAuto = null)
+    {
+        if (postiMinimi <= 0)
+            return Result<RichiestaNoleggio>.Fail("I posti richiesti devono essere positivi");
+
+        return Result<RichiestaNoleggio>.From(new RichiestaNoleggio(clienteId, postiMinimi, idAuto));
+    }
+}
 
 /// <summary>
 /// Metodi di estensione per trasformare un ParcoMezzi.
