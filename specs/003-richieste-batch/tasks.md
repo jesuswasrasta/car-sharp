@@ -33,8 +33,8 @@
 - [x] T007 [OOP] RED: Test `NoleggiaBatch` fallisce se un'auto è già noleggiata (nessuna modifica)
 - [x] T008 [OOP] RED: Test `NoleggiaBatch` fallisce su duplicati nel batch
 - [x] T009 [OOP] GREEN: Refactor `NoleggiaBatch` aggiungendo validazione preventiva (Check-Then-Act)
-- [ ] T010 [FP] RED: Property `NoleggiaBatch` fallisce se un'auto è inesistente o occupata
-- [ ] T011 [FP] RED: Property `NoleggiaBatch` fallisce su duplicati (Parse, don't validate)
+- [x] T010 [FP] RED: Property `NoleggiaBatch` fallisce se un'auto è inesistente o occupata
+- [x] T011 [FP] RED: Property `NoleggiaBatch` fallisce su duplicati (Parse, don't validate)
 - [ ] T012 [FP] GREEN: Refactor pipeline per propagazione errori e gestione set di ID
 
 ## Fase 4: Conclusione Didattica

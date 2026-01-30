@@ -118,4 +118,49 @@ public class ParcoMezziTests
                risultato.Value!.ConteggioDisponibili == 0 &&
                risultato.Value.TotaleAuto == conteggio;
     }
+
+    [Property]
+    public bool NoleggiaBatch_ConAutoNonDisponibile_DovrebbeRitornareErrore(PositiveInt n)
+    {
+        // Questo test verifica l'atomicità funzionale: se una delle auto è già noleggiata,
+        // l'intera operazione deve fallire e restituire l'errore appropriato.
+        var conteggio = n.Get;
+        var parco = ParcoMezzi.Vuoto;
+        var autoList = new List<IAuto>();
+
+        for (int i = 0; i < conteggio; i++)
+        {
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}");
+            autoList.Add(auto);
+            parco = parco.AggiungiAuto(auto);
+        }
+
+        // Rendiamo una delle auto già noleggiata prima del batch.
+        var bersaglio = autoList[new Random().Next(autoList.Count)];
+        parco = parco.NoleggiaAuto(bersaglio.Id, "CLIENTE").Value!;
+
+        var batch = autoList.Select(a => a.Id).ToList();
+
+        var risultato = parco.NoleggiaBatch(batch, "CLIENTE");
+
+        // Il batch deve fallire e il parco risultante (se ignorassimo il fallimento) 
+        // non deve essere stato creato.
+        return !risultato.IsSuccess &&
+               risultato.Error!.Message == "Auto già noleggiata o in stato non valido";
+    }
+
+    [Fact]
+    public void NoleggiaBatch_ConDuplicati_DovrebbeRitornareErrore()
+    {
+        // Anche in FP, inviare lo stesso ID più volte nel batch è considerato un errore.
+        var autoId = Guid.NewGuid();
+        var parco = ParcoMezzi.Vuoto.AggiungiAuto(new AutoDisponibile(autoId, "AA111AA"));
+
+        var batch = new List<Guid> { autoId, autoId };
+
+        var risultato = parco.NoleggiaBatch(batch, "CLIENTE");
+
+        Assert.False(risultato.IsSuccess);
+        Assert.Equal("Il batch contiene duplicati", risultato.Error!.Message);
+    }
 }
