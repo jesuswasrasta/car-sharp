@@ -105,12 +105,26 @@ Il confronto ha evidenziato approcci complementari nella gestione dei vincoli ec
 
 ---
 
-## Fase 7 – Clienti e sconti
+## Fase 7 – Clienti e sconti (✅ COMPLETATA)
 
 - Ogni prenotazione è associata a un cliente.
 - Se un cliente prenota più mezzi nello stesso batch, ottiene uno sconto percentuale.
 - Lo sconto si applica al totale del cliente, non ai singoli mezzi.
 - Il prezzo finale non può mai essere negativo.
+
+In questa fase abbiamo introdotto l'**Identità del Cliente** e la logica di **Sconto Aggregato** basata sul volume di prenotazioni.
+Il confronto ha evidenziato come gestire raggruppamenti e calcoli condizionali mantenendo l'atomicità:
+- **OOP**: Abbiamo esteso `RichiestaNoleggio` e `RisultatoNoleggio` con `ClienteId`. Il metodo `PrenotaBatch()` utilizza LINQ `GroupBy` per identificare i clienti con più di una prenotazione, calcola lo sconto sul totale lordo del cliente e restituisce un `RisultatoBatch` che include un `Dictionary<string, DettaglioCostiCliente>`. Il prezzo finale è protetto da un clamp `Math.Max(0, ...)`.
+- **FP**: Abbiamo aggiornato i record immutabili per includere il `ClienteId`. La funzione pura `PrenotaBatch` applica una trasformazione in due fasi: prima esegue la catena di noleggi (atomicità), poi trasforma la lista dei risultati in un riepilogo scontato utilizzando `GroupBy` funzionale. L'invariante del prezzo non negativo è garantito nella fase di proiezione dei totali.
+
+**Pattern Evidenziati**:
+- **Aggregazione Post-Noleggio**: Lo sconto non viene applicato alle singole auto (prezzi base integri) ma al totale del cliente nel contesto del batch. Questo separa il "prezzo del bene" dalla "politica commerciale".
+- **Terminology Alignment**: Nonostante le differenze di implementazione (Dictionary vs IEnumerable), abbiamo allineato la terminologia (`TotaleGenerale`, `RiepilogoClienti`) per facilitare il confronto.
+- **Safety Clamping**: L'uso di un floor esplicito a zero (`Math.Max(0, ...)`) agisce come una "rete di sicurezza" contro configurazioni di sconto estreme o errori logici, garantendo l'integrità economica.
+
+**Trade-offs**:
+- **OOP**: Pro: Uso naturale di Dictionary per lookup veloci dei dettagli cliente; gestione robusta delle eccezioni per range di sconto invalidi. Contro: La necessità di creare DTO (`DettaglioCostiCliente`) aumenta il boilerplate rispetto ai record FP.
+- **FP**: Pro: I record rendono la definizione del riepilogo estremamente concisa; l'atomicità del batch (rollback automatico in caso di errore) rimane il punto di forza principale. Contro: La validazione dello sconto all'interno di una funzione che restituisce `Result` richiede più "cerimoniale" rispetto al lancio di un'eccezione.
 
 ---
 
