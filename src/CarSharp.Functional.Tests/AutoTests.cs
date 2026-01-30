@@ -17,7 +17,7 @@ public class AutoTests
         // restituire un'auto noleggiata con lo stesso ID e Targa.
         if (string.IsNullOrWhiteSpace(targa)) return true; // Skip invalid inputs
 
-        var auto = new AutoDisponibile(id, targa);
+        var auto = new AutoDisponibile(id, targa, 5);
         var autoNoleggiata = auto.Noleggia();
 
         return autoNoleggiata is AutoNoleggiata &&
@@ -32,7 +32,7 @@ public class AutoTests
         // restituire un'auto disponibile con lo stesso ID e Targa.
         if (string.IsNullOrWhiteSpace(targa)) return true; // Skip invalid inputs
 
-        var auto = new AutoNoleggiata(id, targa);
+        var auto = new AutoNoleggiata(id, targa, 5);
         var autoDisponibile = auto.Restituisci();
 
         return autoDisponibile is AutoDisponibile &&

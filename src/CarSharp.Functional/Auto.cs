@@ -13,17 +13,18 @@ public interface IAuto
 {
     Guid Id { get; }
     string Targa { get; }
+    int Capacita { get; }
 }
 
 /// <summary>
 /// Rappresenta un'auto pronta per essere noleggiata.
 /// </summary>
-public record AutoDisponibile(Guid Id, string Targa) : IAuto;
+public record AutoDisponibile(Guid Id, string Targa, int Capacita) : IAuto;
 
 /// <summary>
 /// Rappresenta un'auto attualmente in uso da un cliente.
 /// </summary>
-public record AutoNoleggiata(Guid Id, string Targa) : IAuto;
+public record AutoNoleggiata(Guid Id, string Targa, int Capacita) : IAuto;
 
 // Manteniamo il record base Auto per compatibilità con i test Fase 1 se necessario,
 // o lo rimuoviamo se migriamo tutto. Per ora lo lasciamo ma Fase 2 usa IAuto.

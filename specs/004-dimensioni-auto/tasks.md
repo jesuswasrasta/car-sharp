@@ -21,16 +21,16 @@
 - [x] T001 [OOP] Aggiungere proprietà `Capacita` a `Auto.cs` e aggiornare costruttore
 - [x] T002 [FP] Aggiungere proprietà `Capacita` al record `Auto` e tipi specializzati
 - [x] T003 [OOP] Aggiornare `ParcoMezzi.AggiungiAuto` per accettare capacità (mutazione)
-- [ ] T004 [FP] Aggiornare `ParcoMezzi.AggiungiAuto` per gestire record con capacità
+- [x] T004 [FP] Aggiornare `ParcoMezzi.AggiungiAuto` per gestire record con capacità
 
 ## Fase 2: Noleggio Singolo con Capacità (US1 & US2) 🎯 MVP
 
 - [x] T005 [OOP] RED: Test `Noleggia(int)` assegna auto idonea
 - [x] T006 [OOP] GREEN: Implementazione logica di ricerca (First) in `ParcoMezzi.cs`
 - [x] T007 [OOP] RED: Test fallimento per capacità insufficiente
-- [ ] T008 [FP] RED: Property `NoleggiaPerCapacita` rispetta sempre l'invariante del minimo
-- [ ] T009 [FP] GREEN: Implementazione pipeline LINQ filtrata in `ParcoMezziExtensions.cs`
-- [ ] T010 [FP] Refactor trasformazione di stato per includere lookup per capacità
+- [x] T008 [FP] RED: Property `NoleggiaPerCapacita` rispetta sempre l'invariante del minimo
+- [x] T009 [FP] GREEN: Implementazione pipeline LINQ filtrata in `ParcoMezziExtensions.cs`
+- [x] T010 [FP] Refactor trasformazione di stato per includere lookup per capacità
 
 ## Fase 3: Richieste Batch con Capacità (US3)
 

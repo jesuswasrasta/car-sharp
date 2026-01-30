@@ -30,7 +30,7 @@ public class ParcoMezziTests
 
         for (int i = 0; i < conteggio; i++)
         {
-            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}"));
+            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5)).Value!;
         }
 
         return (parco.TotaleAuto == conteggio);
@@ -46,7 +46,7 @@ public class ParcoMezziTests
 
         for (int i = 0; i < grandeConteggio; i++)
         {
-            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}"));
+            parco = parco.AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5)).Value!;
         }
 
         var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -68,16 +68,16 @@ public class ParcoMezziTests
         var autoList = new List<IAuto>();
         for (int i = 0; i < n.Get; i++)
         {
-            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}");
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5);
             autoList.Add(auto);
-            parco = parco.AggiungiAuto(auto);
+            parco = parco.AggiungiAuto(auto).Value!;
         }
 
         var bersaglio = autoList[new Random().Next(autoList.Count)];
 
-        var nuovoParco = parco.RimuoviAuto(bersaglio);
+        var risultato = parco.RimuoviAuto(bersaglio);
 
-        return nuovoParco.TotaleAuto == parco.TotaleAuto - 1;
+        return risultato.IsSuccess && risultato.Value!.TotaleAuto == parco.TotaleAuto - 1;
     }
 
     [Fact]
@@ -86,9 +86,9 @@ public class ParcoMezziTests
         // In Type-Driven Design, lo stato è espresso dal tipo. 
         // Filtrare per tipo è l'equivalente funzionale del filtraggio per proprietà.
         var parco = ParcoMezzi.Vuoto
-            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "AA111AA"))
-            .AggiungiAuto(new AutoNoleggiata(Guid.NewGuid(), "BB222BB"))
-            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "CC333CC"));
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "AA111AA", 5)).Value!
+            .AggiungiAuto(new AutoNoleggiata(Guid.NewGuid(), "BB222BB", 5)).Value!
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "CC333CC", 5)).Value!;
 
         Assert.Equal(2, parco.ConteggioDisponibili);
     }
@@ -104,9 +104,9 @@ public class ParcoMezziTests
 
         for (int i = 0; i < conteggio; i++)
         {
-            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}");
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5);
             autoList.Add(auto);
-            parco = parco.AggiungiAuto(auto);
+            parco = parco.AggiungiAuto(auto).Value!;
         }
 
         var batch = autoList.Select(a => a.Id).ToList();
@@ -130,9 +130,9 @@ public class ParcoMezziTests
 
         for (int i = 0; i < conteggio; i++)
         {
-            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}");
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}", 5);
             autoList.Add(auto);
-            parco = parco.AggiungiAuto(auto);
+            parco = parco.AggiungiAuto(auto).Value!;
         }
 
         // Rendiamo una delle auto già noleggiata prima del batch.
@@ -154,7 +154,7 @@ public class ParcoMezziTests
     {
         // Anche in FP, inviare lo stesso ID più volte nel batch è considerato un errore.
         var autoId = Guid.NewGuid();
-        var parco = ParcoMezzi.Vuoto.AggiungiAuto(new AutoDisponibile(autoId, "AA111AA"));
+        var parco = ParcoMezzi.Vuoto.AggiungiAuto(new AutoDisponibile(autoId, "AA111AA", 5)).Value!;
 
         var batch = new List<Guid> { autoId, autoId };
 
@@ -162,5 +162,30 @@ public class ParcoMezziTests
 
         Assert.False(risultato.IsSuccess);
         Assert.Equal("Il batch contiene duplicati", risultato.Error!.Message);
+    }
+
+    [Property]
+    public bool NoleggiaPerCapacita_DovrebbeSempreRispettareIlMinimo(PositiveInt postiRichiesti)
+    {
+        // Proprietà: Un noleggio per capacità deve restituire un'auto idonea O un errore.
+        // Se ha successo, la capacità dell'auto deve essere >= ai posti richiesti.
+        var parco = ParcoMezzi.Vuoto
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "SMALL", 2)).Value!
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "MEDIUM", 5)).Value!
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "LARGE", 7)).Value!;
+
+        var risultato = parco.NoleggiaPerCapacita(postiRichiesti.Get, "CLIENTE");
+
+        if (risultato.IsSuccess)
+        {
+            // Verifichiamo che l'auto trovata e spostata in AutoNoleggiata abbia capacità sufficiente.
+            var idAutoNoleggiata = parco.auto.Except(risultato.Value!.auto).OfType<AutoDisponibile>().First().Id;
+            var autoNoleggiata = risultato.Value.auto.OfType<AutoNoleggiata>().First(a => a.Id == idAutoNoleggiata);
+            
+            return autoNoleggiata.Capacita >= postiRichiesti.Get;
+        }
+
+        // Se fallisce, non devono esserci auto disponibili con capacità sufficiente.
+        return !parco.auto.OfType<AutoDisponibile>().Any(a => a.Capacita >= postiRichiesti.Get);
     }
 }

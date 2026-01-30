@@ -36,6 +36,11 @@ public record ParcoMezzi(ImmutableList<IAuto> auto)
 }
 
 /// <summary>
+/// Rappresenta l'intenzione di noleggiare un mezzo con determinati requisiti.
+/// </summary>
+public record RichiestaNoleggio(string ClienteId, int PostiMinimi, Guid? IdAuto = null);
+
+/// <summary>
 /// Metodi di estensione per trasformare un ParcoMezzi.
 /// In FP, spesso separiamo i dati dalle funzioni che operano su di essi.
 /// </summary>
@@ -44,9 +49,9 @@ public static class ParcoMezziExtensions
     /// <summary>
     /// 'Aggiunge' un'auto al parco mezzi restituendo una nuova istanza di ParcoMezzi.
     /// </summary>
-    public static ParcoMezzi AggiungiAuto(this ParcoMezzi parco, IAuto auto)
+    public static Result<ParcoMezzi> AggiungiAuto(this ParcoMezzi parco, IAuto auto)
     {
-        return parco with { auto = parco.auto.Add(auto) };
+        return Result<ParcoMezzi>.From(parco with { auto = parco.auto.Add(auto) });
     }
 
     /// <summary>
@@ -54,9 +59,13 @@ public static class ParcoMezziExtensions
     /// L'uguaglianza dei record si basa sul valore delle proprietà, rendendo l'identità 
     /// indipendente dal riferimento in memoria.
     /// </summary>
-    public static ParcoMezzi RimuoviAuto(this ParcoMezzi parco, IAuto auto)
+    public static Result<ParcoMezzi> RimuoviAuto(this ParcoMezzi parco, IAuto auto)
     {
-        return parco with { auto = parco.auto.Remove(auto) };
+        var nuoveAuto = parco.auto.Remove(auto);
+        
+        return ReferenceEquals(nuoveAuto, parco.auto)
+            ? Result<ParcoMezzi>.Fail(new Error("Auto non trovata nel parco mezzi"))
+            : Result<ParcoMezzi>.From(parco with { auto = nuoveAuto });
     }
 
     /// <summary>
@@ -64,15 +73,47 @@ public static class ParcoMezziExtensions
     /// </summary>
     public static Result<ParcoMezzi> NoleggiaAuto(this ParcoMezzi parco, Guid id, string clienteId)
     {
-        var autoTrovata = parco.auto.FirstOrDefault(a => a.Id == id);
+        return parco.NoleggiaAuto(new RichiestaNoleggio(clienteId, 1, id));
+    }
+
+    /// <summary>
+    /// Tenta di noleggiare un'auto che soddisfi il requisito di capacità.
+    /// </summary>
+    public static Result<ParcoMezzi> NoleggiaPerCapacita(this ParcoMezzi parco, int postiMinimi, string clienteId)
+    {
+        return parco.NoleggiaAuto(new RichiestaNoleggio(clienteId, postiMinimi));
+    }
+
+    /// <summary>
+    /// Tenta di noleggiare un'auto in base a una richiesta specifica.
+    /// In FP, validiamo i vincoli (disponibilità, capacità) tramite pattern matching e Result.
+    /// </summary>
+    public static Result<ParcoMezzi> NoleggiaAuto(this ParcoMezzi parco, RichiestaNoleggio richiesta)
+    {
+        IAuto? autoTrovata;
+
+        if (richiesta.IdAuto.HasValue)
+        {
+            autoTrovata = parco.auto.FirstOrDefault(a => a.Id == richiesta.IdAuto.Value);
+        }
+        else
+        {
+            // In questa fase, scegliamo la prima auto disponibile che soddisfi il requisito.
+            autoTrovata = parco.auto
+                .OfType<AutoDisponibile>()
+                .FirstOrDefault(a => a.Capacita >= richiesta.PostiMinimi);
+        }
 
         if (autoTrovata == null)
-            return Result<ParcoMezzi>.Fail(new Error("Auto non trovata o non disponibile"));
+            return Result<ParcoMezzi>.Fail(new Error("Auto non trovata o non disponibile per i requisiti richiesti"));
 
         return autoTrovata switch
         {
-            AutoDisponibile disponibile => Result<ParcoMezzi>.From(
-                parco with { auto = parco.auto.Replace(disponibile, disponibile.Noleggia()) }),
+            AutoDisponibile disponibile when disponibile.Capacita >= richiesta.PostiMinimi =>
+                Result<ParcoMezzi>.From(parco with {
+                    auto = parco.auto.Replace(disponibile, disponibile.Noleggia())
+                }),
+            AutoDisponibile => Result<ParcoMezzi>.Fail(new Error($"L'auto scelta non ha capacità sufficiente ({richiesta.PostiMinimi} richiesti)")),
             _ => Result<ParcoMezzi>.Fail(new Error("Auto già noleggiata o in stato non valido"))
         };
     }
