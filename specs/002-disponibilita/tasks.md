@@ -39,7 +39,7 @@
 - [x] T013 [FP] RED: Property `Restituisci` trasforma `AutoNoleggiata` in `AutoDisponibile`
 - [x] T014 [FP] GREEN: Implementazione funzione `Restituisci`
 - [x] T015 [FP] RED: Test `ConteggioDisponibili` conta solo istanze di `AutoDisponibile`
-- [ ] T016 [FP] GREEN: Implementazione query LINQ con pattern matching
+- [x] T016 [FP] GREEN: Implementazione query LINQ con pattern matching
 
 ## Fase 4: Conclusione Didattica
 

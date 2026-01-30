@@ -4,6 +4,8 @@
 
 using System.Collections.Immutable;
 
+using System.Linq;
+
 namespace CarSharp.Functional;
 
 /// <summary>
@@ -23,6 +25,14 @@ public record ParcoMezzi(ImmutableList<IAuto> auto)
     /// Ottiene il numero totale di auto nel parco mezzi.
     /// </summary>
     public int TotaleAuto => auto.Count;
+
+    /// <summary>
+    /// Ottiene il numero di auto attualmente disponibili per il noleggio.
+    /// In Type-Driven Design, lo stato è codificato nel tipo. Filtrare per il tipo 
+    /// 'AutoDisponibile' è il modo idiomatico per estrarre la sottoparte del 
+    /// parco mezzi che risponde ai criteri operativi richiesti.
+    /// </summary>
+    public int ConteggioDisponibili => auto.OfType<AutoDisponibile>().Count();
 }
 
 /// <summary>
