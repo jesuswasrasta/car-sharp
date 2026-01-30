@@ -13,4 +13,13 @@ public static class AutoExtensions
     {
         return new AutoNoleggiata(auto.Id, auto.Targa);
     }
+
+    /// <summary>
+    /// Trasforma un'AutoNoleggiata in AutoDisponibile.
+    /// Ripristina lo stato iniziale.
+    /// </summary>
+    public static AutoDisponibile Restituisci(this AutoNoleggiata auto)
+    {
+        return new AutoDisponibile(auto.Id, auto.Targa);
+    }
 }

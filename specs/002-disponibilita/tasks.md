@@ -37,7 +37,7 @@
 - [x] T011 [FP] RED: Property `Noleggia` trasforma `AutoDisponibile` in `AutoNoleggiata`
 - [x] T012 [FP] GREEN: Implementazione funzione `Noleggia` in `AutoExtensions.cs`
 - [x] T013 [FP] RED: Property `Restituisci` trasforma `AutoNoleggiata` in `AutoDisponibile`
-- [ ] T014 [FP] GREEN: Implementazione funzione `Restituisci`
+- [x] T014 [FP] GREEN: Implementazione funzione `Restituisci`
 - [ ] T015 [FP] RED: Test `ConteggioDisponibili` conta solo istanze di `AutoDisponibile`
 - [ ] T016 [FP] GREEN: Implementazione query LINQ con pattern matching
 
