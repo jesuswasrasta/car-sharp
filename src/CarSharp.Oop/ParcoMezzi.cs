@@ -25,4 +25,18 @@ public class ParcoMezzi
     {
         _auto.Add(auto);
     }
+
+    /// <summary>
+    /// Rimuove un'auto dal parco mezzi.
+    /// L'operazione di rimozione si affida all'identità referenziale dell'oggetto.
+    /// </summary>
+    /// <param name="auto">L'istanza specifica dell'auto da rimuovere.</param>
+    /// <returns>True se l'oggetto con l'identità fornita è stato trovato e rimosso.</returns>
+    public bool RimuoviAuto(Auto auto)
+    {
+        // In C# OOP, l'uguaglianza predefinita per le classi è basata sul riferimento in memoria.
+        // Pertanto, la rimozione ha successo solo se passiamo esattamente lo stesso puntatore 
+        // che è stato aggiunto originariamente alla collezione.
+        return _auto.Remove(auto);
+    }
 }
