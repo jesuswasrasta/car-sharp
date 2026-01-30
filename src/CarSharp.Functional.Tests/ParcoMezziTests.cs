@@ -92,4 +92,30 @@ public class ParcoMezziTests
 
         Assert.Equal(2, parco.ConteggioDisponibili);
     }
+
+    [Property]
+    public bool NoleggiaBatch_ConAutoDisponibili_DovrebbeRitornareNuovoStato(PositiveInt n)
+    {
+        // In FP, il noleggio batch è una funzione di aggregazione che trasforma 
+        // l'intero parco mezzi. Il risultato deve riflettere il nuovo stato di tutte le auto.
+        var conteggio = n.Get;
+        var parco = ParcoMezzi.Vuoto;
+        var autoList = new List<IAuto>();
+
+        for (int i = 0; i < conteggio; i++)
+        {
+            var auto = new AutoDisponibile(Guid.NewGuid(), $"ABC{i}");
+            autoList.Add(auto);
+            parco = parco.AggiungiAuto(auto);
+        }
+
+        var batch = autoList.Select(a => a.Id).ToList();
+
+        // NoleggiaBatch restituisce un nuovo valore del parco.
+        var risultato = parco.NoleggiaBatch(batch, "CLIENTE");
+
+        return risultato.IsSuccess &&
+               risultato.Value!.ConteggioDisponibili == 0 &&
+               risultato.Value.TotaleAuto == conteggio;
+    }
 }
