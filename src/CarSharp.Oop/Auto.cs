@@ -31,4 +31,9 @@ public class Auto
 
         Stato = StatoAuto.Noleggiata;
     }
+
+    public void Restituisci()
+    {
+        Stato = StatoAuto.Disponibile;
+    }
 }
