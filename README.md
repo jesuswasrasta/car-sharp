@@ -53,13 +53,18 @@ Il confronto ha evidenziato strategie opposte per garantire la consistenza:
 
 ---
 
-## Fase 4 – Tipologie e dimensioni
+## Fase 4 – Tipologie e dimensioni (✅ COMPLETATA)
 
 - I mezzi iniziano a differenziarsi per **dimensione**.
 - Ogni mezzo ha un numero di posti (capacità).
 - Una richiesta specifica il numero minimo di posti richiesti.
 - Un mezzo può soddisfare una richiesta solo se ha posti sufficienti.
 - Una richiesta viene sempre assegnata a un solo mezzo.
+
+In questa fase abbiamo introdotto i **vincoli di dominio quantitativi** e la logica di **assegnazione**.
+Il confronto ha messo in luce approcci differenti nella gestione delle pre-condizioni:
+- **OOP**: La logica di matching è imperativa (`FirstOrDefault` su stato mutabile). Abbiamo esteso il pattern **Check-Then-Act** per garantire che l'assegnazione soddisfi sia la disponibilità che la capacità minima richiesta, lanciando eccezioni specifiche per violazioni di capacità.
+- **FP**: Abbiamo utilizzato il concetto di **RichiestaNoleggio** come record per standardizzare l'input. La logica di matching è integrata nel pattern matching del `Result`, dove il controllo di capacità è un filtro aggiuntivo nella pipeline di trasformazione. L'uso di **Property-Based Testing** ha permesso di verificare che l'invariante `Auto.Capacita >= Richiesta.PostiMinimi` sia rispettato per qualsiasi combinazione casuale di input.
 
 ---
 

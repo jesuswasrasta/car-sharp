@@ -41,8 +41,8 @@
 
 ## Fase 4: Rifinitura e Documentazione
 
-- [ ] T015 Aggiornamento `README.md` con recap Fase 4
-- [ ] T016 Creazione `comparison.md` per analisi dei vincoli (Types vs Guards)
-- [ ] T017 Regressione completa `dotnet test`
+- [x] T015 Aggiornamento `README.md` con recap Fase 4
+- [x] T016 Creazione `comparison.md` per analisi dei vincoli (Types vs Guards)
+- [x] T017 Regressione completa `dotnet test`
 
 **Checkpoint**: ✅ Fase 4 completata e allineata agli standard qualitativi.
