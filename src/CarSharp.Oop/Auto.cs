@@ -1,12 +1,24 @@
 // ABOUTME: Entità Auto nel paradigma OOP.
-// In questa fase iniziale, l'auto è un'entità che si distingue per la sua identità (riferimento in memoria).
-// Non ha ancora proprietà, ma esiste come concetto distinto nel dominio.
+// In questa fase, l'auto acquisisce proprietà che definiscono la sua identità (Id, Targa)
+// e il suo stato operativo (StatoAuto).
+
+using System;
 
 namespace CarSharp.Oop;
 
 public class Auto
 {
-    // Per ora la classe è vuota.
-    // L'uguaglianza è basata sul riferimento (default delle classi C#).
-    // new Auto() != new Auto()
+    public Guid Id { get; }
+    public string Targa { get; }
+    public StatoAuto Stato { get; private set; }
+
+    public Auto(Guid id, string targa)
+    {
+        if (id == Guid.Empty) throw new ArgumentException("L'ID non può essere vuoto", nameof(id));
+        if (string.IsNullOrWhiteSpace(targa)) throw new ArgumentException("La targa non può essere vuota", nameof(targa));
+
+        Id = id;
+        Targa = targa;
+        Stato = StatoAuto.Disponibile;
+    }
 }

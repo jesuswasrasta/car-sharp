@@ -24,7 +24,7 @@
 ## Fase 2: Percorso OOP (C# Classico)
 
 - [x] T003 [OOP] RED: Test costruttore `Auto` richiede Id e Targa
-- [ ] T004 [OOP] GREEN: Implementazione proprietà `Id`, `Targa` e `Stato`
+- [x] T004 [OOP] GREEN: Implementazione proprietà `Id`, `Targa` e `Stato`
 - [ ] T005 [OOP] RED: Test `Noleggia` cambia stato in `Noleggiata`
 - [ ] T006 [OOP] GREEN: Implementazione metodo `Noleggia` con validazione (Exception)
 - [ ] T007 [OOP] RED: Test `Restituisci` riporta lo stato a `Disponibile`

@@ -34,7 +34,7 @@ public class ParcoMezziTests
         
         for (int i = 0; i < n; i++)
         {
-            var auto = new Auto();
+            var auto = new Auto(Guid.NewGuid(), $"ABC{i}");
             parco.AggiungiAuto(auto);
         }
 
@@ -49,7 +49,7 @@ public class ParcoMezziTests
         // che era stato precedentemente aggiunto. Questo garantisce che stiamo operando 
         // sull'asset corretto all'interno della flotta gestita.
         var parco = new ParcoMezzi();
-        var auto = new Auto();
+        var auto = new Auto(Guid.NewGuid(), "TEST1");
         parco.AggiungiAuto(auto);
 
         parco.RimuoviAuto(auto);
