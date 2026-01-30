@@ -16,13 +16,17 @@ public class AutoTests
         // e un identificativo di dominio (Targa).
         
         // Targa nulla
-        Assert.Throws<ArgumentException>(() => new Auto(Guid.NewGuid(), null!));
+        Assert.Throws<ArgumentException>(() => new Auto(Guid.NewGuid(), null!, 5));
         
         // Targa vuota
-        Assert.Throws<ArgumentException>(() => new Auto(Guid.NewGuid(), ""));
+        Assert.Throws<ArgumentException>(() => new Auto(Guid.NewGuid(), "", 5));
         
         // ID vuoto
-        Assert.Throws<ArgumentException>(() => new Auto(Guid.Empty, "AA123BB"));
+        Assert.Throws<ArgumentException>(() => new Auto(Guid.Empty, "AA123BB", 5));
+
+        // Capacità non valida
+        Assert.Throws<ArgumentException>(() => new Auto(Guid.NewGuid(), "AA123BB", 0));
+        Assert.Throws<ArgumentException>(() => new Auto(Guid.NewGuid(), "AA123BB", -1));
     }
 
     [Fact]
@@ -32,11 +36,13 @@ public class AutoTests
         // assegnati e accessibili tramite le proprietà pubbliche.
         var id = Guid.NewGuid();
         var targa = "AA123BB";
+        var capacita = 5;
         
-        var auto = new Auto(id, targa);
+        var auto = new Auto(id, targa, capacita);
         
         Assert.Equal(id, auto.Id);
         Assert.Equal(targa, auto.Targa);
+        Assert.Equal(capacita, auto.Capacita);
         // Lo stato iniziale deve essere Disponibile per default.
         Assert.Equal(StatoAuto.Disponibile, auto.Stato);
     }
@@ -45,7 +51,7 @@ public class AutoTests
     public void Noleggia_DovrebbeCambiareStatoInNoleggiata()
     {
         // US1: Quando noleggio un'auto disponibile, il suo stato deve cambiare.
-        var auto = new Auto(Guid.NewGuid(), "AA123BB");
+        var auto = new Auto(Guid.NewGuid(), "AA123BB", 5);
         
         auto.Noleggia();
         
@@ -57,7 +63,7 @@ public class AutoTests
     {
         // US1: Non è possibile noleggiare un'auto già occupata.
         // In OOP, l'oggetto protegge il proprio invariante lanciando un'eccezione.
-        var auto = new Auto(Guid.NewGuid(), "AA123BB");
+        var auto = new Auto(Guid.NewGuid(), "AA123BB", 5);
         auto.Noleggia(); // Prima volta OK
 
         Assert.Throws<InvalidOperationException>(() => auto.Noleggia());
@@ -67,7 +73,7 @@ public class AutoTests
     public void Restituisci_DovrebbeRiportareStatoADisponibile()
     {
         // US2: Quando un'auto noleggiata viene restituita, torna disponibile.
-        var auto = new Auto(Guid.NewGuid(), "AA123BB");
+        var auto = new Auto(Guid.NewGuid(), "AA123BB", 5);
         auto.Noleggia();
         
         auto.Restituisci();

@@ -34,7 +34,7 @@ public class ParcoMezziTests
         
         for (int i = 0; i < n; i++)
         {
-            var auto = new Auto(Guid.NewGuid(), $"ABC{i}");
+            var auto = new Auto(Guid.NewGuid(), $"ABC{i}", 5);
             parco.AggiungiAuto(auto);
         }
 
@@ -49,7 +49,7 @@ public class ParcoMezziTests
         // che era stato precedentemente aggiunto. Questo garantisce che stiamo operando 
         // sull'asset corretto all'interno della flotta gestita.
         var parco = new ParcoMezzi();
-        var auto = new Auto(Guid.NewGuid(), "TEST1");
+        var auto = new Auto(Guid.NewGuid(), "TEST1", 5);
         parco.AggiungiAuto(auto);
 
         parco.RimuoviAuto(auto);
@@ -62,9 +62,9 @@ public class ParcoMezziTests
     {
         // Il sistema deve essere in grado di filtrare la flotta in base allo stato mutabile degli oggetti.
         var parco = new ParcoMezzi();
-        var auto1 = new Auto(Guid.NewGuid(), "AA111AA");
-        var auto2 = new Auto(Guid.NewGuid(), "BB222BB");
-        var auto3 = new Auto(Guid.NewGuid(), "CC333CC");
+        var auto1 = new Auto(Guid.NewGuid(), "AA111AA", 5);
+        var auto2 = new Auto(Guid.NewGuid(), "BB222BB", 5);
+        var auto3 = new Auto(Guid.NewGuid(), "CC333CC", 5);
 
         parco.AggiungiAuto(auto1);
         parco.AggiungiAuto(auto2);
@@ -82,8 +82,8 @@ public class ParcoMezziTests
         // In OOP, ci aspettiamo che il parco mezzi coordini la mutazione dello stato
         // di più oggetti Auto contemporaneamente.
         var parco = new ParcoMezzi();
-        var auto1 = new Auto(Guid.NewGuid(), "AA111AA");
-        var auto2 = new Auto(Guid.NewGuid(), "BB222BB");
+        var auto1 = new Auto(Guid.NewGuid(), "AA111AA", 5);
+        var auto2 = new Auto(Guid.NewGuid(), "BB222BB", 5);
         
         parco.AggiungiAuto(auto1);
         parco.AggiungiAuto(auto2);
@@ -104,8 +104,8 @@ public class ParcoMezziTests
         // Questo test verifica l'atomicità in caso di errore.
         // Se un'auto nel batch non è disponibile, nessuna deve essere noleggiata.
         var parco = new ParcoMezzi();
-        var auto1 = new Auto(Guid.NewGuid(), "AA111AA");
-        var auto2 = new Auto(Guid.NewGuid(), "BB222BB");
+        var auto1 = new Auto(Guid.NewGuid(), "AA111AA", 5);
+        var auto2 = new Auto(Guid.NewGuid(), "BB222BB", 5);
         
         parco.AggiungiAuto(auto1);
         parco.AggiungiAuto(auto2);
@@ -127,7 +127,7 @@ public class ParcoMezziTests
         // Un batch non deve contenere la stessa auto più volte. 
         // In OOP, validiamo questo vincolo prima di procedere.
         var parco = new ParcoMezzi();
-        var auto = new Auto(Guid.NewGuid(), "AA111AA");
+        var auto = new Auto(Guid.NewGuid(), "AA111AA", 5);
         parco.AggiungiAuto(auto);
 
         var batch = new List<Guid> { auto.Id, auto.Id };

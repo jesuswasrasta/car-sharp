@@ -10,15 +10,18 @@ public class Auto
 {
     public Guid Id { get; }
     public string Targa { get; }
+    public int Capacita { get; }
     public StatoAuto Stato { get; private set; }
 
-    public Auto(Guid id, string targa)
+    public Auto(Guid id, string targa, int capacita)
     {
         if (id == Guid.Empty) throw new ArgumentException("L'ID non può essere vuoto", nameof(id));
         if (string.IsNullOrWhiteSpace(targa)) throw new ArgumentException("La targa non può essere vuota", nameof(targa));
+        if (capacita <= 0) throw new ArgumentException("La capacità deve essere positiva", nameof(capacita));
 
         Id = id;
         Targa = targa;
+        Capacita = capacita;
         Stato = StatoAuto.Disponibile;
     }
 

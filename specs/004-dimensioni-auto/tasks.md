@@ -18,7 +18,7 @@
 
 ## Fase 1: Infrastruttura Comune e Modello Dati
 
-- [ ] T001 [OOP] Aggiungere proprietà `Capacita` a `Auto.cs` e aggiornare costruttore
+- [x] T001 [OOP] Aggiungere proprietà `Capacita` a `Auto.cs` e aggiornare costruttore
 - [ ] T002 [FP] Aggiungere proprietà `Capacita` al record `Auto` e tipi specializzati
 - [ ] T003 [OOP] Aggiornare `ParcoMezzi.AggiungiAuto` per accettare capacità (mutazione)
 - [ ] T004 [FP] Aggiornare `ParcoMezzi.AggiungiAuto` per gestire record con capacità
