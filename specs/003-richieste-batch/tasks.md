@@ -39,8 +39,8 @@
 
 ## Fase 4: Conclusione Didattica
 
-- [ ] T013 Aggiornamento `README.md` con recap su atomicità e transizioni in-memory
-- [ ] T014 Creazione `comparison.md` con analisi tecnica Check-Then-Act vs Fold/Bind
-- [ ] T015 Esecuzione regressione completa `dotnet test`
+- [x] T013 Aggiornamento `README.md` con recap su atomicità e transizioni in-memory
+- [x] T014 Creazione `comparison.md` con analisi tecnica Check-Then-Act vs Fold/Bind
+- [x] T015 Esecuzione regressione completa `dotnet test`
 
 **Checkpoint**: ✅ Fase 3 completata e documentata secondo gli standard correnti.

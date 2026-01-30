@@ -42,7 +42,7 @@ public void NoleggiaBatch(IEnumerable<Guid> targhe)
 In C# FP, abbiamo utilizzato un approccio dichiarativo basato sulla trasformazione di stato e sulla tipizzazione forte.
 
 ### Caratteristiche
-1.  **Parse, Don't Validate**: Trasformiamo l'input "grezzo" (`IEnumerable`) in un input "valido" (`ImmutableHashSet`). Se la cardinalità cambia, sappiamo subito che c'erano duplicati.
+1.  **Parse, Don't Validate**: Trasformiamo l'input "grezzo" (`IEnumerable`) in un input "valido" (verificando duplicati all'ingresso).
 2.  **Monadic Binding**: Usiamo `Result<T>` e `Bind` per concatenare le operazioni.
 3.  **Immutabilità**: Ogni passo produce un *nuovo* stato del parco. Se la catena si rompe, restituiamo un errore e il vecchio stato rimane valido (atomicità implicita).
 
@@ -51,12 +51,12 @@ In C# FP, abbiamo utilizzato un approccio dichiarativo basato sulla trasformazio
 public static Result<ParcoMezzi> NoleggiaBatch(this ParcoMezzi parco, IEnumerable<Guid> targhe)
 {
     // Parsing
-    var setTarghe = targhe.ToImmutableHashSet();
-    if (setTarghe.Count != targhe.Count()) return Failure("Duplicati");
+    var setTarghe = targhe.ToList();
+    if (duplicati) return Result.Fail("Duplicati");
 
-    // State Transformation (Fold/Aggregate)
+    // State Transformation (Aggregate)
     return setTarghe.Aggregate(
-        Result.Success(parco), 
+        Result.From(parco), 
         (res, id) => res.Bind(p => p.NoleggiaAuto(id))
     );
 }
@@ -65,6 +65,6 @@ public static Result<ParcoMezzi> NoleggiaBatch(this ParcoMezzi parco, IEnumerabl
 ### Pro e Contro
 *   ✅ Atomicità garantita "by design": impossibile lasciare il sistema in stato inconsistente.
 *   ✅ Codice estremamente conciso e componibile.
-*   ✅ "Parse don't validate" elimina interi classi di bug logici.
+*   ✅ "Parse don't validate" elimina intere classi di bug logici.
 *   ❌ Curva di apprendimento più ripida (Concetti: Monadi, Fold, Immutabilità).
 *   ❌ Maggior pressione sul Garbage Collector (creazione di oggetti intermedi).

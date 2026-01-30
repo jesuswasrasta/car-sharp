@@ -40,11 +40,16 @@ Il confronto ha evidenziato una divergenza fondamentale nella rappresentazione d
 
 ---
 
-## Fase 3 – Richieste e batch
+## Fase 3 – Richieste e batch (✅ COMPLETATA)
 
 - Il sistema può ricevere un batch di richieste.
 - Un batch viene soddisfatto solo se **tutte** le richieste possono essere soddisfatte.
 - Se anche una sola richiesta fallisce, nessuna viene applicata.
+
+In questa fase abbiamo introdotto il concetto di **atomicità** delle operazioni multiple.
+Il confronto ha evidenziato strategie opposte per garantire la consistenza:
+- **OOP**: Pattern **Check-Then-Act**. Si convalida l'intero batch (controllando disponibilità e duplicati) *prima* di applicare qualsiasi modifica. La consistenza è garantita impedendo l'accesso allo stato intermedio non valido (spesso tramite lock in scenari concorrenti, qui semplificato).
+- **FP**: Pattern **Parse, Don't Validate** e **State Transformation**. L'input viene prima "parsato" in una struttura valida (es. un Set per garantire unicità). Successivamente, si usa una pipeline di trasformazioni (`Aggregate` + `Bind`) dove ogni passo produce un nuovo stato o un errore. Se un passo fallisce, l'intera catena restituisce un errore, lasciando il valore originale (immutabile) intatto senza bisogno di rollback espliciti.
 
 ---
 
