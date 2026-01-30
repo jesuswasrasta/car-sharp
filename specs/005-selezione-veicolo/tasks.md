@@ -51,8 +51,8 @@
 
 ## Fase 6: Rifinitura e Documentazione
 
-- [ ] T019 Aggiornamento `README.md` con recap su Best Fit e Determinismo
-- [ ] T020 Revisione narrativa dei commenti (Fase 5)
-- [ ] T021 Validazione scenari del `quickstart.md`
+- [x] T019 Aggiornamento `README.md` con recap su Best Fit e Determinismo
+- [x] T020 Revisione narrativa dei commenti (Fase 5)
+- [x] T021 Validazione scenari del `quickstart.md`
 
 **Checkpoint**: ✅ Fase 5 completata e allineata agli standard qualitativi.

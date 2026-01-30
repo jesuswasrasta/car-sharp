@@ -68,11 +68,16 @@ Il confronto ha messo in luce approcci differenti nella gestione delle pre-condi
 
 ---
 
-## Fase 5 – Scelta del mezzo
+## Fase 5 – Scelta del mezzo (✅ COMPLETATA)
 
 - Se più mezzi possono soddisfare una richiesta, il sistema sceglie quello con il minor numero di posti in eccesso.
 - L'assegnazione delle richieste non dipende dall'ordine di arrivo.
 - A parità di soluzioni valide, il risultato è deterministico.
+
+In questa fase abbiamo implementato l'**algoritmo Best Fit** per l'ottimizzazione delle risorse.
+Il confronto ha evidenziato l'eleganza di entrambi i paradigmi nell'esprimere una logica di selezione complessa:
+- **OOP**: L'algoritmo è implementato come una pipeline LINQ imperativa: `Where(...).OrderBy(a => a.Capacita).FirstOrDefault()`. La selezione è deterministica perché `OrderBy` in LINQ è stabile (mantiene l'ordine originale a parità di chiave). Il pattern **Check-Then-Act** è stato esteso per applicare l'ottimizzazione anche alle operazioni batch, garantendo che ogni richiesta riceva il mezzo più piccolo disponibile. La consistenza è protetta dall'incapsulamento: lo stato interno mutabile è modificato solo dopo la validazione completa.
+- **FP**: L'algoritmo è espresso come una composizione di funzioni pure: `OfType<AutoDisponibile>().Where(...).OrderBy(a => a.Capacita).FirstOrDefault()`. La stabilità dell'ordinamento garantisce lo stesso determinismo. Nel batch, la composizione tramite `Aggregate` + `Bind` applica automaticamente l'ottimizzazione a ogni richiesta senza logica aggiuntiva. L'atomicità è intrinseca: se una richiesta fallisce, l'intera catena restituisce un `Failure`, preservando lo stato originale immutabile. I **Property-Based Tests** con FsCheck hanno verificato gli invarianti fondamentali (capacità minima, determinismo) su milioni di combinazioni casuali.
 
 ---
 
