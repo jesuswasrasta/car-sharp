@@ -35,4 +35,27 @@ public class ParcoMezziTests
 
         return (parco.TotaleAuto == conteggio);
     }
+
+    [Property]
+    public bool RimozioneAuto_DovrebbeDecrementareIlConteggio_QuandoLAutoEsiste(PositiveInt n)
+    {
+        // Nel mondo funzionale, la rimozione è una trasformazione che 'proietta' 
+        // un nuovo stato del parco mezzi che non contiene più l'elemento specificato. 
+        // Verifichiamo che per qualsiasi parco di dimensione N, la rimozione di 
+        // un elemento esistente restituisca sempre un nuovo parco di dimensione N-1.
+        var parco = ParcoMezzi.Vuoto;
+        var autoList = new List<Auto>();
+        for (int i = 0; i < n.Get; i++)
+        {
+            var auto = new Auto();
+            autoList.Add(auto);
+            parco = parco.AggiungiAuto(auto);
+        }
+
+        var bersaglio = autoList[new Random().Next(autoList.Count)];
+
+        var nuovoParco = parco.RimuoviAuto(bersaglio);
+
+        return nuovoParco.TotaleAuto == parco.TotaleAuto - 1;
+    }
 }
