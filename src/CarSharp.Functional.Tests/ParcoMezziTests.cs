@@ -262,4 +262,45 @@ public class ParcoMezziTests
         var capacitaMinima = capacitaValide.Min();
         return autoNoleggiata.Capacita == capacitaMinima;
     }
+
+    [Fact]
+    public void NoleggiaPerCapacita_ConAutoStessaCapacita_DovrebbeSelezionareLaPrimaInserita()
+    {
+        // Nel paradigma FP, il determinismo è ancora più critico perché la prevedibilità
+        // è un pilastro fondamentale. Dato lo stesso input (parco con auto identiche),
+        // dobbiamo sempre ottenere lo stesso output (prima auto inserita selezionata).
+        var parco = ParcoMezzi.Vuoto;
+        var primaAuto = new AutoDisponibile(Guid.NewGuid(), "FIRST5", 5);
+        var secondaAuto = new AutoDisponibile(Guid.NewGuid(), "SECOND5", 5);
+        var terzaAuto = new AutoDisponibile(Guid.NewGuid(), "THIRD5", 5);
+
+        parco = parco.AggiungiAuto(primaAuto).Value!;
+        parco = parco.AggiungiAuto(secondaAuto).Value!;
+        parco = parco.AggiungiAuto(terzaAuto).Value!;
+
+        var risultato = parco.NoleggiaPerCapacita(5, "CLIENTE");
+
+        Assert.True(risultato.IsSuccess);
+        var parcoAggiornato = risultato.Value!;
+        Assert.Contains(parcoAggiornato.auto, a => a.Id == primaAuto.Id && a is AutoNoleggiata);
+    }
+
+    [Property]
+    public bool NoleggiaPerCapacita_Determinismo(PositiveInt capacita)
+    {
+        // Property: Per qualsiasi capacità N, se inseriamo K auto identiche,
+        // il sistema deve sempre selezionare la prima inserita.
+        var cap = Math.Min(capacita.Get, 10);
+        var parco = ParcoMezzi.Vuoto;
+        var primaAuto = new AutoDisponibile(Guid.NewGuid(), "AUTO1", cap);
+        var secondaAuto = new AutoDisponibile(Guid.NewGuid(), "AUTO2", cap);
+
+        parco = parco.AggiungiAuto(primaAuto).Value!;
+        parco = parco.AggiungiAuto(secondaAuto).Value!;
+
+        var risultato = parco.NoleggiaPerCapacita(cap, "CLIENTE");
+
+        return risultato.IsSuccess && 
+               risultato.Value!.auto.OfType<AutoNoleggiata>().First().Id == primaAuto.Id;
+    }
 }

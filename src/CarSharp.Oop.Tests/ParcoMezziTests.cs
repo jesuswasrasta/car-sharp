@@ -222,4 +222,24 @@ public class ParcoMezziTests
 
         Assert.Equal(autoPiccola.Id, autoScelta.Id);
     }
+
+    [Fact]
+    public void Noleggia_ConParitaCapacita_DovrebbeEssereDeterministico()
+    {
+        // US2: In caso di più auto con la stessa capacità ottimale, 
+        // il sistema deve scegliere costantemente la prima inserita.
+        var parco = new ParcoMezzi();
+        var auto1 = new Auto(Guid.NewGuid(), "AUTO1", 5);
+        var auto2 = new Auto(Guid.NewGuid(), "AUTO2", 5);
+        var auto3 = new Auto(Guid.NewGuid(), "AUTO3", 5);
+
+        parco.AggiungiAuto(auto1);
+        parco.AggiungiAuto(auto2);
+        parco.AggiungiAuto(auto3);
+
+        // La prima auto (auto1) deve essere sempre quella scelta.
+        var autoScelta = parco.Noleggia(5);
+
+        Assert.Equal(auto1.Id, autoScelta.Id);
+    }
 }

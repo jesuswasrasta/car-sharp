@@ -37,10 +37,10 @@
 
 ## Fase 4: User Story 2 - Determinismo [US2]
 
-- [ ] T011 [OOP] RED: Test determinismo (prima inserita vince a parità di capacità)
-- [ ] T012 [OOP] GREEN: Verificare stabilità dell'ordinamento
-- [ ] T013 [FP] RED: Property determinismo (stesso stato + stessa richiesta = stesso risultato)
-- [ ] T014 [FP] GREEN: Verificare stabilità dell'ordinamento nella pipeline pura
+- [x] T011 [OOP] RED: Test determinismo (prima inserita vince a parità di capacità)
+- [x] T012 [OOP] GREEN: Verificare stabilità dell'ordinamento
+- [x] T013 [FP] RED: Property determinismo (stesso stato + stessa richiesta = stesso risultato)
+- [x] T014 [FP] GREEN: Verificare stabilità dell'ordinamento nella pipeline pura
 
 ## Fase 5: User Story 3 - Ottimizzazione in Batch [US3]
 
