@@ -1,3 +1,6 @@
+# CarSharp
+Da un'idea di Arialdo Martini: [CarSharp](https://github.com/arialdomartini/car-sharp). Grazie! 🤗  
+
 ## Contesto
 
 Stai sviluppando il core di un **servizio di car renting**.
@@ -6,7 +9,7 @@ Il dominio viene introdotto **per passi**, partendo da un modello volutamente po
 
 ---
 
-## Fase 1 – Parco mezzi minimale
+## Fase 1 – Parco mezzi minimale (✅ COMPLETATA)
 
 - Il sistema gestisce un parco mezzi.
 - Il parco può essere inizialmente vuoto.
@@ -22,13 +25,18 @@ che sfruttano l'uguaglianza basata sul valore (value equality).
 
 ---
 
-## Fase 2 – Disponibilità
+## Fase 2 – Disponibilità (✅ COMPLETATA)
 
 - Un mezzo può essere **disponibile** o **noleggiato**.
 - Noleggiare un mezzo disponibile lo rende non disponibile.
 - Non è possibile noleggiare un mezzo già noleggiato.
 - È possibile restituire un mezzo noleggiato.
 - In ogni momento è possibile conoscere il numero di mezzi disponibili.
+
+In questa fase abbiamo introdotto la gestione della disponibilità e dell'identità tecnica.
+Il confronto ha evidenziato una divergenza fondamentale nella rappresentazione dello stato:
+- **OOP (Orientata agli Oggetti)**: Lo stato è una **proprietà mutabile** (`StatoAuto`) interna all'oggetto. La consistenza è garantita dall'incapsulamento: l'oggetto stesso lancia un'eccezione se si tenta un'operazione non valida (es. noleggiare un'auto già occupata). L'identità è preservata dal riferimento in memoria.
+- **FP (Funzionale)**: Lo stato è espresso dai **Tipi** (**Type-Driven Design**). Esistono tipi distinti per `AutoDisponibile` e `AutoNoleggiata`. Le operazioni sono trasformazioni pure da un tipo all'altro. Questo rende gli stati invalidi irrappresentabili a livello di compilazione. L'identità è garantita da un identificativo tecnico stabile (`Guid`) che persiste attraverso le trasformazioni.
 
 ---
 

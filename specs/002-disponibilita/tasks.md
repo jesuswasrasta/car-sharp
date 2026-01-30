@@ -43,8 +43,8 @@
 
 ## Fase 4: Conclusione Didattica
 
-- [ ] T017 Creare `comparison.md` analizzando Mutazione vs Transizione
-- [ ] T018 Revisione narrativa di tutti i commenti per l'audience
-- [ ] T019 Chiusura branch e creazione tag `002-disponibilita`
+- [x] T017 Creare `comparison.md` analizzando Mutazione vs Transizione
+- [x] T018 Revisione narrativa di tutti i commenti per l'audience
+- [x] T019 Chiusura branch e creazione tag `002-disponibilita`
 
 **Checkpoint**: ✅ Fase 2 completata e documentata secondo gli standard correnti.
