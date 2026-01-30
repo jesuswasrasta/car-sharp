@@ -40,4 +40,26 @@ public class AutoTests
         // Lo stato iniziale deve essere Disponibile per default.
         Assert.Equal(StatoAuto.Disponibile, auto.Stato);
     }
+
+    [Fact]
+    public void Noleggia_DovrebbeCambiareStatoInNoleggiata()
+    {
+        // US1: Quando noleggio un'auto disponibile, il suo stato deve cambiare.
+        var auto = new Auto(Guid.NewGuid(), "AA123BB");
+        
+        auto.Noleggia();
+        
+        Assert.Equal(StatoAuto.Noleggiata, auto.Stato);
+    }
+
+    [Fact]
+    public void Noleggia_SeGiaNoleggiata_DovrebbeLanciareEccezione()
+    {
+        // US1: Non è possibile noleggiare un'auto già occupata.
+        // In OOP, l'oggetto protegge il proprio invariante lanciando un'eccezione.
+        var auto = new Auto(Guid.NewGuid(), "AA123BB");
+        auto.Noleggia(); // Prima volta OK
+
+        Assert.Throws<InvalidOperationException>(() => auto.Noleggia());
+    }
 }

@@ -25,7 +25,7 @@
 
 - [x] T003 [OOP] RED: Test costruttore `Auto` richiede Id e Targa
 - [x] T004 [OOP] GREEN: Implementazione proprietà `Id`, `Targa` e `Stato`
-- [ ] T005 [OOP] RED: Test `Noleggia` cambia stato in `Noleggiata`
+- [x] T005 [OOP] RED: Test `Noleggia` cambia stato in `Noleggiata`
 - [ ] T006 [OOP] GREEN: Implementazione metodo `Noleggia` con validazione (Exception)
 - [ ] T007 [OOP] RED: Test `Restituisci` riporta lo stato a `Disponibile`
 - [ ] T008 [OOP] GREEN: Implementazione metodo `Restituisci`
