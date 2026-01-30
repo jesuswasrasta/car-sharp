@@ -79,4 +79,17 @@ public class ParcoMezziTests
 
         return nuovoParco.TotaleAuto == parco.TotaleAuto - 1;
     }
+
+    [Fact]
+    public void ConteggioDisponibili_DovrebbeContareSoloLeIstanzeDiAutoDisponibile()
+    {
+        // In Type-Driven Design, lo stato è espresso dal tipo. 
+        // Filtrare per tipo è l'equivalente funzionale del filtraggio per proprietà.
+        var parco = ParcoMezzi.Vuoto
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "AA111AA"))
+            .AggiungiAuto(new AutoNoleggiata(Guid.NewGuid(), "BB222BB"))
+            .AggiungiAuto(new AutoDisponibile(Guid.NewGuid(), "CC333CC"));
+
+        Assert.Equal(2, parco.ConteggioDisponibili);
+    }
 }
