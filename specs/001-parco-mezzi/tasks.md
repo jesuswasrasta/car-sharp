@@ -18,19 +18,19 @@
 
 ## Fase 1: Setup e Preparazione Didattica
 
-- [ ] T001 Scrivere le slide introduttive didattiche in `specs/001-parco-mezzi/slides-intro.md`
-- [ ] T002 Aggiornare il `README.md` per riflettere i progressi della Fase 1
-- [ ] T003 [P] Verificare pacchetto `FsCheck.Xunit` in `src/CarSharp.Functional.Tests/`
-- [ ] T004 [P] Verificare pacchetto `System.Collections.Immutable` in `src/CarSharp.Functional/`
+- [x] T001 Scrivere le slide introduttive didattiche in `specs/001-parco-mezzi/slides-intro.md`
+- [x] T002 Aggiornare il `README.md` per riflettere i progressi della Fase 1
+- [x] T003 [P] Verificare pacchetto `FsCheck.Xunit` in `src/CarSharp.Functional.Tests/`
+- [x] T004 [P] Verificare pacchetto `System.Collections.Immutable` in `src/CarSharp.Functional/`
 
 ## Fase 2: Fondamenta (Entità Comuni)
 
-- [ ] T005 [P] [US1] Implementare la classe `Auto` in `src/CarSharp.Oop/Auto.cs`
-- [ ] T006 [P] [US1] Implementare il record `Auto` in `src/CarSharp.Functional/Auto.cs`
+- [x] T005 [P] [US1] Implementare la classe `Auto` in `src/CarSharp.Oop/Auto.cs`
+- [x] T006 [P] [US1] Implementare il record `Auto` in `src/CarSharp.Functional/Auto.cs`
 
 ## Fase 3: User Story 1 - Popolamento Base [US1] 🎯 MVP
 
-- [ ] T007 [US1] [OOP] RED: Fact stato iniziale vuoto in `src/CarSharp.Oop.Tests/ParcoMezziTests.cs`
+- [x] T007 [US1] [OOP] RED: Fact stato iniziale vuoto in `src/CarSharp.Oop.Tests/ParcoMezziTests.cs`
 - [ ] T008 [US1] [OOP] GREEN: Classe `ParcoMezzi` con `TotaleAuto`
 - [ ] T009 [US1] [OOP] RED: Fact aggiunta auto
 - [ ] T010 [US1] [OOP] GREEN: Metodo `AggiungiAuto` (mutazione)
